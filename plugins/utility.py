@@ -17,6 +17,20 @@ async def ping(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
+@utility.command()
+@lightbulb.command("uptime", "Replies with bot uptime", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def uptime(ctx: lightbulb.Context) -> None:
+    uptime_resolved_full = f"<t:{ctx.app.uptime}:F>"
+    uptime_resolved_relative = f"<t:{ctx.app.uptime}:R>"
+    embed = hikari.Embed(
+        title="Uptime",
+        description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
+        color=0x5865F2,
+    )
+    await ctx.respond(embed)
+
+
 def load(bot: lightbulb.BotApp):
     bot.add_plugin(utility)
 

@@ -1,25 +1,26 @@
 import hikari
 import lightbulb
 
-misc = lightbulb.Plugin("Misc")
+
+miscellaneous = lightbulb.Plugin("Miscellaneous")
 
 
-@misc.command()
+@miscellaneous.command()
 @lightbulb.option("text", "Text to repeat", str)
 @lightbulb.command("echo", "Repeats user input", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def echo(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Echo",
-        description=f"{ctx.user} said: `{ctx.options.text}`",
+        description=f"{ctx.author.mention} \n\n`{ctx.options.text}`",
         color=0x5865F2,
     )
     await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp):
-    bot.add_plugin(misc)
+    bot.add_plugin(miscellaneous)
 
 
 def unload(bot: lightbulb.BotApp):
-    bot.remove_plugin(misc)
+    bot.remove_plugin(miscellaneous)
