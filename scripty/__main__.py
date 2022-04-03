@@ -10,7 +10,10 @@ import lightbulb
 
 
 token = os.environ["TOKEN"]
-guild_ids = [hikari.Snowflake(os.environ["GUILD_ID"]), hikari.Snowflake(os.environ["GUILD_ID_SECONDARY"])]
+guild_ids = [
+    hikari.Snowflake(os.environ["GUILD_ID"]),
+    hikari.Snowflake(os.environ["GUILD_ID_SECONDARY"]),
+]
 
 
 class BotApp(lightbulb.BotApp):
