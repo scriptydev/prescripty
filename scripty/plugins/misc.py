@@ -4,12 +4,11 @@ import lightbulb
 import functions
 
 
-miscellaneous = lightbulb.Plugin("Miscellaneous")
+misc = lightbulb.Plugin("Miscellaneous")
 
 
-@miscellaneous.command()
+@misc.command()
 @lightbulb.option("text", "Text to repeat", str)
-@lightbulb.option("something", "something", str)
 @lightbulb.command("echo", "Repeats user input", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def echo(ctx: lightbulb.Context) -> None:
@@ -22,8 +21,8 @@ async def echo(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp):
-    bot.add_plugin(miscellaneous)
+    bot.add_plugin(misc)
 
 
 def unload(bot: lightbulb.BotApp):
-    bot.remove_plugin(miscellaneous)
+    bot.remove_plugin(misc)

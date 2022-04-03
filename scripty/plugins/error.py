@@ -4,10 +4,10 @@ import lightbulb
 import functions
 
 
-internal = lightbulb.Plugin("Internal")
+error = lightbulb.Plugin("Error")
 
 
-@internal.listener(lightbulb.CommandErrorEvent)
+@error.listener(lightbulb.CommandErrorEvent)
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     if isinstance(event.exception, lightbulb.CommandInvocationError):
         embed = hikari.Embed(
@@ -33,8 +33,8 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
 
 
 def load(bot: lightbulb.BotApp):
-    bot.add_plugin(internal)
+    bot.add_plugin(error)
 
 
 def unload(bot: lightbulb.BotApp):
-    bot.remove_plugin(internal)
+    bot.remove_plugin(error)

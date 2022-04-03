@@ -4,10 +4,10 @@ import lightbulb
 import functions
 
 
-utility = lightbulb.Plugin("Utility")
+util = lightbulb.Plugin("Utility")
 
 
-@utility.command()
+@util.command()
 @lightbulb.command("ping", "Replies with bot latency", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def ping(ctx: lightbulb.Context) -> None:
@@ -19,7 +19,7 @@ async def ping(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@utility.command()
+@util.command()
 @lightbulb.command("uptime", "Replies with bot uptime", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def uptime(ctx: lightbulb.Context) -> None:
@@ -34,8 +34,8 @@ async def uptime(ctx: lightbulb.Context) -> None:
 
 
 def load(bot: lightbulb.BotApp):
-    bot.add_plugin(utility)
+    bot.add_plugin(util)
 
 
 def unload(bot: lightbulb.BotApp):
-    bot.remove_plugin(utility)
+    bot.remove_plugin(util)

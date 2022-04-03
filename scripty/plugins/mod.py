@@ -1,5 +1,4 @@
 import datetime
-import pytz
 
 import hikari
 import lightbulb
@@ -7,10 +6,10 @@ import lightbulb
 import functions
 
 
-moderation = lightbulb.Plugin("Moderation")
+mod = lightbulb.Plugin("Moderation")
 
 
-@moderation.command()
+@mod.command()
 @lightbulb.add_checks(
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
@@ -42,8 +41,8 @@ async def on_delete_error(event: lightbulb.CommandErrorEvent) -> None:
 
 
 def load(bot: lightbulb.BotApp):
-    bot.add_plugin(moderation)
+    bot.add_plugin(mod)
 
 
 def unload(bot: lightbulb.BotApp):
-    bot.remove_plugin(moderation)
+    bot.remove_plugin(mod)
