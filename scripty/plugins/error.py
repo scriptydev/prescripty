@@ -1,7 +1,7 @@
 import hikari
 import lightbulb
 
-import functions
+from scripty import functions
 
 
 error = lightbulb.Plugin("Error")

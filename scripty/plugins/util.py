@@ -1,10 +1,36 @@
+import platform
+
 import hikari
 import lightbulb
 
-import functions
+import scripty
+from scripty import functions
 
 
 util = lightbulb.Plugin("Utility")
+
+
+@util.command()
+@lightbulb.command("about", "Displays information about Scripty", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def about(ctx: lightbulb.Context) -> None:
+    app_user = ctx.app.get_me()
+
+    embed = hikari.Embed(
+        title="About",
+        color=functions.Color.blurple(),
+    )
+    embed.set_author(name=app_user.username, icon=app_user.avatar_url)
+    embed.add_field(name="Version", value=f"Scripty {scripty.__version__}", inline=True)
+    embed.add_field(
+        name="Language", value=f"Python {platform.python_version()}", inline=True
+    )
+    embed.add_field(name="Library", value=f"Hikari {hikari.__version__}", inline=True)
+    embed.add_field(
+        name="Developers", value=f"{' | '.join(scripty.__discord__)}", inline=True
+    )
+
+    await ctx.respond(embed)
 
 
 @util.command()

@@ -28,7 +28,7 @@ class BotApp(lightbulb.BotApp):
 
 def create_bot() -> lightbulb.BotApp:
     bot = BotApp()
-    bot.load_extensions_from("./plugins")
+    bot.load_extensions_from("./scripty/plugins")
 
     return bot
 
