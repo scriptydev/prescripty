@@ -1,6 +1,8 @@
 import hikari
 import lightbulb
 
+import functions
+
 
 utility = lightbulb.Plugin("Utility")
 
@@ -12,7 +14,7 @@ async def ping(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Ping",
         description=f"Pong! `{round(ctx.app.heartbeat_latency * 1000)}ms`",
-        color=0x5865F2,
+        color=functions.Color.blurple(),
     )
     await ctx.respond(embed)
 
@@ -26,7 +28,7 @@ async def uptime(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Uptime",
         description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
-        color=0x5865F2,
+        color=functions.Color.blurple,
     )
     await ctx.respond(embed)
 
