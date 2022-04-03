@@ -21,14 +21,10 @@ async def about(ctx: lightbulb.Context) -> None:
         color=functions.Color.blurple(),
     )
     embed.set_author(name=app_user.username, icon=app_user.avatar_url)
-    embed.add_field(name="Version", value=f"Scripty {scripty.__version__}", inline=True)
-    embed.add_field(
-        name="Language", value=f"Python {platform.python_version()}", inline=True
-    )
-    embed.add_field(name="Library", value=f"Hikari {hikari.__version__}", inline=True)
-    embed.add_field(
-        name="Developers", value=f"{' | '.join(scripty.__discord__)}", inline=True
-    )
+    embed.add_field("Version", f"Scripty {scripty.__version__}", inline=True)
+    embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
+    embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
+    embed.add_field("Developers", f"{' | '.join(scripty.__discord__)}", inline=True)
 
     await ctx.respond(embed)
 

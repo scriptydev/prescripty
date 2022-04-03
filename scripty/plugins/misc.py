@@ -49,13 +49,14 @@ async def poll(ctx: lightbulb.Context) -> None:
         description=ctx.options.description,
         color=functions.Color.blurple(),
     )
-    embed.add_field(value=f"1️⃣ {ctx.options.option_1}")
-    embed.add_field(value=f"2️⃣ {ctx.options.option_2}")
+    embed.add_field("1️⃣", ctx.options.option_1, inline=True)
+    embed.add_field("2️⃣", ctx.options.option_2, inline=True)
 
     message = await ctx.respond(embed)
 
-    await message.add_reaction("1️⃣")
-    await message.add_reaction("2️⃣")
+    # Fix reactions not sending later
+    # await message.add_reaction("1️⃣")
+    # await message.add_reaction("2️⃣")
 
 
 def load(bot: lightbulb.BotApp):
