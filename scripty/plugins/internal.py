@@ -15,9 +15,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
             description="This interaction failed",
             color=functions.Color.red(),
         )
-        await event.context.respond(
-            f"Something went wrong during invocation of command `{event.context.command.name}`."
-        )
+        await event.context.respond(embed)
         raise event.exception
 
     # Setup other error handling instances

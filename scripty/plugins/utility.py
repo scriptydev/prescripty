@@ -28,7 +28,7 @@ async def uptime(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Uptime",
         description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
-        color=functions.Color.blurple,
+        color=functions.Color.blurple(),
     )
     await ctx.respond(embed)
 

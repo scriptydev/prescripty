@@ -23,7 +23,7 @@ class BotApp(lightbulb.BotApp):
             default_enabled_guilds=guild_ids,
             help_slash_command=True,
         )
-        self.uptime = datetime.datetime.now(datetime.timezone.utc).strftime("%s")
+        self.uptime = datetime.datetime.now(datetime.timezone.utc).strftime("%S")
 
 
 def create_bot() -> lightbulb.BotApp:
