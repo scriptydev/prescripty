@@ -1,0 +1,4 @@
+hikari
+hikari-lightbulb
+python-dotenv
+uvloop
