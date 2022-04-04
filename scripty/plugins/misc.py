@@ -37,26 +37,49 @@ async def echo(ctx: lightbulb.Context) -> None:
 
 
 @misc.command()
-@lightbulb.option("option_2", "Option 2", str)
-@lightbulb.option("option_1", "Option 1", str)
-@lightbulb.option("description", "Description of the embed", str, required=False)
-@lightbulb.option("title", "Title of the embed", str)
+@lightbulb.option("option_j", "Option J", str, required=False)
+@lightbulb.option("option_i", "Option I", str, required=False)
+@lightbulb.option("option_h", "Option H", str, required=False)
+@lightbulb.option("option_g", "Option G", str, required=False)
+@lightbulb.option("option_f", "Option F", str, required=False)
+@lightbulb.option("option_e", "Option E", str, required=False)
+@lightbulb.option("option_d", "Option D", str, required=False)
+@lightbulb.option("option_c", "Option C", str, required=False)
+@lightbulb.option("option_b", "Option B", str)
+@lightbulb.option("option_a", "Option A", str)
+@lightbulb.option("topic", "Topic of the poll", str)
 @lightbulb.command("poll", "Creates a simple poll", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def poll(ctx: lightbulb.Context) -> None:
+    topic = ctx.options.topic
+    options = {
+        "🇦": ctx.options.option_a,
+        "🇧": ctx.options.option_b,
+        "🇨": ctx.options.option_c,
+        "🇩": ctx.options.option_d,
+        "🇪": ctx.options.option_e,
+        "🇫": ctx.options.option_f,
+        "🇬": ctx.options.option_g,
+        "🇭": ctx.options.option_h,
+        "🇮": ctx.options.option_i,
+        "🇯": ctx.options.option_j,
+    }
+
     embed = hikari.Embed(
-        title=ctx.options.title,
-        description=ctx.options.description,
+        title=topic,
+        description="\n\n".join(
+            f"{key} {value}" for key, value in options.items() if value is not None
+        ),
         color=functions.Color.blurple(),
     )
-    embed.add_field("1️⃣", ctx.options.option_1, inline=True)
-    embed.add_field("2️⃣", ctx.options.option_2, inline=True)
+    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url)
 
-    message = await ctx.respond(embed)
+    await ctx.respond(embed)
 
-    # Fix reactions not sending later
-    # await message.add_reaction("1️⃣")
-    # await message.add_reaction("2️⃣")
+    for key, value in options.items():
+        if value is not None:
+            response = await ctx.interaction.fetch_initial_response()
+            await response.add_reaction(key)
 
 
 def load(bot: lightbulb.BotApp):

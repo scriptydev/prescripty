@@ -3,10 +3,11 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
 import hikari
 import lightbulb
+
+
+load_dotenv()
 
 
 token = os.environ["TOKEN"]

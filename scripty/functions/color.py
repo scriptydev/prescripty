@@ -1,28 +1,28 @@
 class Color:
-    @classmethod
-    def blurple(cls):
-        return cls(0x5865F2)
+    @staticmethod
+    def blurple():
+        return 0x5865F2
 
-    @classmethod
-    def green(cls):
-        return cls(0x57F287)
+    @staticmethod
+    def green():
+        return 0x57F287
 
-    @classmethod
-    def yellow(cls):
-        return cls(0xFEE75C)
+    @staticmethod
+    def yellow():
+        return 0xFEE75C
 
-    @classmethod
-    def fuchsia(cls):
-        return cls(0xEB459E)
+    @staticmethod
+    def fuchsia():
+        return 0xEB459E
 
-    @classmethod
-    def red(cls):
-        return cls(0xED4245)
+    @staticmethod
+    def red():
+        return 0xED4245
 
-    @classmethod
-    def white(cls):
-        return cls(0xFFFFFF)
+    @staticmethod
+    def white():
+        return 0xFFFFFF
 
-    @classmethod
-    def black(cls):
-        return cls(0x000000)
+    @staticmethod
+    def black():
+        return 0x000000
