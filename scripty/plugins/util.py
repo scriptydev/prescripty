@@ -25,7 +25,8 @@ async def about(ctx: lightbulb.Context) -> None:
     embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
     embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
     embed.add_field("Developers", f"{' | '.join(scripty.__discord__)}", inline=True)
-
+    embed.set_footer("We stand with 🇺🇦 Ukraine")
+    
     await ctx.respond(embed)
 
 

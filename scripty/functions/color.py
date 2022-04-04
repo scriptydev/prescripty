@@ -1,7 +1,7 @@
 class Color:
     @classmethod
     def blurple(cls):
-        return 0x5865F2
+        return cls(0x5865F2)
 
     @classmethod
     def green(cls):
