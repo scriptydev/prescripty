@@ -1,4 +1,5 @@
 __author__ = "Erich Nguyen, Johan Joseph, and Hrishikesh Kondiboyina"
+__github__ = ["GoogleGenius", "johan53", "HrishiK100"]
 __discord__ = ["GoogleGenius#3876", "johann#2022", "hrish#7294"]
 __copyright__ = "Copyright 2022-Present Scripty Development"
 __credits__ = []
