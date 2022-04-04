@@ -26,7 +26,7 @@ async def delete(ctx: lightbulb.Context) -> None:
 
     embed = hikari.Embed(
         title="Delete",
-        description=f"`{amount} message(s) deleted",
+        description=f"`{amount}` message(s) deleted",
         color=functions.Color.blurple(),
     )
     await ctx.respond(embed)
