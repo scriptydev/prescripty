@@ -26,7 +26,7 @@ class BotApp(lightbulb.BotApp):
         self.uptime = int(round(datetime.datetime.now().timestamp()))
 
 
-def create_bot() -> lightbulb.BotApp:
+def instantiate_bot() -> lightbulb.BotApp:
     bot = BotApp()
     bot.load_extensions_from("./scripty/plugins")
 
@@ -39,4 +39,4 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-    create_bot().run()
+    instantiate_bot().run()
