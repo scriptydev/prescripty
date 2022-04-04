@@ -5,24 +5,24 @@ class Color:
 
     @classmethod
     def green(cls):
-        return 0x57F287
+        return cls(0x57F287)
 
     @classmethod
     def yellow(cls):
-        return 0xFEE75C
+        return cls(0xFEE75C)
 
     @classmethod
     def fuchsia(cls):
-        return 0xEB459E
+        return cls(0xEB459E)
 
     @classmethod
     def red(cls):
-        return 0xED4245
+        return cls(0xED4245)
 
     @classmethod
     def white(cls):
-        return 0xFFFFFF
+        return cls(0xFFFFFF)
 
     @classmethod
     def black(cls):
-        return 0x000000
+        return cls(0x000000)
