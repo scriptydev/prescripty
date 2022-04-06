@@ -43,7 +43,7 @@ class InviteView(miru.View):
 
 
 @util.command()
-@lightbulb.command("invite", "Invite the bot to your server", auto_defer=True)
+@lightbulb.command("invite", "Replies with Scripty bot invite", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()

@@ -52,7 +52,7 @@ async def echo(ctx: lightbulb.Context) -> None:
 @lightbulb.option("option_b", "Option B", str)
 @lightbulb.option("option_a", "Option A", str)
 @lightbulb.option("topic", "Topic of the poll", str)
-@lightbulb.command("poll", "Creates a simple poll", auto_defer=True)
+@lightbulb.command("poll", "Create a simple poll", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def poll(ctx: lightbulb.Context) -> None:
     topic = ctx.options.topic

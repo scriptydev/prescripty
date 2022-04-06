@@ -12,12 +12,12 @@ fun = lightbulb.Plugin("Fun")
 
 
 @fun.command()
-@lightbulb.command("coin", "Flips a coin", auto_defer=True)
+@lightbulb.command("coin", "Flip a coin", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def coin(ctx: lightbulb.Context) -> None:
     coin = ["Heads", "Tails"]
     embed = hikari.Embed(
-        title="Flip",
+        title="Coin",
         description=random.choice(coin),
         color=functions.Color.blurple(),
     )
@@ -25,12 +25,12 @@ async def coin(ctx: lightbulb.Context) -> None:
 
 
 @fun.command()
-@lightbulb.command("dice", "Rolls a die", auto_defer=True)
+@lightbulb.command("dice", "Roll a die", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def dice(ctx: lightbulb.Context) -> None:
     dice = [1, 2, 3, 4, 5, 6]
     embed = hikari.Embed(
-        title="Roll",
+        title="Dice",
         description=random.choice(dice),
         color=functions.Color.blurple(),
     )
@@ -38,7 +38,7 @@ async def dice(ctx: lightbulb.Context) -> None:
 
 
 @fun.command()
-@lightbulb.command("meme", "Fetches the hottest Reddit r/memes", auto_defer=True)
+@lightbulb.command("meme", "The hottest Reddit r/memes", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def meme(ctx: lightbulb.Context) -> None:
     async with aiohttp.ClientSession() as session:
@@ -112,7 +112,7 @@ class RPSView(miru.View):
 
 
 @fun.command()
-@lightbulb.command("rps", "Play Rock Paper Scissors", auto_defer=True)
+@lightbulb.command("rps", "Play rock paper scissors", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def rps(ctx: lightbulb.Context) -> None:
     rps = ["Rock", "Paper", "Scissors"]

@@ -14,7 +14,7 @@ mod = lightbulb.Plugin("Moderation")
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
 @lightbulb.option("amount", "Amount to delete", int, min_value=1)
-@lightbulb.command("delete", "Purges messages", auto_defer=True, ephemeral=True)
+@lightbulb.command("delete", "Purge messages", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete(ctx: lightbulb.Context) -> None:
     amount = ctx.options.amount
