@@ -28,12 +28,12 @@ class ScriptyBotApp(lightbulb.BotApp):
             help_slash_command=True,
         )
 
-    def setup_bot(self) -> None:
+    def setup(self) -> None:
         self.load_extensions_from("./scripty/plugins")
         miru.load(self)
 
     def run(self) -> None:
-        self.setup_bot()
+        self.setup()
         super().run(
             activity=(
                 hikari.Activity(
