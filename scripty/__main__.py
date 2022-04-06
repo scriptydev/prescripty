@@ -7,6 +7,8 @@ import hikari
 import lightbulb
 import miru
 
+import scripty
+
 
 load_dotenv()
 
@@ -35,8 +37,8 @@ class ScriptyBotApp(lightbulb.BotApp):
         super().run(
             activity=(
                 hikari.Activity(
-                    name="the Devs Learn Hikari",
-                    type=hikari.ActivityType.WATCHING,
+                    name=f"Version {scripty.__version__}",
+                    type=hikari.ActivityType.PLAYING,
                 )
             )
         )
