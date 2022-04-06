@@ -103,9 +103,12 @@ class RPSView(miru.View):
         await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
 
     async def on_timeout(self) -> None:
-        # await ctx.edit_response("This command was timed out!", components=None)
-        # Cannot seem to access the context... looking for a workaround; docs not helping :/ so I'll commit for now
-        pass
+        embed = hikari.Embed(
+            title="RPS",
+            description="Command was timed out! `This command is currently in development.`",
+            color=functions.Color.blurple(),
+        )
+        await self.message.edit(embed, components=None)
 
 
 @fun.command()

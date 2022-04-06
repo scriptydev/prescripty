@@ -2,6 +2,7 @@ import platform
 
 import hikari
 import lightbulb
+import miru
 
 import scripty
 from scripty import functions
@@ -28,6 +29,32 @@ async def about(ctx: lightbulb.Context) -> None:
     embed.set_footer("We stand with 🇺🇦 Ukraine")
 
     await ctx.respond(embed)
+
+
+class InviteView(miru.View):
+    def __init__(self):
+        super().__init__()
+        self.add_item(
+            miru.Button(
+                label="Add to Server",
+                url="https://discord.com/api/oauth2/authorize?client_id=883496337616822302&permissions=8&scope=bot%20applications.commands",
+            )
+        )
+
+
+@util.command()
+@lightbulb.command("invite", "Invite the bot to your server", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def invite(ctx: lightbulb.Context) -> None:
+    view = InviteView()
+
+    embed = hikari.Embed(
+        title="Invite",
+        description="Invite Scripty to your Discord Server!",
+        color=functions.Color.blurple(),
+    )
+
+    await ctx.respond(embed, components=view.build())
 
 
 @util.command()
