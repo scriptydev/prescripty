@@ -57,16 +57,16 @@ async def echo(ctx: lightbulb.Context) -> None:
 async def poll(ctx: lightbulb.Context) -> None:
     topic = ctx.options.topic
     options = {
-        u"\U0001f1e6": ctx.options.option_a,
-        u"\U0001f1e7": ctx.options.option_b,
-        u"\U0001f1e8": ctx.options.option_c,
-        u"\U0001f1e9": ctx.options.option_d,
-        u"\U0001f1ea": ctx.options.option_e,
-        u"\U0001f1eb": ctx.options.option_f,
-        u"\U0001f1ec": ctx.options.option_g,
-        u"\U0001f1ed": ctx.options.option_h,
-        u"\U0001f1ee": ctx.options.option_i,
-        u"\U0001f1ef": ctx.options.option_j,
+        "\U0001f1e6": ctx.options.option_a,
+        "\U0001f1e7": ctx.options.option_b,
+        "\U0001f1e8": ctx.options.option_c,
+        "\U0001f1e9": ctx.options.option_d,
+        "\U0001f1ea": ctx.options.option_e,
+        "\U0001f1eb": ctx.options.option_f,
+        "\U0001f1ec": ctx.options.option_g,
+        "\U0001f1ed": ctx.options.option_h,
+        "\U0001f1ee": ctx.options.option_i,
+        "\U0001f1ef": ctx.options.option_j,
     }
 
     embed = hikari.Embed(

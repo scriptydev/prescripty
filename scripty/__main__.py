@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 import hikari
 import lightbulb
+import miru
 
 
 load_dotenv()
@@ -12,24 +13,39 @@ load_dotenv()
 
 token = os.environ["TOKEN"]
 guild_ids = [
-    hikari.Snowflake(os.environ["GUILD_ID"]),
+    hikari.Snowflake(os.environ["GUILD_ID_PRIMARY"]),
     hikari.Snowflake(os.environ["GUILD_ID_SECONDARY"]),
 ]
 
 
-class BotApp(lightbulb.BotApp):
-    def __init__(self):
+class ScriptyBotApp(lightbulb.BotApp):
+    def __init__(self) -> None:
         super().__init__(
             token=token,
             default_enabled_guilds=guild_ids,
             help_slash_command=True,
         )
-        self.uptime = int(round(datetime.datetime.now().timestamp()))
+
+    def setup_bot(self) -> None:
+        self.load_extensions_from("./scripty/plugins")
+        miru.load(self)
+
+    def run(self) -> None:
+        self.setup_bot()
+        super().run(
+            activity=(
+                hikari.Activity(
+                    name="the Devs Learn Hikari",
+                    type=hikari.ActivityType.WATCHING,
+                )
+            )
+        )
 
 
-def instantiate_bot() -> lightbulb.BotApp:
-    bot = BotApp()
-    bot.load_extensions_from("./scripty/plugins")
+def instantiate_bot() -> ScriptyBotApp:
+    bot = ScriptyBotApp()
+
+    bot.uptime = int(round(datetime.datetime.now(datetime.timezone.utc).timestamp()))
 
     return bot
 

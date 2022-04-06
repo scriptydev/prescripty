@@ -3,6 +3,7 @@ import random
 import aiohttp
 import hikari
 import lightbulb
+import miru
 
 from scripty import functions
 
@@ -16,7 +17,9 @@ fun = lightbulb.Plugin("Fun")
 async def coin(ctx: lightbulb.Context) -> None:
     coin = ["Heads", "Tails"]
     embed = hikari.Embed(
-        title="Flip", description=random.choice(coin), color=functions.Color.blurple()
+        title="Flip",
+        description=random.choice(coin),
+        color=functions.Color.blurple(),
     )
     await ctx.respond(embed)
 
@@ -27,7 +30,9 @@ async def coin(ctx: lightbulb.Context) -> None:
 async def dice(ctx: lightbulb.Context) -> None:
     dice = [1, 2, 3, 4, 5, 6]
     embed = hikari.Embed(
-        title="Roll", description=random.choice(dice), color=functions.Color.blurple()
+        title="Roll",
+        description=random.choice(dice),
+        color=functions.Color.blurple(),
     )
     await ctx.respond(embed)
 
@@ -64,6 +69,63 @@ async def meme(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.SlashCommand)
 async def rickroll(ctx: lightbulb.Context) -> None:
     await ctx.respond("https://youtu.be/dQw4w9WgXcQ")
+
+
+class RPSView(miru.View):
+    def __init__(self):
+        super().__init__(timeout=30.0)
+
+    @miru.button(label="Rock", style=hikari.ButtonStyle.PRIMARY)
+    async def rock(self, button: miru.Button, ctx: miru.Context) -> None:
+        embed = hikari.Embed(
+            title="RPS",
+            description="You clicked on Rock! `This command is currently in development.`",
+            color=functions.Color.blurple(),
+        )
+        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+    @miru.button(label="Paper", style=hikari.ButtonStyle.DANGER)
+    async def paper(self, button: miru.Button, ctx: miru.Context) -> None:
+        embed = hikari.Embed(
+            title="RPS",
+            description="You clicked on Paper! `This command is currently in development.`",
+            color=functions.Color.blurple(),
+        )
+        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+    @miru.button(label="Scissors", style=hikari.ButtonStyle.SUCCESS)
+    async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:
+        embed = hikari.Embed(
+            title="RPS",
+            description="You clicked on Scissors! `This command is currently in development.`",
+            color=functions.Color.blurple(),
+        )
+        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+    async def on_timeout(self) -> None:
+        # await ctx.edit_response("This command was timed out!", components=None)
+        # Cannot seem to access the context... looking for a workaround; docs not helping :/ so I'll commit for now
+        pass
+
+
+@fun.command()
+@lightbulb.command("rps", "Play Rock Paper Scissors", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def rps(ctx: lightbulb.Context) -> None:
+    rps = ["Rock", "Paper", "Scissors"]
+
+    view = RPSView()
+
+    embed = hikari.Embed(
+        title="RPS",
+        description="Click on the button options to continue the game!",
+        color=functions.Color.blurple(),
+    )
+
+    await ctx.respond(embed=embed, components=view.build())
+    message = await ctx.interaction.fetch_initial_response()
+    view.start(message)
+    await view.wait()
 
 
 def load(bot: lightbulb.BotApp):
