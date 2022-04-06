@@ -72,51 +72,99 @@ async def rickroll(ctx: lightbulb.Context) -> None:
 
 
 class RPSView(miru.View):
+    RPS = ("Rock", "Paper", "Scissors")
+
+    win = hikari.Embed(
+        title="RPS",
+        description="You won! You chose `{}` and Scripty chose `{}`",
+        color=functions.Color.blurple(),
+    )
+
+    lose = hikari.Embed(
+        title="RPS",
+        description="You lost! You chose `{}` and Scripty chose `{}`",
+        color=functions.Color.blurple(),
+    )
+
+    tie = hikari.Embed(
+        title="RPS",
+        description="You tied! You chose `{}` and Scripty chose `{}`",
+        color=functions.Color.blurple(),
+    )
+
     def __init__(self):
         super().__init__(timeout=30.0)
+        self._rps = random.choice(self.RPS)
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.PRIMARY)
     async def rock(self, button: miru.Button, ctx: miru.Context) -> None:
-        embed = hikari.Embed(
-            title="RPS",
-            description="You clicked on Rock! `This command is currently in development.`",
-            color=functions.Color.blurple(),
+        RESPONSES = {
+            "Rock": self.win,
+            "Paper": self.lose,
+            "Scissors": self.tie,
+        }
+
+        RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
+            self.rock.label, self._rps
         )
-        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+        await ctx.edit_response(RESPONSES[self._rps], components=None)
+        self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.DANGER)
     async def paper(self, button: miru.Button, ctx: miru.Context) -> None:
-        embed = hikari.Embed(
-            title="RPS",
-            description="You clicked on Paper! `This command is currently in development.`",
-            color=functions.Color.blurple(),
+        RESPONSES = {
+            "Rock": self.win,
+            "Paper": self.tie,
+            "Scissors": self.lose,
+        }
+
+        RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
+            self.paper.label, self._rps
         )
-        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+        await ctx.edit_response(RESPONSES[self._rps], components=None)
+        self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.SUCCESS)
     async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:
-        embed = hikari.Embed(
-            title="RPS",
-            description="You clicked on Scissors! `This command is currently in development.`",
-            color=functions.Color.blurple(),
+        RESPONSES = {
+            "Rock": self.lose,
+            "Paper": self.win,
+            "Scissors": self.tie,
+        }
+
+        RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
+            self.scissors.label, self._rps
         )
-        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+        await ctx.edit_response(RESPONSES[self._rps], components=None)
+        self.stop()
+
+    async def view_check(self, ctx: miru.Context) -> bool:
+        if ctx.user != self.message.interaction.user:
+            await ctx.respond("This isn't for you!", flags=hikari.MessageFlag.EPHEMERAL)
+            return False
+        else:
+            return True
 
     async def on_timeout(self) -> None:
-        embed = hikari.Embed(
-            title="RPS",
-            description="Command was timed out! `This command is currently in development.`",
-            color=functions.Color.blurple(),
+        self.rock.disabled = True
+        self.paper.disabled = True
+        self.scissors.disabled = True
+        self.add_item(
+            miru.Button(
+                style=hikari.ButtonStyle.SECONDARY, label="Timed out", disabled=True
+            )
         )
-        await self.message.edit(embed, components=None)
+
+        await self.message.edit(components=self.build())
 
 
 @fun.command()
 @lightbulb.command("rps", "Play rock paper scissors", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def rps(ctx: lightbulb.Context) -> None:
-    rps = ["Rock", "Paper", "Scissors"]
-
     view = RPSView()
 
     embed = hikari.Embed(
@@ -126,6 +174,7 @@ async def rps(ctx: lightbulb.Context) -> None:
     )
 
     await ctx.respond(embed=embed, components=view.build())
+
     message = await ctx.interaction.fetch_initial_response()
     view.start(message)
     await view.wait()

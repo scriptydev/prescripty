@@ -12,7 +12,7 @@ util = lightbulb.Plugin("Utility")
 
 
 @util.command()
-@lightbulb.command("about", "Displays information about Scripty", auto_defer=True)
+@lightbulb.command("about", "About the Scripty Discord bot", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def about(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
@@ -43,7 +43,7 @@ class InviteView(miru.View):
 
 
 @util.command()
-@lightbulb.command("invite", "Replies with Scripty bot invite", auto_defer=True)
+@lightbulb.command("invite", "Add the bot to server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()

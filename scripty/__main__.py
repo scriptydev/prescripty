@@ -29,7 +29,7 @@ class ScriptyBotApp(lightbulb.BotApp):
         )
 
     def setup(self) -> None:
-        self.load_extensions_from("./scripty/plugins")
+        self.load_extensions_from("./scripty/extensions")
         miru.load(self)
 
     def run(self) -> None:
