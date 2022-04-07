@@ -75,73 +75,58 @@ async def rickroll(ctx: lightbulb.Context) -> None:
 
 
 class RPSView(miru.View):
-    RPS = ("Rock", "Paper", "Scissors")
-
-    win = hikari.Embed(
-        title="RPS",
-        description="You won! You chose `{}` and Scripty chose `{}`",
-        color=functions.Color.blurple(),
-    )
-
-    lose = hikari.Embed(
-        title="RPS",
-        description="You lost! You chose `{}` and Scripty chose `{}`",
-        color=functions.Color.blurple(),
-    )
-
-    tie = hikari.Embed(
-        title="RPS",
-        description="You tied! You chose `{}` and Scripty chose `{}`",
-        color=functions.Color.blurple(),
-    )
+    RPS: dict[str, int] = {"Rock": 0, "Paper": 1, "Scissors": 2}
 
     def __init__(self):
         super().__init__(timeout=30.0)
-        self._rps = random.choice(self.RPS)
+        self._rps = random.choice((0, 1, 2))
 
-    @miru.button(label="Rock", style=hikari.ButtonStyle.PRIMARY)
+    def get_value(self, key: str) -> int:
+        return self.RPS[key]
+
+    def get_key(self, value: int) -> str:
+        if not 0 <= value <= 2:
+            raise ValueError("Invalid value")
+
+        return tuple(k for k, v in self.RPS.items() if v == value)[0]
+
+    def generate_embed(self, message: str) -> hikari.Embed:
+        return hikari.Embed(
+            title="RPS",
+            description=message,
+            color=functions.Color.blurple(),
+        )
+
+    def determine_outcome(self, player_choice: str) -> hikari.Embed:
+        player_value = self.get_value(player_choice)
+        computer_choice = self.get_key(self._rps)
+
+        if (player_value + 1) % 3 == self._rps:
+            return self.generate_embed(
+                f"You lost! `{computer_choice}` beats `{player_choice}`"
+            )
+
+        elif player_value == self._rps:
+            return self.generate_embed(f"You tied! Both chose `{player_choice}`")
+
+        else:
+            return self.generate_embed(
+                f"You won! `{player_choice}` beats `{computer_choice}`"
+            )
+
+    @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
     async def rock(self, button: miru.Button, ctx: miru.Context) -> None:
-        RESPONSES = {
-            "Rock": self.tie,
-            "Paper": self.lose,
-            "Scissors": self.win,
-        }
-
-        RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
-            self.rock.label, self._rps
-        )
-
-        await ctx.edit_response(RESPONSES[self._rps], components=None)
+        await ctx.edit_response(self.determine_outcome("Rock"), components=None)
         self.stop()
 
-    @miru.button(label="Paper", style=hikari.ButtonStyle.DANGER)
+    @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
     async def paper(self, button: miru.Button, ctx: miru.Context) -> None:
-        RESPONSES = {
-            "Rock": self.win,
-            "Paper": self.tie,
-            "Scissors": self.lose,
-        }
-
-        RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
-            self.paper.label, self._rps
-        )
-
-        await ctx.edit_response(RESPONSES[self._rps], components=None)
+        await ctx.edit_response(self.determine_outcome("Paper"), components=None)
         self.stop()
 
-    @miru.button(label="Scissors", style=hikari.ButtonStyle.SUCCESS)
+    @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
     async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:
-        RESPONSES = {
-            "Rock": self.lose,
-            "Paper": self.win,
-            "Scissors": self.tie,
-        }
-
-        RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
-            self.scissors.label, self._rps
-        )
-
-        await ctx.edit_response(RESPONSES[self._rps], components=None)
+        await ctx.edit_response(self.determine_outcome("Scissors"), components=None)
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
@@ -149,7 +134,7 @@ class RPSView(miru.View):
             embed = hikari.Embed(
                 title="Error",
                 description="This command was not invoked by you!",
-                color=functions.Color.red(),
+                color=functions.Color.blurple(),
             )
             await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
