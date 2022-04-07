@@ -31,6 +31,28 @@ async def about(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
+@util.command()
+@lightbulb.command("sysinfo", "System info pertaining to the bot", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def sysinfo(ctx: lightbulb.Context) -> None:
+    system = platform.uname()
+
+    app_user = ctx.app.get_me()
+
+    embed = hikari.Embed(
+        title="About",
+        color=functions.Color.blurple(),
+    )
+    embed.set_author(name=app_user.username, icon=app_user.avatar_url)
+    embed.add_field("System", system.system, inline=True)
+    embed.add_field("Node", system.node, inline=True)
+    embed.add_field("Release", system.version, inline=True)
+    embed.add_field("Machine", system.machine, inline=True)
+    embed.add_field("Processor", system.processor, inline=True)
+
+    await ctx.respond(embed)
+
+
 class InviteView(miru.View):
     def __init__(self) -> None:
         super().__init__()
