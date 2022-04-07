@@ -143,7 +143,12 @@ class RPSView(miru.View):
 
     async def view_check(self, ctx: miru.Context) -> bool:
         if ctx.user != self.message.interaction.user:
-            await ctx.respond("This isn't for you!", flags=hikari.MessageFlag.EPHEMERAL)
+            embed = hikari.Embed(
+                title="Error",
+                description="This command was not invoked by you!",
+                color=functions.Color.red(),
+            )
+            await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
         else:
             return True
