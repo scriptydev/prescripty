@@ -99,9 +99,9 @@ class RPSView(miru.View):
     @miru.button(label="Rock", style=hikari.ButtonStyle.PRIMARY)
     async def rock(self, button: miru.Button, ctx: miru.Context) -> None:
         RESPONSES = {
-            "Rock": self.win,
+            "Rock": self.tie,
             "Paper": self.lose,
-            "Scissors": self.tie,
+            "Scissors": self.win,
         }
 
         RESPONSES[self._rps].description = RESPONSES[self._rps].description.format(
