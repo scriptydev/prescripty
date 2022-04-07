@@ -1,4 +1,5 @@
 aiohttp
+dateparser
 hikari
 hikari-lightbulb
 hikari-miru
