@@ -1,4 +1,5 @@
 import platform
+import psutil
 
 import hikari
 import lightbulb
@@ -40,14 +41,19 @@ async def sysinfo(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
 
     embed = hikari.Embed(
-        title="About",
+        title="SysInfo",
         color=functions.Color.blurple(),
     )
     embed.set_author(name=app_user.username, icon=app_user.avatar_url)
     embed.add_field("System", system.system, inline=True)
-    embed.add_field("Node", system.node, inline=True)
     embed.add_field("Release", system.version, inline=True)
     embed.add_field("Machine", system.machine, inline=True)
+    embed.add_field("CPU", f"{psutil.cpu_percent()}%", inline=True)
+    embed.add_field(
+        "Memory",
+        f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",
+        inline=True,
+    )
     embed.add_field("Processor", system.processor, inline=True)
 
     await ctx.respond(embed)
