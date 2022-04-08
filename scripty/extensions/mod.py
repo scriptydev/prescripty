@@ -1,5 +1,8 @@
+import asyncio
+import concurrent
 import datetime
 
+import dateparser
 import hikari
 import lightbulb
 
@@ -40,57 +43,89 @@ async def on_delete_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(f"Missing `MANAGE_MESSAGES` Permission!")
 
 
-# Setup duration converters later; but for now I want to commit this commented out code
-# @mod.command()
-# @lightbulb.command("timeout", "Timeout member")
-# @lightbulb.implements(lightbulb.SlashCommandGroup)
-# async def timeout() -> None:
-#     pass
+# This command still needs major work. The basic functionality is there, however parsing durations using the dateparser library is still a bit of a mess with blocking asyncio. Our idea solution might be to create out custom parser instead. We also need to add error handling later.
+@mod.command()
+@lightbulb.command("timeout", "Timeout member", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommandGroup)
+async def timeout() -> None:
+    pass
 
 
-# @timeout.child()
-# @lightbulb.add_checks(
-#     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS)
-# )
-# @lightbulb.option("reason", "Reason for timeout", str)
-# @lightbulb.option("duration", "Duration of the timeout", int)
-# @lightbulb.option("member", "Member to timeout", hikari.Member)
-# @lightbulb.command("set", "Set timeout for member", auto_defer=True)
-# @lightbulb.implements(lightbulb.SlashSubCommand)
-# async def set(ctx: lightbulb.Context) -> None:
-#     member = ctx.options.member
-#     duration = ctx.options.duration
+@timeout.child()
+@lightbulb.add_checks(
+    lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS)
+)
+@lightbulb.option("reason", "Reason for timeout", str, required=False)
+@lightbulb.option("duration", "Duration of the timeout", str)
+@lightbulb.option("member", "Member to timeout", hikari.Member)
+@lightbulb.command("set", "Set timeout for member", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def set(ctx: lightbulb.Context) -> None:
+    member = ctx.options.member
+    duration = ctx.options.duration
+    reason = ctx.options.reason or None
 
-#     await member.edit(communication_disabled_until=duration)
+    def get_duration(duration) -> datetime.datetime or None:
+        duration = dateparser.parse(duration, settings={"PREFER_DATES_FROM": "future"})
+        return duration
 
-#     embed = hikari.Embed(
-#         title="Timeout",
-#         description=f"{member.mention} has been timed out for `{duration}` seconds",
-#         color=functions.Color.blurple(),
-#     )
+    async def async_duration(loop, executor):
+        await asyncio.wait(
+            fs={loop.run_in_executor(executor, get_duration, duration)},
+            return_when=asyncio.ALL_COMPLETED,
+        )
 
-#     await ctx.respond(embed)
+    loop = asyncio.get_event_loop()
+    executor = concurrent.futures.ThreadPoolExecutor()
+    duration = await loop.create_task(async_duration(loop, executor))
+
+    if not duration:
+        await ctx.respond("Invalid duration!")
+
+    else:
+        duration_resolved = int(round(duration.timestamp()))
+        duration_resolved_full = f"<t:{duration_resolved}:F>"
+        duration_resolved_relative = f"<t:{duration_resolved}:R>"
+
+        await member.edit(communication_disabled_until=duration)
+
+        embed = hikari.Embed(
+            title="Timeout",
+            description=f"Timed out **{str(member)}** until {duration_resolved_full} {duration_resolved_relative} \nReason: `{reason}`",
+            color=functions.Color.green(),
+        )
+
+        await ctx.respond(embed)
 
 
-# @timeout.child()
-# @lightbulb.add_checks(
-#     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS)
-# )
-# @lightbulb.option("member", "Member to timeout", hikari.Member)
-# @lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
-# @lightbulb.implements(lightbulb.SlashSubCommand)
-# async def remove(ctx: lightbulb.Context) -> None:
-#     member = ctx.options.member
+@timeout.child()
+@lightbulb.add_checks(
+    lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS)
+)
+@lightbulb.option("member", "Member to timeout", hikari.Member)
+@lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def remove(ctx: lightbulb.Context) -> None:
+    member = ctx.options.member
 
-#     await member.edit(communication_disabled_until=None)
+    if not member.communication_disabled_until:
+        embed = hikari.Embed(
+            title="Timeout Error",
+            description="You cannot remove timeout from member that is not timed out!",
+            color=functions.Color.red(),
+        )
+        await ctx.respond(embed)
 
-#     embed = hikari.Embed(
-#         title="Timeout",
-#         description=f"{member.mention} has been removed from timeout",
-#         color=functions.Color.blurple(),
-#     )
+    else:
+        await member.edit(communication_disabled_until=None)
 
-#     await ctx.respond(embed)
+        embed = hikari.Embed(
+            title="Timeout",
+            description=f"Removed timeout from **{str(member)}**",
+            color=functions.Color.green(),
+        )
+
+        await ctx.respond(embed)
 
 
 def load(bot: lightbulb.BotApp):
