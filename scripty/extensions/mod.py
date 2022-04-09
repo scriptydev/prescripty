@@ -32,14 +32,29 @@ async def delete(ctx: lightbulb.Context) -> None:
         task = asyncio.create_task(ctx.app.rest.delete_messages(channel, messages))
         tasks.append(task)
 
-    await asyncio.wait(tasks)
+    def generate_embed(message: str) -> hikari.Embed:
+        return hikari.Embed(
+            title="Delete",
+            description=message,
+            color=functions.Color.green(),
+        )
 
-    embed = hikari.Embed(
-        title="Delete",
-        description=f"`{amount} message(s)` deleted",
-        color=functions.Color.blurple(),
-    )
-    await ctx.respond(embed)
+    if tasks:
+        await asyncio.wait(tasks)
+
+        if amount == 1:
+            await ctx.respond(generate_embed(f"`{amount} message` deleted"))
+
+        else:
+            await ctx.respond(generate_embed(f"`{amount} messages` deleted"))
+
+    else:
+        embed = hikari.Embed(
+            title="Delete Error",
+            description="No messages to delete!",
+            color=functions.Color.red(),
+        )
+        await ctx.respond(embed)
 
 
 @delete.set_error_handler()
@@ -47,7 +62,12 @@ async def on_delete_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception.__cause__ or event.exception
 
     if isinstance(exception, lightbulb.CheckFailure):
-        await event.context.respond(f"Missing `MANAGE_MESSAGES` Permission!")
+        embed = hikari.Embed(
+            title="Delete Error",
+            description="Missing `MANAGE_MESSAGES` permission!",
+            color=functions.Color.red(),
+        )
+        await event.context.respond(embed)
 
 
 # This command still needs major work. The basic functionality is there, however parsing durations using the dateparser library is still a bit of a mess with blocking asyncio. Our idea solution might be to create out custom parser instead. We also need to add error handling later.
