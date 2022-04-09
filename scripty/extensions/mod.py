@@ -13,6 +13,52 @@ mod = lightbulb.Plugin("Moderation")
 
 
 @mod.command()
+@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS))
+@lightbulb.option("reason", "Reason for ban", str, required=False)
+@lightbulb.option(
+    "delete_message_days",
+    "Days to delete user messages",
+    int,
+    required=False,
+    min_value=1,
+    max_value=7,
+)
+@lightbulb.option("user", "User to ban", hikari.User)
+@lightbulb.command("ban", "Ban user from server", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def ban(ctx: lightbulb.Context) -> None:
+    user = ctx.options.user
+    delete_message_days = ctx.options.delete_message_days or hikari.UNDEFINED
+    reason = ctx.options.reason or hikari.UNDEFINED
+    guild = ctx.guild_id
+
+    await ctx.app.rest.ban_user(
+        guild, user, delete_message_days=delete_message_days, reason=reason
+    )
+
+    embed = hikari.Embed(
+        title="Ban",
+        description=f"Banned **{str(user)}** \nReason: `{'No reason provided' if reason is hikari.UNDEFINED else reason}`",
+        color=functions.Color.green(),
+    )
+
+    await ctx.respond(embed)
+
+
+@ban.set_error_handler()
+async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
+    exception = event.exception.__cause__ or event.exception
+
+    if isinstance(exception, lightbulb.CheckFailure):
+        embed = hikari.Embed(
+            title="Ban Error",
+            description="Missing `BAN_MEMBERS` permission!",
+            color=functions.Color.red(),
+        )
+        await event.context.respond(embed)
+
+
+@mod.command()
 @lightbulb.add_checks(
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
@@ -21,7 +67,7 @@ mod = lightbulb.Plugin("Moderation")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete(ctx: lightbulb.Context) -> None:
     amount = ctx.options.amount
-    channel = ctx.get_channel()
+    channel = ctx.channel_id
 
     bulk_delete_limit = datetime.datetime.now(
         datetime.timezone.utc
