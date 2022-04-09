@@ -25,11 +25,22 @@ async def delete(ctx: lightbulb.Context) -> None:
 
     iterator = (
         ctx.app.rest.fetch_messages(channel)
-        .limit(amount)
         .filter(
             lambda message: message.created_at
             > datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
         )
+        .limit(amount)
+    )
+
+    # A bit hacky; needed to do this because of the async iterator exhaustion
+    count = await (
+        ctx.app.rest.fetch_messages(channel)
+        .filter(
+            lambda message: message.created_at
+            > datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
+        )
+        .limit(amount)
+        .count()
     )
 
     tasks = []
@@ -47,11 +58,26 @@ async def delete(ctx: lightbulb.Context) -> None:
     if tasks:
         await asyncio.wait(tasks)
 
-        if amount == 1:
-            await ctx.respond(generate_embed(f"`{amount} message` deleted"))
+        if count < amount:
+            if count == 1:
+                await ctx.respond(
+                    generate_embed(
+                        f"`{count} message` deleted \nOlder messages past `14 days` cannot be deleted"
+                    )
+                )
+
+            else:
+                await ctx.respond(
+                    generate_embed(
+                        f"`{count} messages` deleted \nOlder messages past `14 days` cannot be deleted"
+                    )
+                )
+
+        elif count == 1:
+            await ctx.respond(generate_embed(f"`{count} message` deleted"))
 
         else:
-            await ctx.respond(generate_embed(f"`{amount} messages` deleted"))
+            await ctx.respond(generate_embed(f"`{count} messages` deleted"))
 
     else:
         embed = hikari.Embed(
