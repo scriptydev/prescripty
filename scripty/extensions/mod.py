@@ -23,13 +23,20 @@ async def delete(ctx: lightbulb.Context) -> None:
     amount = ctx.options.amount
     channel = ctx.get_channel()
 
-    iterator = ctx.app.rest.fetch_messages(channel).limit(amount)  # .filter()
+    iterator = (
+        ctx.app.rest.fetch_messages(channel).limit(amount)
+        # .filter(...)
+    )
+    tasks = []
     async for messages in iterator.chunk(100):
-        await ctx.app.rest.delete_messages(channel, messages)
+        task = asyncio.create_task(ctx.app.rest.delete_messages(channel, messages))
+        tasks.append(task)
+
+    await asyncio.wait(tasks)
 
     embed = hikari.Embed(
         title="Delete",
-        description=f"`{amount}` message(s) deleted",
+        description=f"`{amount} message(s)` deleted",
         color=functions.Color.blurple(),
     )
     await ctx.respond(embed)
