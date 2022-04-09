@@ -24,9 +24,14 @@ async def delete(ctx: lightbulb.Context) -> None:
     channel = ctx.get_channel()
 
     iterator = (
-        ctx.app.rest.fetch_messages(channel).limit(amount)
-        # .filter(...)
+        ctx.app.rest.fetch_messages(channel)
+        .limit(amount)
+        .filter(
+            lambda message: message.created_at
+            > datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
+        )
     )
+
     tasks = []
     async for messages in iterator.chunk(100):
         task = asyncio.create_task(ctx.app.rest.delete_messages(channel, messages))
@@ -51,7 +56,7 @@ async def delete(ctx: lightbulb.Context) -> None:
     else:
         embed = hikari.Embed(
             title="Delete Error",
-            description="No messages to delete!",
+            description="Unable to delete messages! \nMessages are older than `14 days` or do not exist",
             color=functions.Color.red(),
         )
         await ctx.respond(embed)
