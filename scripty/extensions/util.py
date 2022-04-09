@@ -13,8 +13,15 @@ util = lightbulb.Plugin("Utility")
 
 
 @util.command()
+@lightbulb.command("bot", "Functions related to Scripty", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashCommandGroup)
+async def bot() -> None:
+    pass
+
+
+@bot.child()
 @lightbulb.command("about", "About the Scripty Discord bot", auto_defer=True)
-@lightbulb.implements(lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashSubCommand)
 async def about(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
 
@@ -32,16 +39,16 @@ async def about(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@util.command()
-@lightbulb.command("sysinfo", "System info pertaining to the bot", auto_defer=True)
-@lightbulb.implements(lightbulb.SlashCommand)
-async def sysinfo(ctx: lightbulb.Context) -> None:
+@bot.child()
+@lightbulb.command("system", "System info pertaining to the bot", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
 
     app_user = ctx.app.get_me()
 
     embed = hikari.Embed(
-        title="SysInfo",
+        title="System",
         color=functions.Color.blurple(),
     )
     embed.set_author(name=app_user.username, icon=app_user.avatar_url)
@@ -70,9 +77,9 @@ class InviteView(miru.View):
         )
 
 
-@util.command()
+@bot.child()
 @lightbulb.command("invite", "Add the bot to server", auto_defer=True)
-@lightbulb.implements(lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashSubCommand)
 async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()
 
@@ -85,9 +92,9 @@ async def invite(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed, components=view.build())
 
 
-@util.command()
+@bot.child()
 @lightbulb.command("ping", "Replies with bot latency", auto_defer=True)
-@lightbulb.implements(lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashSubCommand)
 async def ping(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Ping",
@@ -97,9 +104,9 @@ async def ping(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@util.command()
+@bot.child()
 @lightbulb.command("uptime", "Replies with bot uptime", auto_defer=True)
-@lightbulb.implements(lightbulb.SlashCommand)
+@lightbulb.implements(lightbulb.SlashSubCommand)
 async def uptime(ctx: lightbulb.Context) -> None:
     uptime_resolved_full = f"<t:{ctx.app.uptime}:F>"
     uptime_resolved_relative = f"<t:{ctx.app.uptime}:R>"
