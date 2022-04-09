@@ -80,7 +80,12 @@ async def set(ctx: lightbulb.Context) -> None:
     duration = await loop.create_task(async_duration(loop, executor))
 
     if not duration:
-        await ctx.respond("Invalid duration!")
+        embed=hikari.Embed(
+            title="Timeout Error",
+            description="Invalid duration provided!",
+            color=functions.Color.blurple(),
+        )
+        await ctx.respond(embed)
 
     else:
         duration_resolved = int(round(duration.timestamp()))
