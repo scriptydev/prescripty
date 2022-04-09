@@ -34,9 +34,10 @@ async def echo(ctx: lightbulb.Context) -> None:
     text = ctx.options.text
     embed = hikari.Embed(
         title="Echo",
-        description=f"{ctx.author.mention} said: ```{text}```",
+        description=f"```{text}```",
         color=functions.Color.blurple(),
     )
+    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url)
     await ctx.respond(embed)
 
 
