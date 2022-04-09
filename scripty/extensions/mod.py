@@ -52,7 +52,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
     if isinstance(exception, lightbulb.CheckFailure):
         embed = hikari.Embed(
             title="Ban Error",
-            description="Missing `BAN_MEMBERS` permission!",
+            description="`BAN_MEMBERS` permission missing!",
             color=functions.Color.red(),
         )
         await event.context.respond(embed)
@@ -133,7 +133,7 @@ async def on_delete_error(event: lightbulb.CommandErrorEvent) -> None:
     if isinstance(exception, lightbulb.CheckFailure):
         embed = hikari.Embed(
             title="Delete Error",
-            description="Missing `MANAGE_MESSAGES` permission!",
+            description="`MANAGE_MESSAGES` permission missing!",
             color=functions.Color.red(),
         )
         await event.context.respond(embed)

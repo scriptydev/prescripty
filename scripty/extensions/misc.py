@@ -41,6 +41,19 @@ async def echo(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
+@echo.set_error_handler()
+async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
+    exception = event.exception.__cause__ or event.exception
+
+    if isinstance(exception, lightbulb.CheckFailure):
+        embed = hikari.Embed(
+            title="Ban Error",
+            description="`MANAGE_MESSAGES` permission missing!",
+            color=functions.Color.red(),
+        )
+        await event.context.respond(embed)
+
+
 @misc.command()
 @lightbulb.option("option_j", "Option J", str, required=False)
 @lightbulb.option("option_i", "Option I", str, required=False)
