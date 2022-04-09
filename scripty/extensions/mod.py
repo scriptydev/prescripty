@@ -23,12 +23,13 @@ async def delete(ctx: lightbulb.Context) -> None:
     amount = ctx.options.amount
     channel = ctx.get_channel()
 
+    bulk_delete_limit = datetime.datetime.now(
+        datetime.timezone.utc
+    ) - datetime.timedelta(days=14)
+
     iterator = (
         ctx.app.rest.fetch_messages(channel)
-        .take_while(
-            lambda message: message.created_at
-            > datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
-        )
+        .take_while(lambda message: message.created_at > bulk_delete_limit)
         .limit(amount)
     )
 
