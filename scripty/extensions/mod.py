@@ -25,7 +25,7 @@ async def delete(ctx: lightbulb.Context) -> None:
 
     iterator = (
         ctx.app.rest.fetch_messages(channel)
-        .filter(
+        .take_while(
             lambda message: message.created_at
             > datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
         )
