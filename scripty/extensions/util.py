@@ -40,7 +40,7 @@ async def about(ctx: lightbulb.Context) -> None:
 
 
 @bot.child()
-@lightbulb.command("system", "System info pertaining to the bot", auto_defer=True)
+@lightbulb.command("system", "Bot system information", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
 async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
@@ -78,7 +78,7 @@ class InviteView(miru.View):
 
 
 @bot.child()
-@lightbulb.command("invite", "Add the bot to server", auto_defer=True)
+@lightbulb.command("invite", "Add bot to server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
 async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()
