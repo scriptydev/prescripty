@@ -32,19 +32,10 @@ async def delete(ctx: lightbulb.Context) -> None:
         .limit(amount)
     )
 
-    # A bit hacky; needed to do this because of the async iterator exhaustion
-    count = await (
-        ctx.app.rest.fetch_messages(channel)
-        .filter(
-            lambda message: message.created_at
-            > datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
-        )
-        .limit(amount)
-        .count()
-    )
-
+    count = 0
     tasks = []
     async for messages in iterator.chunk(100):
+        count += len(messages)
         task = asyncio.create_task(ctx.app.rest.delete_messages(channel, messages))
         tasks.append(task)
 
