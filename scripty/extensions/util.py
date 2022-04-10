@@ -33,28 +33,28 @@ async def about(ctx: lightbulb.Context) -> None:
 
 
 @util.command()
-@lightbulb.command("sysinfo", "System info pertaining to the bot", auto_defer=True)
+@lightbulb.command("system", "Bot system information", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def sysinfo(ctx: lightbulb.Context) -> None:
+async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
 
     app_user = ctx.app.get_me()
 
     embed = hikari.Embed(
-        title="SysInfo",
+        title="System",
         color=functions.Color.blurple(),
     )
     embed.set_author(name=app_user.username, icon=app_user.avatar_url)
     embed.add_field("System", system.system, inline=True)
     embed.add_field("Release", system.version, inline=True)
     embed.add_field("Machine", system.machine, inline=True)
+    embed.add_field("Processor", system.processor, inline=True)
     embed.add_field("CPU", f"{psutil.cpu_percent()}%", inline=True)
     embed.add_field(
         "Memory",
         f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",
         inline=True,
     )
-    embed.add_field("Processor", system.processor, inline=True)
 
     await ctx.respond(embed)
 
@@ -71,7 +71,7 @@ class InviteView(miru.View):
 
 
 @util.command()
-@lightbulb.command("invite", "Add the bot to server", auto_defer=True)
+@lightbulb.command("invite", "Add bot to server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()

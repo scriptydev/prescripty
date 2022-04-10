@@ -34,10 +34,24 @@ async def echo(ctx: lightbulb.Context) -> None:
     text = ctx.options.text
     embed = hikari.Embed(
         title="Echo",
-        description=f"{ctx.author.mention} said: ```{text}```",
+        description=f"```{text}```",
         color=functions.Color.blurple(),
     )
+    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url)
     await ctx.respond(embed)
+
+
+@echo.set_error_handler()
+async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
+    exception = event.exception.__cause__ or event.exception
+
+    if isinstance(exception, lightbulb.CheckFailure):
+        embed = hikari.Embed(
+            title="Echo Error",
+            description="`MANAGE_MESSAGES` permission missing!",
+            color=functions.Color.red(),
+        )
+        await event.context.respond(embed)
 
 
 @misc.command()
