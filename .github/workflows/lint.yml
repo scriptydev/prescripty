@@ -10,6 +10,6 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
-          src: "./src"
+          src: "./scripty"
           version: "21.5b1"
       - uses: jakebailey/pyright-action@v1.1.0
