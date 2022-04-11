@@ -14,10 +14,10 @@ load_dotenv()
 
 
 token = os.environ["TOKEN"]
-guild_ids = [
+guild_ids = (
     hikari.Snowflake(os.environ["GUILD_ID_PRIMARY"]),
     hikari.Snowflake(os.environ["GUILD_ID_SECONDARY"]),
-]
+)
 
 
 class ScriptyBotApp(lightbulb.BotApp):
