@@ -26,11 +26,12 @@ mod = lightbulb.Plugin("Moderation")
 @lightbulb.option("user", "User to ban", hikari.User)
 @lightbulb.command("ban", "Ban user from server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def ban(ctx: lightbulb.SlashContext) -> None:
+async def ban(ctx: lightbulb.Context) -> None:
     user = ctx.options.user
     delete_message_days = ctx.options.delete_message_days or hikari.UNDEFINED
     reason = ctx.options.reason or hikari.UNDEFINED
     guild = ctx.guild_id
+    assert guild is not None, "Guild ID is None"
 
     await ctx.app.rest.ban_user(
         guild, user, delete_message_days=delete_message_days, reason=reason
@@ -66,7 +67,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.option("amount", "Amount to delete", int, min_value=1)
 @lightbulb.command("delete", "Purge messages", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def delete(ctx: lightbulb.SlashContext) -> None:
+async def delete(ctx: lightbulb.Context) -> None:
     amount = ctx.options.amount
     channel = ctx.channel_id
 
@@ -81,7 +82,7 @@ async def delete(ctx: lightbulb.SlashContext) -> None:
     )
 
     count = 0
-    tasks = []
+    tasks: typing.Any | None = []
     async for messages in iterator.chunk(100):
         count += len(messages)
         task = asyncio.create_task(ctx.app.rest.delete_messages(channel, messages))
@@ -144,14 +145,14 @@ async def timeout() -> None:
 @lightbulb.option("member", "Member to timeout", hikari.Member)
 @lightbulb.command("set", "Set timeout for member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def set(ctx: lightbulb.SlashContext) -> None:
+async def set(ctx: lightbulb.Context) -> None:
     member: hikari.Member = ctx.options.member
-    duration: str | datetime.datetime = ctx.options.duration
+    duration: str | datetime.datetime | None = ctx.options.duration
     reason: str | typing.Literal[hikari.UNDEFINED] = (
         ctx.options.reason or hikari.UNDEFINED
     )
 
-    def parse_duration(duration: str) -> datetime.datetime:
+    def parse_duration(duration: str) -> typing.Optional[datetime.datetime]:
         return dateparser.parse(
             duration,
             settings={
@@ -216,7 +217,7 @@ async def set(ctx: lightbulb.SlashContext) -> None:
 @lightbulb.option("member", "Member to timeout", hikari.Member)
 @lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def remove(ctx: lightbulb.SlashContext) -> None:
+async def remove(ctx: lightbulb.Context) -> None:
     member: hikari.Member = ctx.options.member
 
     if not member.communication_disabled_until():

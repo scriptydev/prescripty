@@ -1,5 +1,4 @@
 import platform
-# import typing
 import psutil
 
 import hikari
@@ -17,8 +16,9 @@ util = lightbulb.Plugin("Utility")
 @util.command
 @lightbulb.command("about", "About the Scripty Discord bot", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def about(ctx: lightbulb.SlashContext) -> None:
+async def about(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
+    assert app_user is not None, "App must be started"
 
     embed = hikari.Embed(
         title="About",
@@ -37,10 +37,11 @@ async def about(ctx: lightbulb.SlashContext) -> None:
 @util.command
 @lightbulb.command("system", "Bot system information", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def system(ctx: lightbulb.SlashContext) -> None:
+async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
 
     app_user = ctx.app.get_me()
+    assert app_user is not None, "App must be started"
 
     embed = hikari.Embed(
         title="System",
@@ -54,7 +55,7 @@ async def system(ctx: lightbulb.SlashContext) -> None:
     embed.add_field("CPU", f"{psutil.cpu_percent()}%", inline=True)
     embed.add_field(
         "Memory",
-        f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",
+        f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB", # type: ignore
         inline=True,
     )
 
@@ -75,7 +76,7 @@ class InviteView(miru.View):
 @util.command
 @lightbulb.command("invite", "Add bot to server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def invite(ctx: lightbulb.SlashContext) -> None:
+async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()
 
     embed = hikari.Embed(
@@ -90,7 +91,7 @@ async def invite(ctx: lightbulb.SlashContext) -> None:
 @util.command
 @lightbulb.command("ping", "Replies with bot latency", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def ping(ctx: lightbulb.SlashContext) -> None:
+async def ping(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Ping",
         description=f"Pong! `{round(ctx.app.heartbeat_latency * 1000)}ms`",
@@ -102,7 +103,7 @@ async def ping(ctx: lightbulb.SlashContext) -> None:
 @util.command
 @lightbulb.command("uptime", "Replies with bot uptime", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def uptime(ctx: lightbulb.SlashContext) -> None:
+async def uptime(ctx: lightbulb.Context) -> None:
     uptime_resolved_full = f"<t:{ctx.app.d.uptime}:F>"
     uptime_resolved_relative = f"<t:{ctx.app.d.uptime}:R>"
     embed = hikari.Embed(

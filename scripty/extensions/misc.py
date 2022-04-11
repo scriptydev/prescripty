@@ -11,7 +11,7 @@ misc = lightbulb.Plugin("Miscellaneous")
 @misc.command
 @lightbulb.command("Avatar", "Retrieves user avatar", auto_defer=True)
 @lightbulb.implements(lightbulb.UserCommand)
-async def avatar(ctx: lightbulb.SlashContext) -> None:
+async def avatar(ctx: lightbulb.Context) -> None:
     user: hikari.User = ctx.options.target
 
     embed = hikari.Embed(
@@ -31,7 +31,7 @@ async def avatar(ctx: lightbulb.SlashContext) -> None:
 @lightbulb.option("text", "Text to repeat", str)
 @lightbulb.command("echo", "Repeats user input", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def echo(ctx: lightbulb.SlashContext) -> None:
+async def echo(ctx: lightbulb.Context) -> None:
     text: str = ctx.options.text
     embed = hikari.Embed(
         title="Echo",
@@ -69,7 +69,7 @@ async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.option("topic", "Topic of the poll", str)
 @lightbulb.command("poll", "Create a simple poll", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def poll(ctx: lightbulb.SlashContext) -> None:
+async def poll(ctx: lightbulb.Context) -> None:
     topic: str = ctx.options.topic
     options: dict[str, str] = {
         "\U0001f1e6": ctx.options.option_a,

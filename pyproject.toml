@@ -7,3 +7,13 @@ include = ["./scripty"]
 exclude = ["**/node_modules", "**/__pycache__"]
 pythonVersion = "3.10"
 typeCheckingMode = "strict"
+
+reportUnnecessaryTypeIgnoreComment = "error"
+reportMissingTypeStubs = "none"
+reportImportCycles = "none"
+reportIncompatibleMethodOverride = "none"
+reportOverlappingOverload = "none"
+reportIncompatibleVariableOverride = "none"
+reportUnknownMemberType = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportOptionalMemberAccess = "warning"

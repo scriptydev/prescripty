@@ -15,7 +15,7 @@ fun = lightbulb.Plugin("Fun")
 @fun.command
 @lightbulb.command("coin", "Flip a coin", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def coin(ctx: lightbulb.SlashContext) -> None:
+async def coin(ctx: lightbulb.Context) -> None:
     coin = ["Heads", "Tails"]
     embed = hikari.Embed(
         title="Coin",
@@ -31,7 +31,7 @@ async def coin(ctx: lightbulb.SlashContext) -> None:
 )
 @lightbulb.command("dice", "Roll a die", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def dice(ctx: lightbulb.SlashContext) -> None:
+async def dice(ctx: lightbulb.Context) -> None:
     sides: int = ctx.options.sides or 2
     embed = hikari.Embed(
         title="Dice",
@@ -44,7 +44,7 @@ async def dice(ctx: lightbulb.SlashContext) -> None:
 @fun.command
 @lightbulb.command("meme", "The hottest Reddit r/memes", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def meme(ctx: lightbulb.SlashContext) -> None:
+async def meme(ctx: lightbulb.Context) -> None:
     async with aiohttp.ClientSession() as session:
         reddit_url = "https://reddit.com/r/memes/hot.json"
         async with session.get(reddit_url) as response:
@@ -71,7 +71,7 @@ async def meme(ctx: lightbulb.SlashContext) -> None:
 @fun.command
 @lightbulb.command("rickroll", ";)", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def rickroll(ctx: lightbulb.SlashContext) -> None:
+async def rickroll(ctx: lightbulb.Context) -> None:
     await ctx.respond("https://youtu.be/dQw4w9WgXcQ")
 
 
