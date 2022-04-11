@@ -31,7 +31,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
 
     elif isinstance(exception, lightbulb.MissingRequiredPermission):
         embed = hikari.Embed(
-            title="Delete Error",
+            title="Error",
             description=f"User missing required `{exception.missing_perms}` permission!",
             color=functions.Color.red(),
         )
