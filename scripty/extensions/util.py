@@ -114,9 +114,9 @@ async def uptime(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-def load(bot: lightbulb.BotApp):
+def load(bot: scripty.BotApp):
     bot.add_plugin(util)
 
 
-def unload(bot: lightbulb.BotApp):
+def unload(bot: scripty.BotApp):
     bot.remove_plugin(util)
