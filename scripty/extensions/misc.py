@@ -2,6 +2,7 @@
 import hikari
 import lightbulb
 
+import scripty
 from scripty import functions
 
 
@@ -101,9 +102,9 @@ async def poll(ctx: lightbulb.Context) -> None:
             await response.add_reaction(key)
 
 
-def load(bot: lightbulb.BotApp):
+def load(bot: scripty.BotApp):
     bot.add_plugin(misc)
 
 
-def unload(bot: lightbulb.BotApp):
+def unload(bot: scripty.BotApp):
     bot.remove_plugin(misc)

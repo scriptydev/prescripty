@@ -1,6 +1,7 @@
 import hikari
 import lightbulb
 
+import scripty
 from scripty import functions
 
 
@@ -46,9 +47,9 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         raise event.exception
 
 
-def load(bot: lightbulb.BotApp):
+def load(bot: scripty.BotApp):
     bot.add_plugin(error)
 
 
-def unload(bot: lightbulb.BotApp):
+def unload(bot: scripty.BotApp):
     bot.remove_plugin(error)

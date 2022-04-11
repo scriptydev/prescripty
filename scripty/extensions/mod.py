@@ -6,6 +6,7 @@ import dateparser
 import hikari
 import lightbulb
 
+import scripty
 from scripty import functions
 
 
@@ -240,9 +241,9 @@ async def remove(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-def load(bot: lightbulb.BotApp):
+def load(bot: scripty.BotApp):
     bot.add_plugin(mod)
 
 
-def unload(bot: lightbulb.BotApp):
+def unload(bot: scripty.BotApp):
     bot.remove_plugin(mod)

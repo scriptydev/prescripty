@@ -6,6 +6,7 @@ import hikari
 import lightbulb
 import miru
 
+import scripty
 from scripty import functions
 
 
@@ -180,9 +181,9 @@ async def rps(ctx: lightbulb.SlashContext) -> None:
     await view.wait()
 
 
-def load(bot: lightbulb.BotApp):
+def load(bot: scripty.BotApp):
     bot.add_plugin(fun)
 
 
-def unload(bot: lightbulb.BotApp):
+def unload(bot: scripty.BotApp):
     bot.remove_plugin(fun)
