@@ -1,4 +1,4 @@
-name: Lint
+name: lint
 
 on: [push, pull_request]
 
@@ -23,7 +23,7 @@ jobs:
         npm install -g pyright
     - name: Run black
       run: |
-        black .
+        python -m black .
     - name: Run pyright
       run: |
         pyright
