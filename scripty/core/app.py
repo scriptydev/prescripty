@@ -1,3 +1,5 @@
+import datetime
+
 import hikari
 import lightbulb
 import miru
@@ -16,9 +18,12 @@ class BotApp(lightbulb.BotApp):
 
     def setup(self) -> None:
         self.load_extensions_from("./scripty/extensions")
+        self.load_extensions("scripty.core.errors")
+        self.load_extensions("scripty.core.help")
+
         miru.load(self)
 
-    def run(self) -> None: # pyright: ignore
+    def run(self) -> None:
         self.setup()
         super().run(
             activity=(
@@ -28,3 +33,11 @@ class BotApp(lightbulb.BotApp):
                 )
             )
         )
+
+
+def run() -> None:
+    bot = BotApp()
+
+    bot.d.uptime = int(datetime.datetime.now(datetime.timezone.utc).timestamp())
+
+    bot.run()
