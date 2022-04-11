@@ -1,4 +1,5 @@
 import random
+import typing
 
 import aiohttp
 import hikari
@@ -11,10 +12,10 @@ from scripty import functions
 fun = lightbulb.Plugin("Fun")
 
 
-@fun.command()
+@fun.command
 @lightbulb.command("coin", "Flip a coin", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def coin(ctx: lightbulb.Context) -> None:
+async def coin(ctx: lightbulb.SlashContext) -> None:
     coin = ["Heads", "Tails"]
     embed = hikari.Embed(
         title="Coin",
@@ -24,14 +25,14 @@ async def coin(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@fun.command()
+@fun.command
 @lightbulb.option(
     "sides", "The number of sides on the die", int, required=False, min_value=2
 )
 @lightbulb.command("dice", "Roll a die", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def dice(ctx: lightbulb.Context) -> None:
-    sides = ctx.options.sides or 2
+async def dice(ctx: lightbulb.SlashContext) -> None:
+    sides: int = ctx.options.sides or 2
     embed = hikari.Embed(
         title="Dice",
         description=random.randint(1, sides),
@@ -40,16 +41,16 @@ async def dice(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@fun.command()
+@fun.command
 @lightbulb.command("meme", "The hottest Reddit r/memes", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def meme(ctx: lightbulb.Context) -> None:
+async def meme(ctx: lightbulb.SlashContext) -> None:
     async with aiohttp.ClientSession() as session:
         reddit_url = "https://reddit.com/r/memes/hot.json"
         async with session.get(reddit_url) as response:
             reddit = await response.json()
 
-    submissions = []
+    submissions: typing.Any = []
     for submission in range(len(reddit["data"]["children"])):
         submissions.append(reddit["data"]["children"][submission]["data"])
     random_submission = random.choice(submissions)
@@ -67,28 +68,28 @@ async def meme(ctx: lightbulb.Context) -> None:
             await ctx.respond(embed)
 
 
-@fun.command()
+@fun.command
 @lightbulb.command("rickroll", ";)", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def rickroll(ctx: lightbulb.Context) -> None:
+async def rickroll(ctx: lightbulb.SlashContext) -> None:
     await ctx.respond("https://youtu.be/dQw4w9WgXcQ")
 
 
 class RPSView(miru.View):
-    RPS: dict[str, int] = {"Rock": 0, "Paper": 1, "Scissors": 2}
+    rps: dict[str, int] = {"Rock": 0, "Paper": 1, "Scissors": 2}
 
     def __init__(self):
         super().__init__(timeout=30.0)
         self._rps = random.choice((0, 1, 2))
 
     def get_value(self, key: str) -> int:
-        return self.RPS[key]
+        return self.rps[key]
 
     def get_key(self, value: int) -> str:
         if not 0 <= value <= 2:
             raise ValueError("Invalid value")
 
-        return tuple(k for k, v in self.RPS.items() if v == value)[0]
+        return tuple(k for k, v in self.rps.items() if v == value)[0]
 
     def generate_embed(self, message: str) -> hikari.Embed:
         return hikari.Embed(
@@ -115,28 +116,34 @@ class RPSView(miru.View):
             )
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
-    async def rock(self, button: miru.Button, ctx: miru.Context) -> None:
-        await ctx.edit_response(self.determine_outcome("Rock"), components=None)
+    async def rock(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+        await ctx.edit_response(
+            self.determine_outcome("Rock"), components=hikari.UNDEFINED
+        )
         self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
-    async def paper(self, button: miru.Button, ctx: miru.Context) -> None:
-        await ctx.edit_response(self.determine_outcome("Paper"), components=None)
+    async def paper(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+        await ctx.edit_response(
+            self.determine_outcome("Paper"), components=hikari.UNDEFINED
+        )
         self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
-    async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:
-        await ctx.edit_response(self.determine_outcome("Scissors"), components=None)
+    async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+        await ctx.edit_response(
+            self.determine_outcome("Scissors"), components=hikari.UNDEFINED
+        )
         self.stop()
 
-    async def view_check(self, ctx: miru.Context) -> bool:
-        if ctx.user != self.message.interaction.user:
+    async def view_check(self, context: miru.Context) -> bool:
+        if context.user != self.message.interaction.user:
             embed = hikari.Embed(
                 title="Error",
                 description="This command was not invoked by you!",
                 color=functions.Color.blurple(),
             )
-            await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+            await context.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
         else:
             return True
@@ -154,10 +161,10 @@ class RPSView(miru.View):
         await self.message.edit(components=self.build())
 
 
-@fun.command()
+@fun.command
 @lightbulb.command("rps", "Play rock paper scissors", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def rps(ctx: lightbulb.Context) -> None:
+async def rps(ctx: lightbulb.SlashContext) -> None:
     view = RPSView()
 
     embed = hikari.Embed(
