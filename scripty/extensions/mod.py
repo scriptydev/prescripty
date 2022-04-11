@@ -151,7 +151,11 @@ async def set(ctx: lightbulb.Context) -> None:
     def parse_duration(duration) -> datetime.datetime or None:
         return dateparser.parse(
             duration,
-            settings={"PREFER_DATES_FROM": "future", "RETURN_AS_TIMEZONE_AWARE": True},
+            settings={
+                "RETURN_AS_TIMEZONE_AWARE": True,
+                "PREFER_DATES_FROM": "future",
+                "STRICT_PARSING": True,
+            },
         )
 
     loop = asyncio.get_event_loop()
@@ -199,19 +203,6 @@ async def set(ctx: lightbulb.Context) -> None:
         )
 
         await ctx.respond(embed)
-
-
-@set.set_error_handler()
-async def on_set_error(event: lightbulb.CommandErrorEvent) -> None:
-    exception = event.exception.__cause__ or event.exception
-
-    if isinstance(exception, hikari.BadRequestError):
-        embed = hikari.Embed(
-            title="Timeout Error",
-            description="Invalid duration provided!",
-            color=functions.Color.red(),
-        )
-        await event.context.respond(embed)
 
 
 @timeout.child()
