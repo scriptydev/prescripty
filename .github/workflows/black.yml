@@ -1,4 +1,4 @@
-name: Lint
+name: lint
 
 on: [push, pull_request]
 
@@ -6,9 +6,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Run black
       - uses: actions/checkout@v2
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
           src: "./src"
           version: "21.5b1"
+      - name: Run pyright
+        uses: jakebailey/pyright-action@v1.1.0
