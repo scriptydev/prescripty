@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import typing
 
 import dateparser
 import hikari
@@ -11,7 +12,7 @@ from scripty import functions
 mod = lightbulb.Plugin("Moderation")
 
 
-@mod.command()
+@mod.command
 @lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS))
 @lightbulb.option("reason", "Reason for ban", str, required=False)
 @lightbulb.option(
@@ -25,7 +26,7 @@ mod = lightbulb.Plugin("Moderation")
 @lightbulb.option("user", "User to ban", hikari.User)
 @lightbulb.command("ban", "Ban user from server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def ban(ctx: lightbulb.Context) -> None:
+async def ban(ctx: lightbulb.SlashContext) -> None:
     user = ctx.options.user
     delete_message_days = ctx.options.delete_message_days or hikari.UNDEFINED
     reason = ctx.options.reason or hikari.UNDEFINED
@@ -44,7 +45,7 @@ async def ban(ctx: lightbulb.Context) -> None:
     await ctx.respond(embed)
 
 
-@ban.set_error_handler()
+@ban.set_error_handler
 async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception.__cause__ or event.exception
 
@@ -57,7 +58,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
         await event.context.respond(embed)
 
 
-@mod.command()
+@mod.command
 @lightbulb.add_checks(
     lightbulb.bot_has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
@@ -65,7 +66,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.option("amount", "Amount to delete", int, min_value=1)
 @lightbulb.command("delete", "Purge messages", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def delete(ctx: lightbulb.Context) -> None:
+async def delete(ctx: lightbulb.SlashContext) -> None:
     amount = ctx.options.amount
     channel = ctx.channel_id
 
@@ -126,14 +127,14 @@ async def delete(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-@mod.command()
+@mod.command
 @lightbulb.command("timeout", "Timeout member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommandGroup)
 async def timeout() -> None:
     pass
 
 
-@timeout.child()
+@timeout.child
 @lightbulb.add_checks(
     lightbulb.bot_has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
@@ -143,12 +144,14 @@ async def timeout() -> None:
 @lightbulb.option("member", "Member to timeout", hikari.Member)
 @lightbulb.command("set", "Set timeout for member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def set(ctx: lightbulb.Context) -> None:
-    member = ctx.options.member
-    duration = ctx.options.duration
-    reason = ctx.options.reason or hikari.UNDEFINED
+async def set(ctx: lightbulb.SlashContext) -> None:
+    member: hikari.Member = ctx.options.member
+    duration: str | datetime.datetime = ctx.options.duration
+    reason: str | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.reason or hikari.UNDEFINED
+    )
 
-    def parse_duration(duration) -> datetime.datetime or None:
+    def parse_duration(duration: str) -> datetime.datetime:
         return dateparser.parse(
             duration,
             settings={
@@ -205,7 +208,7 @@ async def set(ctx: lightbulb.Context) -> None:
         await ctx.respond(embed)
 
 
-@timeout.child()
+@timeout.child
 @lightbulb.add_checks(
     lightbulb.bot_has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
@@ -213,7 +216,7 @@ async def set(ctx: lightbulb.Context) -> None:
 @lightbulb.option("member", "Member to timeout", hikari.Member)
 @lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def remove(ctx: lightbulb.Context) -> None:
+async def remove(ctx: lightbulb.SlashContext) -> None:
     member: hikari.Member = ctx.options.member
 
     if not member.communication_disabled_until():

@@ -1,3 +1,6 @@
+from .core import *
+
+
 __author__ = "Erich Nguyen, Johan Joseph, and Hrishikesh Kondiboyina"
 __github__ = ["GoogleGenius", "johan53", "HrishiK100"]
 __discord__ = ["GoogleGenius#2007", "johann#2022", "hrish#7294"]
