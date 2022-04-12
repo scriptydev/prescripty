@@ -1,3 +1,6 @@
+"""Imagine a Bot"""
+
+
 from .core import *
 from .constants import *
 
