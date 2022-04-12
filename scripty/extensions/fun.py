@@ -138,8 +138,7 @@ class RPSView(miru.View):
         self.stop()
 
     async def view_check(self, context: miru.Context) -> bool:
-        assert self.message is not None
-        assert self.message.interaction is not None
+        assert self.message and self.message.interaction is not None
 
         if context.user != self.message.interaction.user:
             embed = hikari.Embed(
