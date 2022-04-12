@@ -18,7 +18,9 @@ util = lightbulb.Plugin("Utility")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def about(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
-    assert app_user is not None, "App must be started"
+    # assert app_user is not None, "App must be started"
+
+    if app_user is None: return None
 
     embed = hikari.Embed(
         title="About",
@@ -41,7 +43,9 @@ async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
 
     app_user = ctx.app.get_me()
-    assert app_user is not None, "App must be started"
+    # assert app_user is not None, "App must be started"
+
+    if app_user is None: return None
 
     embed = hikari.Embed(
         title="System",
