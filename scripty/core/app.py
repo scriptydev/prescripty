@@ -5,7 +5,6 @@ import lightbulb
 import miru
 
 import scripty
-from scripty.constants import TOKEN, GUILD_IDS
 
 
 class BotApp(lightbulb.BotApp):
@@ -13,8 +12,8 @@ class BotApp(lightbulb.BotApp):
 
     def __init__(self) -> None:
         super().__init__(
-            token=TOKEN,
-            default_enabled_guilds=GUILD_IDS,
+            token=scripty.TOKEN,
+            default_enabled_guilds=scripty.GUILD_IDS,
             help_slash_command=True,
         )
 

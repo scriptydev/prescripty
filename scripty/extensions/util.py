@@ -7,7 +7,6 @@ import miru
 
 import scripty
 from scripty import functions
-from scripty.constants import INVITE_URL
 
 
 util = lightbulb.Plugin("Utility")
@@ -80,7 +79,7 @@ class InviteView(miru.View):
         self.add_item(
             miru.Button(
                 label="Add to Server",
-                url=INVITE_URL,
+                url=scripty.INVITE_URL,
             )
         )
 
