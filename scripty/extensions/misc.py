@@ -39,7 +39,10 @@ async def echo(ctx: lightbulb.Context) -> None:
         description=f"```{text}```",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url or ctx.author.default_avatar_url)
+    embed.set_author(
+        name=str(ctx.author),
+        icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
+    )
     await ctx.respond(embed)
 
 
@@ -92,7 +95,10 @@ async def poll(ctx: lightbulb.SlashContext) -> None:
         ),
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url or ctx.author.default_avatar_url)
+    embed.set_author(
+        name=str(ctx.author),
+        icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
+    )
 
     await ctx.respond(embed)
 

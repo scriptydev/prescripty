@@ -18,15 +18,18 @@ util = lightbulb.Plugin("Utility")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def about(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
-    # assert app_user is not None, "App must be started"
+    assert app_user is not None, "App must be started"
 
-    if app_user is None: return None
+    # if app_user is None:
+    #     return None
 
     embed = hikari.Embed(
         title="About",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url)
+    embed.set_author(
+        name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url
+    )
     embed.add_field("Version", f"Scripty {scripty.__version__}", inline=True)
     embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
     embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
@@ -43,15 +46,20 @@ async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
 
     app_user = ctx.app.get_me()
-    # assert app_user is not None, "App must be started"
+    assert app_user is not None, "App must be started"
 
-    if app_user is None: return None
+    # app_user = ctx.app.get_me() or await ctx.bot.rest.fetch_my_user()
+
+    # if app_user is None:
+    #     return None
 
     embed = hikari.Embed(
         title="System",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url)
+    embed.set_author(
+        name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url
+    )
     embed.add_field("System", system.system, inline=True)
     embed.add_field("Release", system.version, inline=True)
     embed.add_field("Machine", system.machine, inline=True)
@@ -59,7 +67,7 @@ async def system(ctx: lightbulb.Context) -> None:
     embed.add_field("CPU", f"{psutil.cpu_percent()}%", inline=True)
     embed.add_field(
         "Memory",
-        f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB", # type: ignore
+        f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",  # type: ignore
         inline=True,
     )
 

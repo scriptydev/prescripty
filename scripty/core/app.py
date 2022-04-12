@@ -10,6 +10,7 @@ from scripty.constants import TOKEN, GUILD_IDS
 
 class BotApp(lightbulb.BotApp):
     """A subclassed implementation of `lightbulb.BotApp`"""
+
     def __init__(self) -> None:
         super().__init__(
             token=TOKEN,

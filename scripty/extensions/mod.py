@@ -36,9 +36,7 @@ async def ban(ctx: lightbulb.Context) -> None:
         ctx.options.reason or hikari.UNDEFINED
     )
     guild = ctx.guild_id
-    # assert guild is not None, "Guild ID is None"
-
-    if guild is None: return None
+    assert guild is not None, "Guild ID is None"
 
     await ctx.app.rest.ban_user(
         guild, user, delete_message_days=delete_message_days, reason=reason
