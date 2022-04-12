@@ -26,7 +26,7 @@ async def about(ctx: lightbulb.Context) -> None:
         title="About",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=app_user.username, icon=app_user.avatar_url)
+    embed.set_author(name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url)
     embed.add_field("Version", f"Scripty {scripty.__version__}", inline=True)
     embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
     embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
@@ -51,7 +51,7 @@ async def system(ctx: lightbulb.Context) -> None:
         title="System",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=app_user.username, icon=app_user.avatar_url)
+    embed.set_author(name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url)
     embed.add_field("System", system.system, inline=True)
     embed.add_field("Release", system.version, inline=True)
     embed.add_field("Machine", system.machine, inline=True)

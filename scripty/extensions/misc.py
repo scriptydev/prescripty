@@ -19,8 +19,8 @@ async def avatar(ctx: lightbulb.Context) -> None:
         title=f"Avatar",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=str(user), icon=user.avatar_url)
-    embed.set_image(user.avatar_url)
+    embed.set_author(name=str(user), icon=user.avatar_url or user.default_avatar_url)
+    embed.set_image(user.avatar_url or user.default_avatar_url)
 
     await ctx.respond(embed)
 
@@ -39,7 +39,7 @@ async def echo(ctx: lightbulb.Context) -> None:
         description=f"```{text}```",
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url)
+    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url or ctx.author.default_avatar_url)
     await ctx.respond(embed)
 
 
@@ -70,7 +70,7 @@ async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.option("topic", "Topic of the poll", str)
 @lightbulb.command("poll", "Create a simple poll", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def poll(ctx: lightbulb.Context) -> None:
+async def poll(ctx: lightbulb.SlashContext) -> None:
     topic: str = ctx.options.topic
     options: dict[str, str] = {
         "\U0001f1e6": ctx.options.option_a,
@@ -92,7 +92,7 @@ async def poll(ctx: lightbulb.Context) -> None:
         ),
         color=functions.Color.blurple(),
     )
-    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url)
+    embed.set_author(name=str(ctx.author), icon=ctx.author.avatar_url or ctx.author.default_avatar_url)
 
     await ctx.respond(embed)
 
