@@ -28,9 +28,13 @@ mod = lightbulb.Plugin("Moderation")
 @lightbulb.command("ban", "Ban user from server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def ban(ctx: lightbulb.Context) -> None:
-    user = ctx.options.user
-    delete_message_days = ctx.options.delete_message_days or hikari.UNDEFINED
-    reason = ctx.options.reason or hikari.UNDEFINED
+    user: hikari.User = ctx.options.user
+    delete_message_days: int | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.delete_message_days or hikari.UNDEFINED
+    )
+    reason: str | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.reason or hikari.UNDEFINED
+    )
     guild = ctx.guild_id
     assert guild is not None, "Guild ID is None"
 
@@ -69,7 +73,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.command("delete", "Purge messages", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delete(ctx: lightbulb.Context) -> None:
-    amount = ctx.options.amount
+    amount: int = ctx.options.amount
     channel = ctx.channel_id
 
     bulk_delete_limit = datetime.datetime.now(
