@@ -42,7 +42,7 @@ async def ban(
 
     embed = hikari.Embed(
         title="Ban",
-        description=f"Banned **{str(user)}** \nReason: `{reason or 'No reason provided'}`",
+        description=f"Banned **{str(user)}** \n Reason: `{reason or 'No reason provided'}`",
         color=functions.Color.green(),
     )
 
@@ -106,14 +106,14 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
             if count == 1:
                 await ctx.respond(
                     generate_embed(
-                        f"`{count} message` deleted \nOlder messages past `14 days` cannot be deleted"
+                        f"`{count} message` deleted \n Older messages past `14 days` cannot be deleted"
                     )
                 )
 
             else:
                 await ctx.respond(
                     generate_embed(
-                        f"`{count} messages` deleted \nOlder messages past `14 days` cannot be deleted"
+                        f"`{count} messages` deleted \n Older messages past `14 days` cannot be deleted"
                     )
                 )
 
@@ -126,10 +126,35 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
     else:
         embed = hikari.Embed(
             title="Delete Error",
-            description="Unable to delete messages! \nMessages are older than `14 days` or do not exist",
+            description="Unable to delete messages! \n Messages are older than `14 days` or do not exist",
             color=functions.Color.red(),
         )
         await ctx.respond(embed)
+
+
+@mod.command
+@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.KICK_MEMBERS))
+@lightbulb.option("reason", "Reason for kick", str, required=False)
+@lightbulb.option("member", "Member to kick", hikari.User)
+@lightbulb.command("kick", "Kick member from server", auto_defer=True, pass_options=True)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def kick(
+    ctx: lightbulb.Context,
+    member: hikari.Member,
+    reason: str | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
+) -> None:
+    guild = ctx.guild_id
+    assert guild is not None, "Guild ID is None"
+
+    await ctx.app.rest.kick_user(guild, member)
+
+    embed = hikari.Embed(
+        title="Kick",
+        description=f"Kicked **{str(member)}** \n Reason: `{reason or 'No reason provided'}`",
+        color=functions.Color.green(),
+    )
+
+    await ctx.respond(embed)
 
 
 @mod.command
@@ -205,7 +230,7 @@ async def set(
 
         embed = hikari.Embed(
             title="Timeout",
-            description=f"Timed out **{str(member)}** until {duration_resolved_full} \nReason: `{reason or 'No reason provided'}`",
+            description=f"Timed out **{str(member)}** until {duration_resolved_full} \n Reason: `{reason or 'No reason provided'}`",
             color=functions.Color.green(),
         )
 

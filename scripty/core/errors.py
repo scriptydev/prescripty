@@ -40,7 +40,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     else:
         embed = hikari.Embed(
             title="Error",
-            description=f"This interaction failed! \n```{exception}```",
+            description=f"This interaction failed! \n ```{exception}```",
             color=functions.Color.red(),
         )
         await event.context.respond(embed)
