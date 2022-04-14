@@ -30,10 +30,9 @@ async def coin(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     "sides", "The number of sides on the die", int, required=False, min_value=2
 )
-@lightbulb.command("dice", "Roll a die", auto_defer=True)
+@lightbulb.command("dice", "Roll a die", auto_defer=True, pass_options=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def dice(ctx: lightbulb.Context) -> None:
-    sides: int = ctx.options.sides or 2
+async def dice(ctx: lightbulb.Context, sides: int = 6) -> None:
     embed = hikari.Embed(
         title="Dice",
         description=random.randint(1, sides),

@@ -10,11 +10,11 @@ misc = lightbulb.Plugin("Miscellaneous")
 
 
 @misc.command
-@lightbulb.command("Avatar", "Retrieves user avatar", auto_defer=True)
+@lightbulb.command(
+    "Avatar", "Retrieves user avatar", auto_defer=True, pass_options=True
+)
 @lightbulb.implements(lightbulb.UserCommand)
-async def avatar(ctx: lightbulb.Context) -> None:
-    user: hikari.User = ctx.options.target
-
+async def avatar(ctx: lightbulb.Context, user: hikari.User) -> None:
     embed = hikari.Embed(
         title=f"Avatar",
         color=functions.Color.blurple(),
@@ -30,10 +30,9 @@ async def avatar(ctx: lightbulb.Context) -> None:
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
 @lightbulb.option("text", "Text to repeat", str)
-@lightbulb.command("echo", "Repeats user input", auto_defer=True)
+@lightbulb.command("echo", "Repeats user input", auto_defer=True, pass_options=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def echo(ctx: lightbulb.Context) -> None:
-    text: str = ctx.options.text
+async def echo(ctx: lightbulb.Context, text: str) -> None:
     embed = hikari.Embed(
         title="Echo",
         description=f"```{text}```",
@@ -71,21 +70,33 @@ async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.option("option_b", "Option B", str)
 @lightbulb.option("option_a", "Option A", str)
 @lightbulb.option("topic", "Topic of the poll", str)
-@lightbulb.command("poll", "Create a simple poll", auto_defer=True)
+@lightbulb.command("poll", "Create a simple poll", auto_defer=True, pass_options=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def poll(ctx: lightbulb.SlashContext) -> None:
-    topic: str = ctx.options.topic
+async def poll(
+    ctx: lightbulb.SlashContext,
+    topic: str,
+    option_a: str,
+    option_b: str,
+    option_c: str,
+    option_d: str,
+    option_e: str,
+    option_f: str,
+    option_g: str,
+    option_h: str,
+    option_i: str,
+    option_j: str,
+) -> None:
     options: dict[str, str] = {
-        "\U0001f1e6": ctx.options.option_a,
-        "\U0001f1e7": ctx.options.option_b,
-        "\U0001f1e8": ctx.options.option_c,
-        "\U0001f1e9": ctx.options.option_d,
-        "\U0001f1ea": ctx.options.option_e,
-        "\U0001f1eb": ctx.options.option_f,
-        "\U0001f1ec": ctx.options.option_g,
-        "\U0001f1ed": ctx.options.option_h,
-        "\U0001f1ee": ctx.options.option_i,
-        "\U0001f1ef": ctx.options.option_j,
+        "\U0001f1e6": option_a,
+        "\U0001f1e7": option_b,
+        "\U0001f1e8": option_c,
+        "\U0001f1e9": option_d,
+        "\U0001f1ea": option_e,
+        "\U0001f1eb": option_f,
+        "\U0001f1ec": option_g,
+        "\U0001f1ed": option_h,
+        "\U0001f1ee": option_i,
+        "\U0001f1ef": option_j,
     }
 
     embed = hikari.Embed(

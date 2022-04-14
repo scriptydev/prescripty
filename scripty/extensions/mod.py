@@ -25,16 +25,14 @@ mod = lightbulb.Plugin("Moderation")
     max_value=7,
 )
 @lightbulb.option("user", "User to ban", hikari.User)
-@lightbulb.command("ban", "Ban user from server", auto_defer=True)
+@lightbulb.command("ban", "Ban user from server", auto_defer=True, pass_options=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def ban(ctx: lightbulb.Context) -> None:
-    user: hikari.User = ctx.options.user
-    delete_message_days: int | typing.Literal[hikari.UNDEFINED] = (
-        ctx.options.delete_message_days or hikari.UNDEFINED
-    )
-    reason: str | typing.Literal[hikari.UNDEFINED] = (
-        ctx.options.reason or hikari.UNDEFINED
-    )
+async def ban(
+    ctx: lightbulb.Context,
+    user: hikari.User,
+    delete_message_days: int | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
+    reason: str | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
+) -> None:
     guild = ctx.guild_id
     assert guild is not None, "Guild ID is None"
 
@@ -44,7 +42,7 @@ async def ban(ctx: lightbulb.Context) -> None:
 
     embed = hikari.Embed(
         title="Ban",
-        description=f"Banned **{str(user)}** \nReason: `{'No reason provided' if reason is hikari.UNDEFINED else reason}`",
+        description=f"Banned **{str(user)}** \nReason: `{reason or 'No reason provided'}`",
         color=functions.Color.green(),
     )
 
@@ -70,10 +68,11 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
 )
 @lightbulb.option("amount", "Amount to delete", int, min_value=1)
-@lightbulb.command("delete", "Purge messages", auto_defer=True, ephemeral=True)
+@lightbulb.command(
+    "delete", "Purge messages", auto_defer=True, ephemeral=True, pass_options=True
+)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def delete(ctx: lightbulb.Context) -> None:
-    amount: int = ctx.options.amount
+async def delete(ctx: lightbulb.Context, amount: int) -> None:
     channel = ctx.channel_id
 
     bulk_delete_limit = datetime.datetime.now(
@@ -148,15 +147,14 @@ async def timeout() -> None:
 @lightbulb.option("reason", "Reason for timeout", str, required=False)
 @lightbulb.option("duration", "Duration of the timeout", str)
 @lightbulb.option("member", "Member to timeout", hikari.Member)
-@lightbulb.command("set", "Set timeout for member", auto_defer=True)
+@lightbulb.command("set", "Set timeout for member", auto_defer=True, pass_options=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def set(ctx: lightbulb.Context) -> None:
-    member: hikari.Member = ctx.options.member
-    duration: str | datetime.datetime | None = ctx.options.duration
-    reason: str | typing.Literal[hikari.UNDEFINED] = (
-        ctx.options.reason or hikari.UNDEFINED
-    )
-
+async def set(
+    ctx: lightbulb.Context,
+    member: hikari.Member,
+    duration: str | datetime.datetime | None,
+    reason: str | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
+) -> None:
     def parse_duration(duration: str) -> typing.Optional[datetime.datetime]:
         return dateparser.parse(
             duration,
@@ -207,7 +205,7 @@ async def set(ctx: lightbulb.Context) -> None:
 
         embed = hikari.Embed(
             title="Timeout",
-            description=f"Timed out **{str(member)}** until {duration_resolved_full} \nReason: `{'No reason provided' if reason is hikari.UNDEFINED else reason}`",
+            description=f"Timed out **{str(member)}** until {duration_resolved_full} \nReason: `{reason or 'No reason provided'}`",
             color=functions.Color.green(),
         )
 
@@ -220,11 +218,11 @@ async def set(ctx: lightbulb.Context) -> None:
     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
 )
 @lightbulb.option("member", "Member to timeout", hikari.Member)
-@lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
+@lightbulb.command(
+    "remove", "Remove timeout from member", auto_defer=True, pass_options=True
+)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def remove(ctx: lightbulb.Context) -> None:
-    member: hikari.Member = ctx.options.member
-
+async def remove(ctx: lightbulb.Context, member: hikari.Member) -> None:
     if not member.communication_disabled_until():
         embed = hikari.Embed(
             title="Timeout Error",
