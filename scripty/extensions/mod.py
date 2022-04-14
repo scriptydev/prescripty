@@ -136,7 +136,9 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
 @lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.KICK_MEMBERS))
 @lightbulb.option("reason", "Reason for kick", str, required=False)
 @lightbulb.option("member", "Member to kick", hikari.User)
-@lightbulb.command("kick", "Kick member from server", auto_defer=True, pass_options=True)
+@lightbulb.command(
+    "kick", "Kick member from server", auto_defer=True, pass_options=True
+)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def kick(
     ctx: lightbulb.Context,
