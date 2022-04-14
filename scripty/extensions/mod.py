@@ -14,7 +14,10 @@ mod = lightbulb.Plugin("Moderation")
 
 
 @mod.command
-@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS))
+@lightbulb.add_checks(
+    lightbulb.bot_has_guild_permissions(hikari.Permissions.BAN_MEMBERS),
+    lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS),
+)
 @lightbulb.option("reason", "Reason for ban", str, required=False)
 @lightbulb.option(
     "delete_message_days",
@@ -133,7 +136,10 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
 
 
 @mod.command
-@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.KICK_MEMBERS))
+@lightbulb.add_checks(
+    lightbulb.bot_has_guild_permissions(hikari.Permissions.KICK_MEMBERS),
+    lightbulb.has_guild_permissions(hikari.Permissions.KICK_MEMBERS),
+)
 @lightbulb.option("reason", "Reason for kick", str, required=False)
 @lightbulb.option("member", "Member to kick", hikari.User)
 @lightbulb.command(
