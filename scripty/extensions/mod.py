@@ -47,7 +47,7 @@ async def ban(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Ban",
         description=f"Banned **{str(user)}** \n Reason: `{reason or 'No reason provided'}`",
-        color=scripty.functions.Color.green(),
+        color=scripty.functions.Color.background_secondary(),
     )
 
     await ctx.respond(embed)
@@ -61,7 +61,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
         embed = hikari.Embed(
             title="Ban Error",
             description="`BAN_MEMBERS` permission missing!",
-            color=scripty.functions.Color.red(),
+            color=scripty.functions.Color.background_secondary(),
         )
         await event.context.respond(embed)
 
@@ -99,7 +99,7 @@ async def delete(ctx: lightbulb.Context) -> None:
         return hikari.Embed(
             title="Delete",
             description=message,
-            color=scripty.functions.Color.green(),
+            color=scripty.functions.Color.background_secondary(),
         )
 
     if tasks:
@@ -130,7 +130,7 @@ async def delete(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Delete Error",
             description="Unable to delete messages! \n Messages are older than `14 days` or do not exist",
-            color=scripty.functions.Color.red(),
+            color=scripty.functions.Color.background_secondary(),
         )
         await ctx.respond(embed)
 
@@ -157,7 +157,7 @@ async def kick(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Kick",
         description=f"Kicked **{str(member)}** \n Reason: `{reason or 'No reason provided'}`",
-        color=scripty.functions.Color.green(),
+        color=scripty.functions.Color.background_secondary(),
     )
 
     await ctx.respond(embed)
@@ -209,7 +209,7 @@ async def set(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Timeout Error",
             description="Invalid duration provided!",
-            color=scripty.functions.Color.red(),
+            color=scripty.functions.Color.background_secondary(),
         )
         await ctx.respond(embed)
 
@@ -217,7 +217,7 @@ async def set(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration must be in the future!",
-            color=scripty.functions.Color.red(),
+            color=scripty.functions.Color.background_secondary(),
         )
         await ctx.respond(embed)
 
@@ -225,7 +225,7 @@ async def set(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration cannot be longer than `28 days`!",
-            color=scripty.functions.Color.red(),
+            color=scripty.functions.Color.background_secondary(),
         )
         await ctx.respond(embed)
 
@@ -238,7 +238,7 @@ async def set(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Timeout",
             description=f"Timed out **{str(member)}** until {duration_resolved_full} \n Reason: `{reason or 'No reason provided'}`",
-            color=scripty.functions.Color.green(),
+            color=scripty.functions.Color.background_secondary(),
         )
 
         await ctx.respond(embed)
@@ -259,7 +259,7 @@ async def remove(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Timeout Error",
             description="You cannot remove timeout from member that is not timed out!",
-            color=scripty.functions.Color.red(),
+            color=scripty.functions.Color.background_secondary(),
         )
         await ctx.respond(embed)
 
@@ -269,7 +269,7 @@ async def remove(ctx: lightbulb.Context) -> None:
         embed = hikari.Embed(
             title="Timeout",
             description=f"Removed timeout from **{str(member)}**",
-            color=scripty.functions.Color.green(),
+            color=scripty.functions.Color.background_secondary(),
         )
 
         await ctx.respond(embed)
