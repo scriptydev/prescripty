@@ -36,11 +36,11 @@ class HelpCommand(lightbulb.BaseHelpCommand):
         await context.respond("This help command is currently in development.")
 
 
-def load(bot: scripty.BotApp):
+def load(bot: scripty.core.BotApp):
     bot.d.old_help_command = bot.help_command
     bot.help_command = HelpCommand(bot)
 
 
-def unload(bot: scripty.BotApp):
+def unload(bot: scripty.core.BotApp):
     bot.help_command = bot.d.old_help_command
     del typing.Any[bot.d.old_help_command]

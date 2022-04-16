@@ -2,7 +2,6 @@ import hikari
 import lightbulb
 
 import scripty
-from scripty import functions
 
 
 error = lightbulb.Plugin("Error")
@@ -16,7 +15,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     #     embed = hikari.Embed(
     #         title="Error",
     #         description="This interaction failed!",
-    #         color=functions.Color.red(),
+    #         color=scripty.functions.Color.red(),
     #     )
     #     await event.context.respond(embed)
     #     raise event.exception
@@ -25,7 +24,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         embed = hikari.Embed(
             title="Error",
             description=f"Bot missing required `{exception.missing_perms}` permission!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await event.context.respond(embed)
 
@@ -33,7 +32,7 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         embed = hikari.Embed(
             title="Error",
             description=f"User missing required `{exception.missing_perms}` permission!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await event.context.respond(embed)
 
@@ -41,15 +40,15 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         embed = hikari.Embed(
             title="Error",
             description=f"This interaction failed! \n ```{exception}```",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await event.context.respond(embed)
         raise event.exception
 
 
-def load(bot: scripty.BotApp):
+def load(bot: scripty.core.BotApp):
     bot.add_plugin(error)
 
 
-def unload(bot: scripty.BotApp):
+def unload(bot: scripty.core.BotApp):
     bot.remove_plugin(error)

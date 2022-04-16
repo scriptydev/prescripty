@@ -7,7 +7,6 @@ import lightbulb
 import miru
 
 import scripty
-from scripty import functions
 
 
 fun = lightbulb.Plugin("Fun")
@@ -21,7 +20,7 @@ async def coin(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Coin",
         description=random.choice(coin),
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     await ctx.respond(embed)
 
@@ -30,14 +29,17 @@ async def coin(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     "sides", "The number of sides on the die", int, required=False, min_value=2
 )
-@lightbulb.command("dice", "Roll a die", auto_defer=True, pass_options=True)
+@lightbulb.command("dice", "Roll a die", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def dice(ctx: lightbulb.Context, sides: int = 6) -> None:
+async def dice(ctx: lightbulb.Context) -> None:
+    sides: int = ctx.options.sides or 6
+
     embed = hikari.Embed(
         title="Dice",
         description=random.randint(1, sides),
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
+
     await ctx.respond(embed)
 
 
@@ -62,7 +64,7 @@ async def meme(ctx: lightbulb.Context) -> None:
             embed = hikari.Embed(
                 title=random_submission["title"],
                 url=f"https://reddit.com{random_submission['permalink']}",
-                color=functions.Color.blurple(),
+                color=scripty.functions.Color.background_secondary(),
             )
             embed.set_image(random_submission["url"])
             await ctx.respond(embed)
@@ -95,7 +97,7 @@ class RPSView(miru.View):
         return hikari.Embed(
             title="RPS",
             description=message,
-            color=functions.Color.blurple(),
+            color=scripty.functions.Color.background_secondary(),
         )
 
     def determine_outcome(self, player_choice: str) -> hikari.Embed:
@@ -143,7 +145,7 @@ class RPSView(miru.View):
             embed = hikari.Embed(
                 title="Error",
                 description="This command was not invoked by you!",
-                color=functions.Color.blurple(),
+                color=scripty.functions.Color.background_secondary(),
             )
             await context.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
@@ -173,7 +175,7 @@ async def rps(ctx: lightbulb.SlashContext) -> None:
     embed = hikari.Embed(
         title="RPS",
         description="Click on the button options to continue the game!",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
 
     await ctx.respond(embed=embed, components=view.build())
@@ -183,9 +185,9 @@ async def rps(ctx: lightbulb.SlashContext) -> None:
     await view.wait()
 
 
-def load(bot: scripty.BotApp):
+def load(bot: scripty.core.BotApp):
     bot.add_plugin(fun)
 
 
-def unload(bot: scripty.BotApp):
+def unload(bot: scripty.core.BotApp):
     bot.remove_plugin(fun)

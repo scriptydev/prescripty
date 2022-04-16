@@ -7,7 +7,6 @@ import hikari
 import lightbulb
 
 import scripty
-from scripty import functions
 
 
 mod = lightbulb.Plugin("Moderation")
@@ -28,14 +27,16 @@ mod = lightbulb.Plugin("Moderation")
     max_value=7,
 )
 @lightbulb.option("user", "User to ban", hikari.User)
-@lightbulb.command("ban", "Ban user from server", auto_defer=True, pass_options=True)
+@lightbulb.command("ban", "Ban user from server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def ban(
-    ctx: lightbulb.Context,
-    user: hikari.User,
-    delete_message_days: int | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
-    reason: str | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
-) -> None:
+async def ban(ctx: lightbulb.Context) -> None:
+    user: hikari.User = ctx.options.user
+    delete_message_days: int | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.delete_message_days or hikari.UNDEFINED
+    )
+    reason: str | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.reason or hikari.UNDEFINED
+    )
     guild = ctx.guild_id
     assert guild is not None, "Guild ID is None"
 
@@ -46,7 +47,7 @@ async def ban(
     embed = hikari.Embed(
         title="Ban",
         description=f"Banned **{str(user)}** \n Reason: `{reason or 'No reason provided'}`",
-        color=functions.Color.green(),
+        color=scripty.functions.Color.green(),
     )
 
     await ctx.respond(embed)
@@ -60,7 +61,7 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
         embed = hikari.Embed(
             title="Ban Error",
             description="`BAN_MEMBERS` permission missing!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await event.context.respond(embed)
 
@@ -71,11 +72,10 @@ async def on_ban_error(event: lightbulb.CommandErrorEvent) -> None:
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES),
 )
 @lightbulb.option("amount", "Amount to delete", int, min_value=1)
-@lightbulb.command(
-    "delete", "Purge messages", auto_defer=True, ephemeral=True, pass_options=True
-)
+@lightbulb.command("delete", "Purge messages", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def delete(ctx: lightbulb.Context, amount: int) -> None:
+async def delete(ctx: lightbulb.Context) -> None:
+    amount: int = ctx.options.amount
     channel = ctx.channel_id
 
     bulk_delete_limit = datetime.datetime.now(
@@ -99,7 +99,7 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
         return hikari.Embed(
             title="Delete",
             description=message,
-            color=functions.Color.green(),
+            color=scripty.functions.Color.green(),
         )
 
     if tasks:
@@ -130,7 +130,7 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
         embed = hikari.Embed(
             title="Delete Error",
             description="Unable to delete messages! \n Messages are older than `14 days` or do not exist",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await ctx.respond(embed)
 
@@ -142,15 +142,13 @@ async def delete(ctx: lightbulb.Context, amount: int) -> None:
 )
 @lightbulb.option("reason", "Reason for kick", str, required=False)
 @lightbulb.option("member", "Member to kick", hikari.User)
-@lightbulb.command(
-    "kick", "Kick member from server", auto_defer=True, pass_options=True
-)
+@lightbulb.command("kick", "Kick member from server", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def kick(
-    ctx: lightbulb.Context,
-    member: hikari.Member,
-    reason: str | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
-) -> None:
+async def kick(ctx: lightbulb.Context) -> None:
+    member: hikari.Member = ctx.options.member
+    reason: str | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.reason or hikari.UNDEFINED
+    )
     guild = ctx.guild_id
     assert guild is not None, "Guild ID is None"
 
@@ -159,7 +157,7 @@ async def kick(
     embed = hikari.Embed(
         title="Kick",
         description=f"Kicked **{str(member)}** \n Reason: `{reason or 'No reason provided'}`",
-        color=functions.Color.green(),
+        color=scripty.functions.Color.green(),
     )
 
     await ctx.respond(embed)
@@ -180,14 +178,15 @@ async def timeout() -> None:
 @lightbulb.option("reason", "Reason for timeout", str, required=False)
 @lightbulb.option("duration", "Duration of the timeout", str)
 @lightbulb.option("member", "Member to timeout", hikari.Member)
-@lightbulb.command("set", "Set timeout for member", auto_defer=True, pass_options=True)
+@lightbulb.command("set", "Set timeout for member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def set(
-    ctx: lightbulb.Context,
-    member: hikari.Member,
-    duration: str | datetime.datetime | None,
-    reason: str | typing.Literal[hikari.UNDEFINED] = hikari.UNDEFINED,
-) -> None:
+async def set(ctx: lightbulb.Context) -> None:
+    member: hikari.Member = ctx.options.member
+    duration: str | datetime.datetime | None = ctx.options.duration
+    reason: str | typing.Literal[hikari.UNDEFINED] = (
+        ctx.options.reason or hikari.UNDEFINED
+    )
+
     def parse_duration(duration: str) -> typing.Optional[datetime.datetime]:
         return dateparser.parse(
             duration,
@@ -210,7 +209,7 @@ async def set(
         embed = hikari.Embed(
             title="Timeout Error",
             description="Invalid duration provided!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await ctx.respond(embed)
 
@@ -218,7 +217,7 @@ async def set(
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration must be in the future!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await ctx.respond(embed)
 
@@ -226,7 +225,7 @@ async def set(
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration cannot be longer than `28 days`!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await ctx.respond(embed)
 
@@ -239,7 +238,7 @@ async def set(
         embed = hikari.Embed(
             title="Timeout",
             description=f"Timed out **{str(member)}** until {duration_resolved_full} \n Reason: `{reason or 'No reason provided'}`",
-            color=functions.Color.green(),
+            color=scripty.functions.Color.green(),
         )
 
         await ctx.respond(embed)
@@ -251,16 +250,16 @@ async def set(
     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
 )
 @lightbulb.option("member", "Member to timeout", hikari.Member)
-@lightbulb.command(
-    "remove", "Remove timeout from member", auto_defer=True, pass_options=True
-)
+@lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
-async def remove(ctx: lightbulb.Context, member: hikari.Member) -> None:
+async def remove(ctx: lightbulb.Context) -> None:
+    member: hikari.Member = ctx.options.member
+
     if not member.communication_disabled_until():
         embed = hikari.Embed(
             title="Timeout Error",
             description="You cannot remove timeout from member that is not timed out!",
-            color=functions.Color.red(),
+            color=scripty.functions.Color.red(),
         )
         await ctx.respond(embed)
 
@@ -270,15 +269,15 @@ async def remove(ctx: lightbulb.Context, member: hikari.Member) -> None:
         embed = hikari.Embed(
             title="Timeout",
             description=f"Removed timeout from **{str(member)}**",
-            color=functions.Color.green(),
+            color=scripty.functions.Color.green(),
         )
 
         await ctx.respond(embed)
 
 
-def load(bot: scripty.BotApp):
+def load(bot: scripty.core.BotApp):
     bot.add_plugin(mod)
 
 
-def unload(bot: scripty.BotApp):
+def unload(bot: scripty.core.BotApp):
     bot.remove_plugin(mod)

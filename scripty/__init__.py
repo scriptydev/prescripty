@@ -1,8 +1,9 @@
 """Imagine a Bot"""
 
 
-from .core import *
-from .constants import *
+from . import constants as constants
+from . import core as core
+from . import functions as functions
 
 
 __author__ = "Erich Nguyen, Johan Joseph, and Hrishikesh Kondiboyina"

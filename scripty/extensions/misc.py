@@ -3,21 +3,20 @@ import hikari
 import lightbulb
 
 import scripty
-from scripty import functions
 
 
 misc = lightbulb.Plugin("Miscellaneous")
 
 
 @misc.command
-@lightbulb.command(
-    "Avatar", "Retrieves user avatar", auto_defer=True, pass_options=True
-)
+@lightbulb.command("Avatar", "Retrieves user avatar", auto_defer=True)
 @lightbulb.implements(lightbulb.UserCommand)
-async def avatar(ctx: lightbulb.Context, user: hikari.User) -> None:
+async def avatar(ctx: lightbulb.Context) -> None:
+    user = ctx.options.target
+
     embed = hikari.Embed(
         title=f"Avatar",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     embed.set_author(name=str(user), icon=user.avatar_url or user.default_avatar_url)
     embed.set_image(user.avatar_url or user.default_avatar_url)
@@ -30,32 +29,22 @@ async def avatar(ctx: lightbulb.Context, user: hikari.User) -> None:
     lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
 @lightbulb.option("text", "Text to repeat", str)
-@lightbulb.command("echo", "Repeats user input", auto_defer=True, pass_options=True)
+@lightbulb.command("echo", "Repeats user input", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def echo(ctx: lightbulb.Context, text: str) -> None:
+async def echo(ctx: lightbulb.Context) -> None:
+    text: str = ctx.options.text
+
     embed = hikari.Embed(
         title="Echo",
         description=f"```{text}```",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     embed.set_author(
         name=str(ctx.author),
         icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
     )
+
     await ctx.respond(embed)
-
-
-@echo.set_error_handler
-async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
-    exception = event.exception.__cause__ or event.exception
-
-    if isinstance(exception, lightbulb.CheckFailure):
-        embed = hikari.Embed(
-            title="Echo Error",
-            description="`MANAGE_MESSAGES` permission missing!",
-            color=functions.Color.red(),
-        )
-        await event.context.respond(embed)
 
 
 @misc.command
@@ -70,33 +59,21 @@ async def on_echo_error(event: lightbulb.CommandErrorEvent) -> None:
 @lightbulb.option("option_b", "Option B", str)
 @lightbulb.option("option_a", "Option A", str)
 @lightbulb.option("topic", "Topic of the poll", str)
-@lightbulb.command("poll", "Create a simple poll", auto_defer=True, pass_options=True)
+@lightbulb.command("poll", "Create a simple poll", auto_defer=True)
 @lightbulb.implements(lightbulb.SlashCommand)
-async def poll(
-    ctx: lightbulb.SlashContext,
-    topic: str,
-    option_a: str,
-    option_b: str,
-    option_c: str,
-    option_d: str,
-    option_e: str,
-    option_f: str,
-    option_g: str,
-    option_h: str,
-    option_i: str,
-    option_j: str,
-) -> None:
+async def poll(ctx: lightbulb.SlashContext) -> None:
+    topic: str = ctx.options.topic
     options: dict[str, str] = {
-        "\U0001f1e6": option_a,
-        "\U0001f1e7": option_b,
-        "\U0001f1e8": option_c,
-        "\U0001f1e9": option_d,
-        "\U0001f1ea": option_e,
-        "\U0001f1eb": option_f,
-        "\U0001f1ec": option_g,
-        "\U0001f1ed": option_h,
-        "\U0001f1ee": option_i,
-        "\U0001f1ef": option_j,
+        "\U0001f1e6": ctx.options.option_a,
+        "\U0001f1e7": ctx.options.option_b,
+        "\U0001f1e8": ctx.options.option_c,
+        "\U0001f1e9": ctx.options.option_d,
+        "\U0001f1ea": ctx.options.option_e,
+        "\U0001f1eb": ctx.options.option_f,
+        "\U0001f1ec": ctx.options.option_g,
+        "\U0001f1ed": ctx.options.option_h,
+        "\U0001f1ee": ctx.options.option_i,
+        "\U0001f1ef": ctx.options.option_j,
     }
 
     embed = hikari.Embed(
@@ -104,7 +81,7 @@ async def poll(
         description="\n\n".join(
             f"{key} {value}" for key, value in options.items() if value is not None
         ),
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     embed.set_author(
         name=str(ctx.author),
@@ -119,9 +96,9 @@ async def poll(
             await response.add_reaction(key)
 
 
-def load(bot: scripty.BotApp):
+def load(bot: scripty.core.BotApp):
     bot.add_plugin(misc)
 
 
-def unload(bot: scripty.BotApp):
+def unload(bot: scripty.core.BotApp):
     bot.remove_plugin(misc)

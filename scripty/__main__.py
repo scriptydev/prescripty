@@ -9,4 +9,4 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-    scripty.run()
+    scripty.core.run()

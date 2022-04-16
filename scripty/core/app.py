@@ -12,8 +12,8 @@ class BotApp(lightbulb.BotApp):
 
     def __init__(self) -> None:
         super().__init__(
-            token=scripty.TOKEN,
-            default_enabled_guilds=scripty.GUILD_IDS,
+            token=scripty.constants.TOKEN,
+            default_enabled_guilds=scripty.constants.GUILD_IDS,
             help_slash_command=True,
         )
 
@@ -29,7 +29,7 @@ class BotApp(lightbulb.BotApp):
         super().run(
             activity=(
                 hikari.Activity(
-                    name=f"Version {scripty.__version__}",
+                    name=f"v{scripty.__version__}",
                     type=hikari.ActivityType.PLAYING,
                 )
             )

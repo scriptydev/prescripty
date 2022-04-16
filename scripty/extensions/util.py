@@ -6,7 +6,6 @@ import lightbulb
 import miru
 
 import scripty
-from scripty import functions
 
 
 util = lightbulb.Plugin("Utility")
@@ -24,7 +23,7 @@ async def about(ctx: lightbulb.Context) -> None:
 
     embed = hikari.Embed(
         title="About",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     embed.set_author(
         name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url
@@ -54,7 +53,7 @@ async def system(ctx: lightbulb.Context) -> None:
 
     embed = hikari.Embed(
         title="System",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     embed.set_author(
         name=app_user.username, icon=app_user.avatar_url or app_user.default_avatar_url
@@ -79,7 +78,7 @@ class InviteView(miru.View):
         self.add_item(
             miru.Button(
                 label="Add to Server",
-                url=scripty.INVITE_URL,
+                url=scripty.constants.INVITE_URL,
             )
         )
 
@@ -93,7 +92,7 @@ async def invite(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Invite",
         description="Invite Scripty to your Discord Server!",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
 
     await ctx.respond(embed, components=view.build())
@@ -106,7 +105,7 @@ async def ping(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Ping",
         description=f"Pong! `{round(ctx.app.heartbeat_latency * 1000)}ms`",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     await ctx.respond(embed)
 
@@ -120,14 +119,14 @@ async def uptime(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
         title="Uptime",
         description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
-        color=functions.Color.blurple(),
+        color=scripty.functions.Color.background_secondary(),
     )
     await ctx.respond(embed)
 
 
-def load(bot: scripty.BotApp):
+def load(bot: scripty.core.BotApp):
     bot.add_plugin(util)
 
 
-def unload(bot: scripty.BotApp):
+def unload(bot: scripty.core.BotApp):
     bot.remove_plugin(util)

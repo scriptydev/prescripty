@@ -133,6 +133,8 @@ dmypy.json
 
 # Replit
 .replit
-replit.nix
 .breakpoints
-poetry.lock
+replit.nix
+
+# Scripty
+config.py
