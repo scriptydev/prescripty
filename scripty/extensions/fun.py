@@ -119,23 +119,17 @@ class RPSView(miru.View):
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
     async def rock(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        await ctx.edit_response(
-            self.determine_outcome("Rock"), components=hikari.UNDEFINED
-        )
+        await ctx.edit_response(self.determine_outcome("Rock"), components=[])
         self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
     async def paper(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        await ctx.edit_response(
-            self.determine_outcome("Paper"), components=hikari.UNDEFINED
-        )
+        await ctx.edit_response(self.determine_outcome("Paper"), components=[])
         self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
     async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        await ctx.edit_response(
-            self.determine_outcome("Scissors"), components=hikari.UNDEFINED
-        )
+        await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
     async def view_check(self, context: miru.Context) -> bool:
