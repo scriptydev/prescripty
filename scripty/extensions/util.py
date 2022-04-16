@@ -12,7 +12,9 @@ util = lightbulb.Plugin("Utility")
 
 
 @util.command
-@lightbulb.command("about", "About the Scripty Discord bot", auto_defer=True)
+@lightbulb.command(
+    "about", "About the Scripty Discord bot", auto_defer=True, ephemeral=True
+)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def about(ctx: lightbulb.Context) -> None:
     app_user = ctx.app.get_me()
@@ -38,7 +40,7 @@ async def about(ctx: lightbulb.Context) -> None:
 
 
 @util.command
-@lightbulb.command("system", "Bot system information", auto_defer=True)
+@lightbulb.command("system", "Bot system information", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def system(ctx: lightbulb.Context) -> None:
     system = platform.uname()
@@ -84,7 +86,7 @@ class InviteView(miru.View):
 
 
 @util.command
-@lightbulb.command("invite", "Add bot to server", auto_defer=True)
+@lightbulb.command("invite", "Add bot to server", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def invite(ctx: lightbulb.Context) -> None:
     view = InviteView()
@@ -99,7 +101,7 @@ async def invite(ctx: lightbulb.Context) -> None:
 
 
 @util.command
-@lightbulb.command("ping", "Replies with bot latency", auto_defer=True)
+@lightbulb.command("ping", "Replies with bot latency", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def ping(ctx: lightbulb.Context) -> None:
     embed = hikari.Embed(
@@ -111,7 +113,7 @@ async def ping(ctx: lightbulb.Context) -> None:
 
 
 @util.command
-@lightbulb.command("uptime", "Replies with bot uptime", auto_defer=True)
+@lightbulb.command("uptime", "Replies with bot uptime", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def uptime(ctx: lightbulb.Context) -> None:
     uptime_resolved_full = f"<t:{ctx.app.d.uptime}:F>"

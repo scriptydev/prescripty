@@ -27,7 +27,7 @@ mod = lightbulb.Plugin("Moderation")
     max_value=7,
 )
 @lightbulb.option("user", "User to ban", hikari.User)
-@lightbulb.command("ban", "Ban user from server", auto_defer=True)
+@lightbulb.command("ban", "Ban user from server", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def ban(ctx: lightbulb.Context) -> None:
     user: hikari.User = ctx.options.user
@@ -142,7 +142,7 @@ async def delete(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.option("reason", "Reason for kick", str, required=False)
 @lightbulb.option("member", "Member to kick", hikari.User)
-@lightbulb.command("kick", "Kick member from server", auto_defer=True)
+@lightbulb.command("kick", "Kick member from server", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def kick(ctx: lightbulb.Context) -> None:
     member: hikari.Member = ctx.options.member
@@ -164,7 +164,7 @@ async def kick(ctx: lightbulb.Context) -> None:
 
 
 @mod.command
-@lightbulb.command("timeout", "Timeout member", auto_defer=True)
+@lightbulb.command("timeout", "Timeout member", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommandGroup)
 async def timeout() -> None:
     pass
@@ -178,7 +178,7 @@ async def timeout() -> None:
 @lightbulb.option("reason", "Reason for timeout", str, required=False)
 @lightbulb.option("duration", "Duration of the timeout", str)
 @lightbulb.option("member", "Member to timeout", hikari.Member)
-@lightbulb.command("set", "Set timeout for member", auto_defer=True)
+@lightbulb.command("set", "Set timeout for member", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.SlashSubCommand)
 async def set(ctx: lightbulb.Context) -> None:
     member: hikari.Member = ctx.options.member
@@ -250,7 +250,9 @@ async def set(ctx: lightbulb.Context) -> None:
     lightbulb.has_guild_permissions(hikari.Permissions.MODERATE_MEMBERS),
 )
 @lightbulb.option("member", "Member to timeout", hikari.Member)
-@lightbulb.command("remove", "Remove timeout from member", auto_defer=True)
+@lightbulb.command(
+    "remove", "Remove timeout from member", auto_defer=True, ephemeral=True
+)
 @lightbulb.implements(lightbulb.SlashSubCommand)
 async def remove(ctx: lightbulb.Context) -> None:
     member: hikari.Member = ctx.options.member

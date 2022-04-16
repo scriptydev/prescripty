@@ -9,7 +9,7 @@ misc = lightbulb.Plugin("Miscellaneous")
 
 
 @misc.command
-@lightbulb.command("Avatar", "Retrieves user avatar", auto_defer=True)
+@lightbulb.command("Avatar", "Retrieves user avatar", auto_defer=True, ephemeral=True)
 @lightbulb.implements(lightbulb.UserCommand)
 async def avatar(ctx: lightbulb.Context) -> None:
     user = ctx.options.target
