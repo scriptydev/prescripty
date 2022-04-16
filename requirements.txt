@@ -4,4 +4,5 @@ hikari
 hikari-lightbulb
 hikari-miru
 psutil
+python-dotenv
 uvloop; sys_platform != "win32"

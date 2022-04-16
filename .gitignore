@@ -135,6 +135,3 @@ dmypy.json
 .replit
 .breakpoints
 replit.nix
-
-# Scripty
-config.py
