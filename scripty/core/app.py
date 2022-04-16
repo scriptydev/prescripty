@@ -18,7 +18,9 @@ class BotApp(lightbulb.BotApp):
         )
 
     def setup(self) -> None:
-        self.load_extensions_from(*["./scripty/core/modules", "./scripty/extensions"])
+        self.load_extensions_from(
+            *["./scripty/core/extensions", "./scripty/extensions"]
+        )
 
         miru.load(self)
 
