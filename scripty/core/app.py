@@ -18,14 +18,13 @@ class BotApp(lightbulb.BotApp):
         )
 
     def setup(self) -> None:
-        self.load_extensions_from("./scripty/extensions")
-        self.load_extensions("scripty.core.errors")
-        self.load_extensions("scripty.core.help")
+        self.load_extensions_from(*["./scripty/core/modules", "./scripty/extensions"])
 
         miru.load(self)
 
     def run(self) -> None:
         self.setup()
+
         super().run(
             activity=(
                 hikari.Activity(
