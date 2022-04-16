@@ -4,7 +4,7 @@ import lightbulb
 import scripty
 
 
-dev = lightbulb.Plugin("Developer")
+dev = lightbulb.Plugin("Developer", default_enabled_guilds=scripty.constants.DEV_ID)
 
 
 @dev.command
