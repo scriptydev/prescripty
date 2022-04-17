@@ -4,7 +4,7 @@ class Color:
     @staticmethod
     def blurple():
         """Hexadecimal code for Discord blurple color
-        
+
         Returns
         -------
         0x5865F2
@@ -14,7 +14,7 @@ class Color:
     @staticmethod
     def green():
         """Hexadecimal code for Discord green color
-        
+
         Returns
         -------
         0x57F287
@@ -24,7 +24,7 @@ class Color:
     @staticmethod
     def yellow():
         """Hexadecimal code for Discord yellow color
-        
+
         Returns
         -------
         0xFEE75C
@@ -34,7 +34,7 @@ class Color:
     @staticmethod
     def fuchsia():
         """Hexadecimal code for Discord fuchsia color
-        
+
         Returns
         -------
         0xEB459E
@@ -44,7 +44,7 @@ class Color:
     @staticmethod
     def red():
         """Hexadecimal code for Discord red color
-        
+
         Returns
         -------
         0xED4245
@@ -54,7 +54,7 @@ class Color:
     @staticmethod
     def white():
         """Hexadecimal code for Discord white color
-        
+
         Returns
         -------
         0xFFFFFF
@@ -64,7 +64,7 @@ class Color:
     @staticmethod
     def black():
         """Hexadecimal code for Discord black color
-        
+
         Returns
         -------
         0x000000
@@ -74,7 +74,7 @@ class Color:
     @staticmethod
     def background_secondary():
         """Hexadecimal code for Discord background secondary gray color
-        
+
         Returns
         -------
         0x2F3136
