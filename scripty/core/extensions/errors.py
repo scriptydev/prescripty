@@ -11,15 +11,6 @@ error = lightbulb.Plugin("Error")
 async def on_error(event: lightbulb.CommandErrorEvent) -> None:
     exception = event.exception.__cause__ or event.exception
 
-    # if isinstance(exception, lightbulb.CommandInvocationError):
-    #     embed = hikari.Embed(
-    #         title="Error",
-    #         description="This interaction failed!",
-    #         color=scripty.functions.Color.background_secondary(),
-    #     )
-    #     await event.context.respond(embed)
-    #     raise event.exception
-
     if isinstance(exception, lightbulb.BotMissingRequiredPermission):
         embed = hikari.Embed(
             title="Error",

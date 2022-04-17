@@ -3,40 +3,80 @@ class Color:
 
     @staticmethod
     def blurple():
-        """Returns hex code for Discord blurple color"""
+        """Hexadecimal code for Discord blurple color
+        
+        Returns
+        -------
+        0x5865F2
+        """
         return 0x5865F2
 
     @staticmethod
     def green():
-        """Returns hex code for Discord green color"""
+        """Hexadecimal code for Discord green color
+        
+        Returns
+        -------
+        0x57F287
+        """
         return 0x57F287
 
     @staticmethod
     def yellow():
-        """Returns hex code for Discord yellow color"""
+        """Hexadecimal code for Discord yellow color
+        
+        Returns
+        -------
+        0xFEE75C
+        """
         return 0xFEE75C
 
     @staticmethod
     def fuchsia():
-        """Returns hex code for Discord fuchsia color"""
+        """Hexadecimal code for Discord fuchsia color
+        
+        Returns
+        -------
+        0xEB459E
+        """
         return 0xEB459E
 
     @staticmethod
     def red():
-        """Returns hex code for Discord red color"""
+        """Hexadecimal code for Discord red color
+        
+        Returns
+        -------
+        0xED4245
+        """
         return 0xED4245
 
     @staticmethod
     def white():
-        """Returns hex code for Discord white color"""
+        """Hexadecimal code for Discord white color
+        
+        Returns
+        -------
+        0xFFFFFF
+        """
         return 0xFFFFFF
 
     @staticmethod
     def black():
-        """Returns hex code for Discord black color"""
+        """Hexadecimal code for Discord black color
+        
+        Returns
+        -------
+        0x000000
+        """
         return 0x000000
 
     @staticmethod
     def background_secondary():
-        """Returns hex code for Discord background secondary gray color"""
+        """Hexadecimal code for Discord background secondary gray color
+        
+        Returns
+        -------
+        0x2F3136
+        """
         return 0x2F3136
