@@ -18,6 +18,7 @@ class BotApp(lightbulb.BotApp):
         )
 
     def setup(self) -> None:
+        """Load all Lightbulb extensions and setup Miru"""
         self.load_extensions_from(
             *["./scripty/core/extensions", "./scripty/extensions"]
         )
@@ -25,6 +26,7 @@ class BotApp(lightbulb.BotApp):
         miru.load(self)
 
     def run(self) -> None:
+        """An override of `lightbulb.BotApp.run()` to add the additional `setup` function"""
         self.setup()
 
         super().run(
@@ -38,6 +40,7 @@ class BotApp(lightbulb.BotApp):
 
 
 def run() -> None:
+    """Instantiate the `BotApp` class and run the bot"""
     bot = BotApp()
 
     bot.d.uptime = int(datetime.datetime.now(datetime.timezone.utc).timestamp())
