@@ -1,6 +1,9 @@
 import os
 
-import scripty
+import toml
+
+
+config = toml.load("scripty/constants/config.toml")
 
 
 if __name__ == "__main__":
