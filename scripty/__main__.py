@@ -1,9 +1,6 @@
 import os
 
-import toml
-
-
-config = toml.load("scripty/constants/config.toml")
+from scripty import build_bot
 
 
 if __name__ == "__main__":
@@ -11,3 +8,5 @@ if __name__ == "__main__":
         import uvloop
 
         uvloop.install()
+
+    build_bot().run()

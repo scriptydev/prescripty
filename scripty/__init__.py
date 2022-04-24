@@ -10,3 +10,8 @@ __version__ = "1.0.0a6"
 __maintainer__ = "Erich Nguyen"
 __email__ = "nverich07@gmail.com"
 __status__ = "Development"
+
+
+from .bot import *
+from .constants import *
+from .functions import *

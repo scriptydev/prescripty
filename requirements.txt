@@ -1,8 +1,8 @@
 aiohttp
 dateparser
 hikari
-hikari-lightbulb
 hikari-miru
+hikari-tanchi
+hikari-tanjun
 psutil
-python-dotenv
 uvloop; sys_platform != "win32"
