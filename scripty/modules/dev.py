@@ -11,17 +11,16 @@ import scripty
 component = tanjun.Component()
 
 
-# Not working currently 🤔
-# async def set_dev_cmds(
-#     client: tanjun.Client = tanjun.inject(type=tanjun.Client),
-# ):
-#     await client.declare_application_commands(
-#         [load_, reload, unload_, sync], guild=scripty.GUILD_ID_PRIMARY
-#     )
+async def set_dev_cmds(
+    client: tanjun.Client = tanjun.inject(type=tanjun.Client),
+):
+    await client.declare_application_commands(
+        [load_, reload, unload_, sync], guild=scripty.GUILD_ID_PRIMARY
+    )
 
 
-# loop = asyncio.get_event_loop()
-# loop.create_task(set_dev_cmds())
+loop = asyncio.get_event_loop()
+loop.create_task(set_dev_cmds())
 
 
 @component.with_command

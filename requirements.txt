@@ -2,7 +2,9 @@ aiohttp
 dateparser
 hikari
 hikari-miru
-hikari-tanchi
+# hikari-tanchi (Pyright hates the PyPi version)
+git+https://github.com/thesadru/tanchi
 hikari-tanjun
 psutil
+toml
 uvloop; sys_platform != "win32"

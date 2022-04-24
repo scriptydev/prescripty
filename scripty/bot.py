@@ -41,8 +41,8 @@ class Bot(hikari.GatewayBot):
     def run(self) -> None:
         self.setup()
 
-        self.event_manager.subscribe(hikari.StartingEvent, self.on_starting)
-        self.event_manager.subscribe(hikari.StoppingEvent, self.on_stopping)
+        self.subscribe(hikari.StartingEvent, self.on_starting)
+        self.subscribe(hikari.StoppingEvent, self.on_stopping)
 
         super().run(
             activity=hikari.Activity(
