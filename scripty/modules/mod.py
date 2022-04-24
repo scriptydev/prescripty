@@ -20,7 +20,7 @@ async def ban(
     ctx: tanjun.abc.SlashContext,
     user: hikari.User,
     delete_message_days: hikari.UndefinedNoneOr[tanchi.Range[1, 7]] = None,
-    reason: str | typing.Literal[hikari.UNDEFINED] | None = None,
+    reason: hikari.UndefinedNoneOr[str] = None,
     bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
 ) -> None:
     """Ban user from server
@@ -29,9 +29,9 @@ async def ban(
     ----------
     user : hikari.User
         User to ban
-    delete_message_days : int
+    delete_message_days : hikari.UndefinedNoneOr[tanchi.Range[int, int]]
         Days to delete user messages
-    reason : hikari.UndefinedNoneOr[tanchi.Range[int, int]]
+    reason : hikari.UndefinedNoneOr[str]
         Reason for ban
     """
     delete_message_days = delete_message_days or hikari.UNDEFINED
@@ -67,7 +67,7 @@ async def delete(
 
     Parameters
     ----------
-    amount : tanchi.Range[1, ...]
+    amount : tanchi.Range[int, ...]
         Amount to delete
     """
     channel = ctx.channel_id
@@ -186,7 +186,7 @@ async def set(
     ----------
     member : hikari.Member
         Member to timeout
-    duration : str | datetime.datetime | None
+    duration : tanchi.Converted[datetime.datetime, scripty.parse_duration]
         Duration of the timeout
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
