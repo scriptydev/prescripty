@@ -1,3 +1,6 @@
+__all__: list[str] = ["Color"]
+
+
 class Color:
     """A class for color functions that return hex colors"""
 
@@ -80,3 +83,8 @@ class Color:
         0x2F3136
         """
         return 0x2F3136
+
+    @staticmethod
+    def dark_embed():
+        """Alias for ``~.Color.background_secondary()``"""
+        return Color.background_secondary()
