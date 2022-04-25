@@ -17,7 +17,7 @@ component = tanjun.Component()
 @component.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.BAN_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.BAN_MEMBERS)
-@tanchi.as_slash_command(default_to_ephemeral=True)
+@tanchi.as_slash_command()
 async def ban(
     ctx: tanjun.abc.SlashContext,
     user: hikari.User,
@@ -59,7 +59,7 @@ async def ban(
 @component.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.MANAGE_MESSAGES)
 @tanjun.with_author_permission_check(hikari.Permissions.MANAGE_MESSAGES)
-@tanchi.as_slash_command()
+@tanchi.as_slash_command(default_to_ephemeral=True)
 async def delete(
     ctx: tanjun.abc.SlashContext,
     amount: tanchi.Range[1, ...],
