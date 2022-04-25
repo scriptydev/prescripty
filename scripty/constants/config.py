@@ -8,7 +8,7 @@ __all__: list[str] = [
     "INVITE_URL",
 ]
 
-config = toml.load("scripty/constants/config.toml")
+config = toml.load("config.toml")
 
 DISCORD_TOKEN: str = config["discord_token"]
 GUILD_ID_PRIMARY: int = config["guild_id_primary"]
