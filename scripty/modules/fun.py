@@ -86,7 +86,9 @@ class MemeView(miru.View):
         await ctx.edit_response(embed)
 
     async def on_timeout(self) -> None:
-        self.next.disabled = True
+        for item in self.children:
+            item.disabled = True
+
         self.add_item(
             miru.Button(
                 style=hikari.ButtonStyle.SECONDARY,
@@ -221,9 +223,9 @@ class RPSView(miru.View):
             return True
 
     async def on_timeout(self) -> None:
-        self.rock.disabled = True
-        self.paper.disabled = True
-        self.scissors.disabled = True
+        for item in self.children:
+            item.disabled = True
+
         self.add_item(
             miru.Button(
                 style=hikari.ButtonStyle.SECONDARY,
