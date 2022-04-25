@@ -52,8 +52,8 @@ class MemeView(miru.View):
         self.submissions = submissions
         self.index = index
 
-    @miru.button(label="Previous", style=hikari.ButtonStyle.PRIMARY)
-    async def previous(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    @miru.button(label="Prev", style=hikari.ButtonStyle.PRIMARY)
+    async def prev(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         self.index -= 1
         if self.index == len(self.submissions):
             self.index = 0
@@ -68,7 +68,11 @@ class MemeView(miru.View):
 
     @miru.button(label="Stop", style=hikari.ButtonStyle.DANGER)
     async def stop_(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        await ctx.edit_response(components=[])
+        for item in self.children:
+            item.disabled = True
+
+        await ctx.edit_response(components=self.build())
+
         self.stop()
 
     @miru.button(label="Next", style=hikari.ButtonStyle.PRIMARY)
