@@ -156,7 +156,7 @@ async def info_member(
     member: hikari.Member | None = None,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
-    """Get information about a member
+    """Get information about member
 
     Parameters
     ----------
@@ -214,7 +214,7 @@ async def info_server(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
-    """Get information about the server"""
+    """Get information about server"""
     guild = ctx.guild_id
 
     if guild is None:
@@ -259,7 +259,7 @@ async def info_role(
     ctx: tanjun.abc.SlashContext,
     role: hikari.Role,
 ) -> None:
-    """Get information about a role
+    """Get information about role
 
     Parameters
     ----------
@@ -299,7 +299,7 @@ async def info_channel(
     channel: hikari.GuildChannel | None = None,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
-    """Get information about a channel
+    """Get information about channel
 
     Parameters
     ----------
