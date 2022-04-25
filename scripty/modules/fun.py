@@ -85,6 +85,20 @@ class MemeView(miru.View):
         embed.set_image(self.submissions[self.index]["url"])
         await ctx.edit_response(embed)
 
+    async def view_check(self, ctx: miru.Context) -> bool:
+        assert self.message and self.message.interaction is not None
+
+        if ctx.user != self.message.interaction.user:
+            embed = hikari.Embed(
+                title="Error",
+                description="This command was not invoked by you!",
+                color=scripty.Color.dark_embed(),
+            )
+            await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return False
+        else:
+            return True
+
     async def on_timeout(self) -> None:
         for item in self.children:
             item.disabled = True
@@ -208,16 +222,16 @@ class RPSView(miru.View):
         )
         self.stop()
 
-    async def view_check(self, context: miru.Context) -> bool:
+    async def view_check(self, ctx: miru.Context) -> bool:
         assert self.message and self.message.interaction is not None
 
-        if context.user != self.message.interaction.user:
+        if ctx.user != self.message.interaction.user:
             embed = hikari.Embed(
                 title="Error",
                 description="This command was not invoked by you!",
                 color=scripty.Color.dark_embed(),
             )
-            await context.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+            await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
         else:
             return True
