@@ -336,6 +336,69 @@ async def timeout_remove(
         await ctx.respond(embed)
 
 
+async def ban_user_autocomplete(
+    ctx: tanjun.abc.AutocompleteContext,
+    user: str,
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Autocomplete for banned users"""
+    guild = ctx.guild_id
+
+    if not guild:
+        return
+
+    bans = await bot.rest.fetch_bans(guild)
+
+    ban_map: dict[str, str] = {}
+    ban_name: list[str] = []
+    ban_id: list[str] = []
+
+    for ban in bans:
+        while len(ban_map) < 10:
+            ban_name.append(str(ban.user))
+            ban_id.append(str(ban.user.id))
+
+    for key, value in zip(ban_name, ban_id):
+        ban_map[key] = value
+
+    print(ban_map)
+
+    await ctx.set_choices(ban_map)
+
+
+@component.with_command
+@tanjun.with_own_permission_check(hikari.Permissions.BAN_MEMBERS)
+@tanjun.with_author_permission_check(hikari.Permissions.BAN_MEMBERS)
+@tanchi.as_slash_command()
+async def unban(
+    ctx: tanjun.abc.SlashContext,
+    user: tanchi.Autocompleted[ban_user_autocomplete, hikari.Snowflake],
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Unban member
+
+    Parameters
+    ----------
+    user : typing.Annotated[hikari.User, tanchi.Autocompleted[autocomplete_user, hikari.Snowflake]]
+        User to unban
+    """
+    user_ = await bot.rest.fetch_user(user)
+    guild = ctx.guild_id
+
+    if not guild:
+        return
+
+    await bot.rest.unban_user(guild, user)
+
+    embed = hikari.Embed(
+        title="Unban",
+        description=f"Unbanned **{str(user_)}**",
+        color=scripty.Color.dark_embed(),
+    )
+
+    await ctx.respond(embed)
+
+
 @tanjun.as_loader
 def load(client: tanjun.abc.Client) -> None:
     client.add_component(component.copy())
