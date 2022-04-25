@@ -165,16 +165,82 @@ async def kick(
     await ctx.respond(embed)
 
 
+slowmode = component.with_slash_command(tanjun.slash_command_group("slowmode", "Slowmode channel"))
+
+
+@slowmode.with_command
+@tanjun.with_own_permission_check(hikari.Permissions.MANAGE_CHANNELS)
+@tanjun.with_author_permission_check(hikari.Permissions.MANAGE_CHANNELS)
+@tanchi.as_slash_command("enable")
+async def slowmode_enable(
+    ctx: tanjun.abc.SlashContext,
+    duration: tanchi.Range[1, 21600],
+    channel: hikari.TextableGuildChannel | None = None,
+    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+) -> None:
+    """Set slowmode for channel
+
+    Parameters
+    ----------
+    channel : hikari.TextableGuildChannel
+        Channel to set slowmode
+    duration : tanchi.Range[int, ...]
+        Duration of slowmode
+    """
+    channel = channel or ctx.get_channel()
+    assert isinstance(channel, hikari.TextableGuildChannel)
+
+    await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
+
+    embed = hikari.Embed(
+        title="Slowmode",
+        description=f"Set slowmode for **{str(channel)}** to `{duration}s`",
+        color=scripty.Color.dark_embed(),
+    )
+
+    await ctx.respond(embed)
+
+
+@slowmode.with_command
+@tanjun.with_own_permission_check(hikari.Permissions.MANAGE_CHANNELS)
+@tanjun.with_author_permission_check(hikari.Permissions.MANAGE_CHANNELS)
+@tanchi.as_slash_command("disable")
+async def slowmode_disable(
+    ctx: tanjun.abc.SlashContext,
+    channel: hikari.TextableGuildChannel | None = None,
+    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+) -> None:
+    """Remove slowmode from channel
+
+    Parameters
+    ----------
+    channel : hikari.TextableGuildChannel
+        Channel to remove slowmode
+    """
+    channel = channel or ctx.get_channel()
+    assert isinstance(channel, hikari.TextableGuildChannel)
+
+    await bot.rest.edit_channel(channel, rate_limit_per_user=0)
+
+    embed = hikari.Embed(
+        title="Slowmode",
+        description=f"Removed slowmode from **{str(channel)}**",
+        color=scripty.Color.dark_embed(),
+    )
+
+    await ctx.respond(embed)
+
+
 timeout = component.with_slash_command(
-    tanjun.slash_command_group("timeout", "Get bot statistics.")
+    tanjun.slash_command_group("timeout", "Timeout member")
 )
 
 
 @timeout.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.MODERATE_MEMBERS)
-@tanchi.as_slash_command()
-async def set(
+@tanchi.as_slash_command("set")
+async def timeout_set(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
     duration: tanchi.Converted[datetime.datetime, scripty.parse_duration],
@@ -237,8 +303,8 @@ async def set(
 @timeout.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.MODERATE_MEMBERS)
-@tanchi.as_slash_command()
-async def remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) -> None:
+@tanchi.as_slash_command("remove")
+async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) -> None:
     """Remove timeout from member
 
     Parameters
