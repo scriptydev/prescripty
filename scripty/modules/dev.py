@@ -1,4 +1,3 @@
-import asyncio
 import pathlib
 
 import hikari
@@ -11,21 +10,21 @@ import scripty
 component = tanjun.Component()
 
 
-async def set_dev_cmds(
-    client: tanjun.Client = tanjun.inject(type=tanjun.Client),
-):
-    await client.declare_application_commands(
-        [load_, reload, unload_, sync], guild=scripty.GUILD_ID_PRIMARY
-    )
+# async def set_dev_cmds(
+#     client: tanjun.Client = tanjun.inject(type=tanjun.Client),
+# ):
+#     await client.declare_application_commands(
+#         [load_, reload, unload_, sync], guild=scripty.GUILD_ID_PRIMARY
+#     )
 
 
-loop = asyncio.get_event_loop()
-loop.create_task(set_dev_cmds())
+# loop = asyncio.get_event_loop()
+# loop.create_task(set_dev_cmds())
 
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command("load", is_global=False)
+@tanchi.as_slash_command("load")
 async def load_(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -55,7 +54,7 @@ async def load_(
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command(is_global=False)
+@tanchi.as_slash_command()
 async def reload(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -85,7 +84,7 @@ async def reload(
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command(is_global=False)
+@tanchi.as_slash_command()
 async def sync(
     ctx: tanjun.abc.SlashContext,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
@@ -104,7 +103,7 @@ async def sync(
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command("unload", is_global=False)
+@tanchi.as_slash_command("unload")
 async def unload_(
     ctx: tanjun.abc.SlashContext,
     module: str,
