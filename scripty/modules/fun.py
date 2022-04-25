@@ -1,6 +1,8 @@
 import random
 import typing
 
+from functools import lru_cache
+
 import hikari
 import miru
 import tanchi
@@ -121,6 +123,7 @@ class MemeView(miru.View):
 
 @component.with_command
 @tanchi.as_slash_command()
+@lru_cache
 async def meme(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
