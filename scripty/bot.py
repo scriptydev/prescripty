@@ -24,11 +24,6 @@ class AppBot(hikari.GatewayBot):
     def aiohttp_session(self) -> aiohttp.ClientSession:
         return self._aiohttp_session
 
-    @aiohttp_session.deleter
-    async def aiohttp_session(self) -> None:
-        await self._aiohttp_session.close()
-        del self._aiohttp_session
-
     @property
     def uptime(self) -> datetime.datetime:
         return self._uptime
@@ -42,7 +37,7 @@ class AppBot(hikari.GatewayBot):
         self._uptime = datetime.datetime.now(datetime.timezone.utc)
 
     async def on_stopping(self, event: hikari.StoppingEvent) -> None:
-        del self.aiohttp_session
+        await self.aiohttp_session.close()
         del self.uptime
 
     def setup(self) -> None:
