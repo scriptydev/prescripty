@@ -2,6 +2,8 @@ import asyncio
 import datetime
 import typing
 
+from functools import lru_cache
+
 import hikari
 import tanchi
 import tanjun
@@ -336,6 +338,7 @@ async def timeout_remove(
         await ctx.respond(embed)
 
 
+@lru_cache
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
     user: str,
@@ -349,19 +352,13 @@ async def unban_user_autocomplete(
 
     bans = await bot.rest.fetch_bans(guild)
 
-    ban_map: dict[str, str] = {}
-    ban_name: list[str] = []
-    ban_id: list[str] = []
+    ban_map = {}
 
     for ban in bans:
-        while len(ban_map) < 25:
-            ban_name.append(str(ban.user))
-            ban_id.append(str(ban.user.id))
-
-    for key, value in zip(ban_name, ban_id):
-        ban_map[key] = value
-
-    print(ban_map)
+        if len(ban_map) == 25:
+            break
+        if user.lower() in str(ban.user).lower():
+            ban_map[str(ban.user)] = str(ban.user.id)
 
     await ctx.set_choices(ban_map)
 
@@ -382,21 +379,31 @@ async def unban(
     user : tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake]
         User to unban
     """
-    user_ = await bot.rest.fetch_user(user)
+    fetch_user = await bot.rest.fetch_user(user)
     guild = ctx.guild_id
 
     if not guild:
         return
 
-    await bot.rest.unban_user(guild, user)
+    try:
+        await bot.rest.unban_user(guild, user)
 
-    embed = hikari.Embed(
-        title="Unban",
-        description=f"Unbanned **{str(user_)}**",
-        color=scripty.Color.dark_embed(),
-    )
+        embed = hikari.Embed(
+            title="Unban",
+            description=f"Unbanned **{str(fetch_user)}**",
+            color=scripty.Color.dark_embed(),
+        )
 
-    await ctx.respond(embed)
+        await ctx.respond(embed)
+
+    except hikari.NotFoundError:
+        embed = hikari.Embed(
+            title="Unban Error",
+            description="Unable to unban user that is not banned!",
+            color=scripty.Color.dark_embed(),
+        )
+
+        await ctx.respond(embed)
 
 
 @tanjun.as_loader
