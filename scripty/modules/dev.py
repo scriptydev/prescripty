@@ -24,7 +24,7 @@ component = tanjun.Component()
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command("load")
+@tanchi.as_slash_command("load", default_to_ephemeral=True)
 async def load_(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -54,7 +54,7 @@ async def load_(
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command()
+@tanchi.as_slash_command(default_to_ephemeral=True)
 async def reload(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -84,7 +84,7 @@ async def reload(
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command()
+@tanchi.as_slash_command(default_to_ephemeral=True)
 async def sync(
     ctx: tanjun.abc.SlashContext,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
@@ -103,7 +103,7 @@ async def sync(
 
 @component.with_command
 @tanjun.with_owner_check
-@tanchi.as_slash_command("unload")
+@tanchi.as_slash_command("unload", default_to_ephemeral=True)
 async def unload_(
     ctx: tanjun.abc.SlashContext,
     module: str,
