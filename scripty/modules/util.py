@@ -133,8 +133,9 @@ async def uptime(
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Replies with bot uptime"""
-    uptime_resolved_full = f"<t:{bot.uptime}:F>"
-    uptime_resolved_relative = f"<t:{bot.uptime}:R>"
+    uptime_timestamp = bot.uptime.timestamp()
+    uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
+    uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
     embed = hikari.Embed(
         title="Uptime",
         description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",

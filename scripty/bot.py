@@ -13,26 +13,37 @@ import scripty
 
 
 class AppBot(hikari.GatewayBot):
+    """A custom subclassed implementation of ``hikari.GatewayBot``"""
+
     def __init__(self) -> None:
         super().__init__(scripty.DISCORD_TOKEN)
         self._aiohttp_session: aiohttp.ClientSession
-        self._uptime: int = int(
-            datetime.datetime.now(datetime.timezone.utc).timestamp()
-        )
+        self._uptime: datetime.datetime
 
     @property
     def aiohttp_session(self) -> aiohttp.ClientSession:
         return self._aiohttp_session
 
+    @aiohttp_session.deleter
+    async def aiohttp_session(self) -> None:
+        await self._aiohttp_session.close()
+        del self._aiohttp_session
+
     @property
-    def uptime(self) -> int:
+    def uptime(self) -> datetime.datetime:
         return self._uptime
+
+    @uptime.deleter
+    def uptime(self) -> None:
+        del self._uptime
 
     async def on_starting(self, event: hikari.StartingEvent) -> None:
         self._aiohttp_session = aiohttp.ClientSession()
+        self._uptime = datetime.datetime.now(datetime.timezone.utc)
 
     async def on_stopping(self, event: hikari.StoppingEvent) -> None:
-        await self.aiohttp_session.close()
+        del self.aiohttp_session
+        del self.uptime
 
     def setup(self) -> None:
         create_client(self)
