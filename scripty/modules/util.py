@@ -11,16 +11,12 @@ import scripty
 
 component = tanjun.Component()
 
-info = component.with_slash_command(
-    tanjun.slash_command_group("info", "Get bot statistics.")
-)
 
-
-@info.with_command
+@component.with_command
 @tanchi.as_slash_command()
 async def about(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """About the Scripty Discord bot"""
     bot_user = bot.get_me()
@@ -61,7 +57,7 @@ class InviteView(miru.View):
         )
 
 
-@info.with_command
+@component.with_command
 @tanchi.as_slash_command()
 async def invite(ctx: tanjun.abc.SlashContext) -> None:
     """Add bot to server"""
@@ -76,11 +72,11 @@ async def invite(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.respond(embed, components=view.build())
 
 
-@info.with_command
+@component.with_command
 @tanchi.as_slash_command()
 async def ping(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Replies with bot latency"""
     embed = hikari.Embed(
@@ -91,11 +87,11 @@ async def ping(
     await ctx.respond(embed)
 
 
-@info.with_command
+@component.with_command
 @tanchi.as_slash_command()
 async def system(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Bot system information"""
     system = platform.uname()
@@ -130,11 +126,11 @@ async def system(
     await ctx.respond(embed)
 
 
-@info.with_command
+@component.with_command
 @tanchi.as_slash_command()
 async def uptime(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Replies with bot uptime"""
     uptime_resolved_full = f"<t:{bot.uptime}:F>"
@@ -144,6 +140,69 @@ async def uptime(
         description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
         color=scripty.Color.dark_embed(),
     )
+    await ctx.respond(embed)
+
+
+info = component.with_slash_command(
+    tanjun.slash_command_group("info", "Get information")
+)
+
+
+@info.with_command
+@tanchi.as_slash_command("member")
+async def info_member(
+    ctx: tanjun.abc.SlashContext,
+    member: hikari.Member | None = None,
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Get information about a member
+
+    Parameters
+    ----------
+    member : hikari.Member | None
+        The member to get information about
+    """
+    guild = ctx.guild_id
+
+    if guild is None:
+        return
+
+    if member:
+        await bot.rest.fetch_member(guild, member)
+
+    else:
+        member = ctx.member
+
+    assert member is not None, "Member was None"
+
+    roles = member.get_roles()
+
+    embed = hikari.Embed(
+        title=f"Info Member",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.set_author(
+        name=str(member),
+        icon=member.avatar_url or member.default_avatar_url,
+    )
+    embed.add_field("Tag", str(member), inline=True)
+    embed.add_field("ID", str(member.id), inline=True)
+    embed.add_field("Nickname", str(member.nickname), inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(member.created_at.timestamp())}:R>", inline=True
+    )
+    embed.add_field(
+        "Joined", f"<t:{int(member.joined_at.timestamp())}:R>", inline=True
+    )
+    embed.add_field("Roles", " ".join(role.mention for role in roles))
+    embed.add_field(
+        "Permissions",
+        f"Primary permission noted as `{hikari.Permissions.ADMINISTRATOR}`"
+        if hikari.Permissions.ADMINISTRATOR in member.permissions  # type: ignore
+        else " ".join(f"`{permission}`" for permission in member.permissions),  # type: ignore
+        inline=True,
+    )
+    embed.set_thumbnail(member.avatar_url or member.default_avatar_url)
     await ctx.respond(embed)
 
 

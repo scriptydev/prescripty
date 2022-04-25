@@ -50,7 +50,7 @@ async def dice(
 @tanchi.as_slash_command()
 async def meme(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """The hottest Reddit r/memes"""
     reddit_url = "https://reddit.com/r/memes/hot.json"
