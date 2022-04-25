@@ -372,7 +372,7 @@ async def unban(
     user: tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake],
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
-    """Unban member
+    """Unban user from server
 
     Parameters
     ----------
