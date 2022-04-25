@@ -46,6 +46,40 @@ async def dice(
     await ctx.respond(embed)
 
 
+class MemeView(miru.View):
+    def __init__(self, submissions: typing.Any, index: int) -> None:
+        super().__init__(timeout=30.0)
+        self.submissions = submissions
+        self.index = index
+
+    @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
+    async def next(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+        self.index += 1
+        if self.index == len(self.submissions):
+            self.index = 0
+
+        embed = hikari.Embed(
+            title=self.submissions[self.index]["title"],
+            url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
+            color=scripty.Color.dark_embed(),
+        )
+        embed.set_image(self.submissions[self.index]["url"])
+        await ctx.edit_response(embed)
+
+    async def on_timeout(self) -> None:
+        self.next.disabled = True
+        self.add_item(
+            miru.Button(
+                style=hikari.ButtonStyle.SECONDARY,
+                label="Timed out",
+                disabled=True,
+            )
+        )
+
+        assert self.message is not None, "Message is None"
+        await self.message.edit(components=self.build())
+
+
 @component.with_command
 @tanchi.as_slash_command()
 async def meme(
@@ -61,18 +95,30 @@ async def meme(
 
     submissions: typing.Any = []
     for submission in range(len(reddit["data"]["children"])):
-        submissions.append(reddit["data"]["children"][submission]["data"])
-    random_submission = random.choice(submissions)
+        if not reddit["data"]["children"][submission]["data"]["over_18"]:
+            if not reddit["data"]["children"][submission]["data"]["is_video"]:
+                submissions.append(
+                    reddit["data"]["children"][submission]["data"]
+                )
 
-    if not random_submission["over_18"]:
-        if not random_submission["is_video"]:
-            embed = hikari.Embed(
-                title=random_submission["title"],
-                url=f"https://reddit.com{random_submission['permalink']}",
-                color=scripty.Color.dark_embed(),
-            )
-            embed.set_image(random_submission["url"])
-            await ctx.respond(embed)
+    random.shuffle(submissions)
+
+    index = 0
+
+    view = MemeView(submissions, index)
+
+    embed = hikari.Embed(
+        title=submissions[index]["title"],
+        url=f"https://reddit.com{submissions[index]['permalink']}",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.set_image(submissions[index]["url"])
+
+    await ctx.respond(embed, components=view.build())
+
+    message = await ctx.interaction.fetch_initial_response()
+    view.start(message)
+    await view.wait()
 
 
 @component.with_command
