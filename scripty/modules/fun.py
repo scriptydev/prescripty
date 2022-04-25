@@ -1,8 +1,6 @@
 import random
 import typing
 
-from functools import lru_cache
-
 import hikari
 import miru
 import tanchi
@@ -123,13 +121,13 @@ class MemeView(miru.View):
 
 @component.with_command
 @tanchi.as_slash_command()
-@lru_cache
 async def meme(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """The hottest Reddit r/memes"""
     reddit_url = "https://reddit.com/r/memes/hot.json"
+
     async with bot.aiohttp_session.get(
         reddit_url, headers={"User-Agent": "Scripty"}
     ) as response:
@@ -158,7 +156,7 @@ async def meme(
 
     await ctx.respond(embed, components=view.build())
 
-    message = await ctx.interaction.fetch_initial_response()
+    message = await ctx.fetch_initial_response()
     view.start(message)
     await view.wait()
 
@@ -273,7 +271,7 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
 
     await ctx.respond(embed, components=view.build())
 
-    message = await ctx.interaction.fetch_initial_response()
+    message = await ctx.fetch_initial_response()
     view.start(message)
     await view.wait()
 
