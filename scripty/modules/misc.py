@@ -65,7 +65,33 @@ async def poll(
     option_i: str | None = None,
     option_j: str | None = None,
 ) -> None:
-    """Create a simple poll"""
+    """Create a simple poll
+    
+    Parameters
+    ----------
+    topic : str
+        Topic of the poll
+    option_a : str
+        Option A
+    option_b : str
+        Option B
+    option_c : str | None
+        Option C
+    option_d : str | None
+        Option D
+    option_e : str | None
+        Option E
+    option_f : str | None
+        Option F
+    option_g : str | None
+        Option G
+    option_h : str | None
+        Option H
+    option_i : str | None
+        Option I
+    option_j : str | None
+        Option J
+    """
     options: dict[str, str | None] = {
         "\U0001f1e6": option_a,
         "\U0001f1e7": option_b,
