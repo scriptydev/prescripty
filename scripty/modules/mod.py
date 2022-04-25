@@ -336,7 +336,7 @@ async def timeout_remove(
         await ctx.respond(embed)
 
 
-async def ban_user_autocomplete(
+async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
     user: str,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
@@ -372,14 +372,14 @@ async def ban_user_autocomplete(
 @tanchi.as_slash_command()
 async def unban(
     ctx: tanjun.abc.SlashContext,
-    user: tanchi.Autocompleted[ban_user_autocomplete, hikari.Snowflake],
+    user: tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake],
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Unban member
 
     Parameters
     ----------
-    user : tanchi.Autocompleted[ban_user_autocomplete, hikari.Snowflake]
+    user : tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake]
         User to unban
     """
     user_ = await bot.rest.fetch_user(user)
