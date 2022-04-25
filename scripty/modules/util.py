@@ -186,7 +186,8 @@ async def info_member(
         name=str(member),
         icon=member.avatar_url or member.default_avatar_url,
     )
-    embed.add_field("Tag", str(member), inline=True)
+    embed.add_field("Name", member.display_name, inline=True)
+    embed.add_field("Discriminator", member.discriminator, inline=True)
     embed.add_field("ID", str(member.id), inline=True)
     embed.add_field("Nickname", str(member.nickname), inline=True)
     embed.add_field(
@@ -204,6 +205,126 @@ async def info_member(
         inline=True,
     )
     embed.set_thumbnail(member.avatar_url or member.default_avatar_url)
+    await ctx.respond(embed)
+
+
+@info.with_command
+@tanchi.as_slash_command("server")
+async def info_server(
+    ctx: tanjun.abc.SlashContext,
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Get information about the server"""
+    guild = ctx.guild_id
+
+    if guild is None:
+        return
+
+    guild = await bot.rest.fetch_guild(guild)
+
+    embed = hikari.Embed(
+        title=f"Info Server",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.add_field("Name", guild.name, inline=True)
+    embed.add_field("ID", str(guild.id), inline=True)
+    embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(guild.created_at.timestamp())}:R>", inline=True
+    )
+    embed.add_field(
+        "Members",
+        f"{guild.approximate_active_member_count}/{guild.approximate_member_count}",
+        inline=True,
+    )
+    embed.add_field("Channels", str(len(guild.get_channels())), inline=True)
+    embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
+    embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
+    embed.add_field("Region", guild.preferred_locale, inline=True)
+    embed.add_field(
+        "Premium Boosts", str(guild.premium_subscription_count), inline=True
+    )
+    embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
+    embed.add_field(
+        "Verification Level", str(guild.verification_level), inline=True
+    )
+    embed.set_thumbnail(guild.icon_url)
+
+    await ctx.respond(embed)
+
+
+@info.with_command
+@tanchi.as_slash_command("role")
+async def info_role(
+    ctx: tanjun.abc.SlashContext,
+    role: hikari.Role,
+) -> None:
+    """Get information about a role
+
+    Parameters
+    ----------
+    role : hikari.Role
+        The role to get information about
+    """
+    embed = hikari.Embed(
+        title=f"Info Role",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.add_field("Name", role.name, inline=True)
+    embed.add_field("ID", str(role.id), inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True
+    )
+    embed.add_field("Color", str(role.color), inline=True)
+    embed.add_field("Position", str(role.position), inline=True)
+    embed.add_field("Mentionable", str(role.is_mentionable), inline=True)
+    embed.add_field("Hoisted", str(role.is_hoisted), inline=True)
+    embed.add_field("Managed", str(role.is_managed), inline=True)
+    embed.add_field(
+        "Permissions",
+        f"Primary permission noted as `{hikari.Permissions.ADMINISTRATOR}`"
+        if hikari.Permissions.ADMINISTRATOR in role.permissions
+        else " ".join(f"`{permission}`" for permission in role.permissions),
+    )
+    embed.set_thumbnail(role.icon_url)
+
+    await ctx.respond(embed)
+
+
+# info channel command
+@info.with_command
+@tanchi.as_slash_command("channel")
+async def info_channel(
+    ctx: tanjun.abc.SlashContext,
+    channel: hikari.GuildChannel | None = None,
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Get information about a channel
+
+    Parameters
+    ----------
+    channel : hikari.Channel
+        The channel to get information about
+    """
+    if channel is None:
+        channel = channel or ctx.get_channel()
+    
+    assert channel is not None, "Channel was None"
+    
+    embed = hikari.Embed(
+        title=f"Info Channel",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.add_field("Name", str(channel.name), inline=True)
+    embed.add_field("ID", str(channel.id), inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(channel.created_at.timestamp())}:R>", inline=True
+    )
+    embed.add_field("Type", str(channel.type), inline=True)
+    # embed.add_field("Position", str(channel.position), inline=True)
+    # embed.add_field("NSFW", str(channel.is_nsfw), inline=True)
+    # embed.add_field("Permissions", str(channel.permission_overwrites))
+
     await ctx.respond(embed)
 
 
