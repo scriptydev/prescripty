@@ -1,4 +1,4 @@
-__all__: list[str] = ["build_bot", "Bot"]
+__all__: list[str] = ["build_bot", "AppBot"]
 
 
 import datetime
@@ -12,7 +12,7 @@ import tanjun
 import scripty
 
 
-class Bot(hikari.GatewayBot):
+class AppBot(hikari.GatewayBot):
     def __init__(self) -> None:
         super().__init__(scripty.DISCORD_TOKEN)
         self._aiohttp_session: aiohttp.ClientSession
@@ -52,7 +52,7 @@ class Bot(hikari.GatewayBot):
         )
 
 
-def create_client(bot: Bot) -> tanjun.Client:
+def create_client(bot: AppBot) -> tanjun.Client:
     client = tanjun.Client.from_gateway_bot(
         bot,
         mention_prefix=True,
@@ -64,5 +64,5 @@ def create_client(bot: Bot) -> tanjun.Client:
     return client
 
 
-def build_bot() -> Bot:
-    return Bot()
+def build_bot() -> AppBot:
+    return AppBot()

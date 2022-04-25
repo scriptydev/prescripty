@@ -21,7 +21,7 @@ async def ban(
     user: hikari.User,
     delete_message_days: hikari.UndefinedNoneOr[tanchi.Range[1, 7]] = None,
     reason: hikari.UndefinedNoneOr[str] = None,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Ban user from server
 
@@ -61,7 +61,7 @@ async def ban(
 async def delete(
     ctx: tanjun.abc.SlashContext,
     amount: tanchi.Range[1, ...],
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Purge messages from channel
 
@@ -137,7 +137,7 @@ async def kick(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
     reason: hikari.UndefinedNoneOr[str] = None,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Kick member from server
 
@@ -165,7 +165,9 @@ async def kick(
     await ctx.respond(embed)
 
 
-slowmode = component.with_slash_command(tanjun.slash_command_group("slowmode", "Slowmode channel"))
+slowmode = component.with_slash_command(
+    tanjun.slash_command_group("slowmode", "Slowmode channel")
+)
 
 
 @slowmode.with_command
@@ -176,7 +178,7 @@ async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
     duration: tanchi.Range[1, 21600],
     channel: hikari.TextableGuildChannel | None = None,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Set slowmode for channel
 
@@ -208,7 +210,7 @@ async def slowmode_enable(
 async def slowmode_disable(
     ctx: tanjun.abc.SlashContext,
     channel: hikari.TextableGuildChannel | None = None,
-    bot: scripty.Bot = tanjun.inject(type=scripty.Bot),
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Remove slowmode from channel
 
@@ -304,7 +306,9 @@ async def timeout_set(
 @tanjun.with_own_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanchi.as_slash_command("remove")
-async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) -> None:
+async def timeout_remove(
+    ctx: tanjun.abc.SlashContext, member: hikari.Member
+) -> None:
     """Remove timeout from member
 
     Parameters
