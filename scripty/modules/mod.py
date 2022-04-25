@@ -15,7 +15,7 @@ component = tanjun.Component()
 @component.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.BAN_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.BAN_MEMBERS)
-@tanchi.as_slash_command()
+@tanchi.as_slash_command(default_to_ephemeral=True)
 async def ban(
     ctx: tanjun.abc.SlashContext,
     user: hikari.User,
@@ -354,7 +354,7 @@ async def ban_user_autocomplete(
     ban_id: list[str] = []
 
     for ban in bans:
-        while len(ban_map) < 10:
+        while len(ban_map) < 25:
             ban_name.append(str(ban.user))
             ban_id.append(str(ban.user.id))
 
@@ -379,7 +379,7 @@ async def unban(
 
     Parameters
     ----------
-    user : typing.Annotated[hikari.User, tanchi.Autocompleted[autocomplete_user, hikari.Snowflake]]
+    user : tanchi.Autocompleted[ban_user_autocomplete, hikari.Snowflake]
         User to unban
     """
     user_ = await bot.rest.fetch_user(user)
