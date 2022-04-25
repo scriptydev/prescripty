@@ -13,6 +13,7 @@ component = tanjun.Component()
 async def avatar(
     ctx: tanjun.abc.MenuContext, user: hikari.User | hikari.InteractionMember
 ) -> None:
+    """Get user avatar"""
     embed = hikari.Embed(
         title=f"Avatar",
         color=scripty.Color.dark_embed(),
