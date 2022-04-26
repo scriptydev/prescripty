@@ -20,10 +20,7 @@ async def about(
 ) -> None:
     """About the Scripty Discord bot"""
     bot_user = bot.get_me()
-    assert bot_user is not None
-
-    # if app_user is None:
-    #     return None
+    assert bot_user is not None, "App must be started"
 
     embed = hikari.Embed(
         title="About",
@@ -291,7 +288,6 @@ async def info_role(
     await ctx.respond(embed)
 
 
-# info channel command
 @info.with_command
 @tanchi.as_slash_command("channel")
 async def info_channel(
@@ -308,9 +304,9 @@ async def info_channel(
     """
     if channel is None:
         channel = channel or ctx.get_channel()
-    
+
     assert channel is not None, "Channel was None"
-    
+
     embed = hikari.Embed(
         title=f"Info Channel",
         color=scripty.Color.dark_embed(),
@@ -324,6 +320,40 @@ async def info_channel(
     # embed.add_field("Position", str(channel.position), inline=True)
     # embed.add_field("NSFW", str(channel.is_nsfw), inline=True)
     # embed.add_field("Permissions", str(channel.permission_overwrites))
+
+    await ctx.respond(embed)
+
+
+# invite info command
+@info.with_command
+@tanchi.as_slash_command("invite")
+async def info_invite(
+    ctx: tanjun.abc.SlashContext,
+    invite: hikari.Invite,
+) -> None:
+    """Get information about invite
+
+    Parameters
+    ----------
+    invite : hikari.Invite
+        The invite to get information about
+    """
+    embed = hikari.Embed(
+        title=f"Info Invite",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.add_field("Code", invite.code, inline=True)
+    embed.add_field("Inviter", str(invite.inviter), inline=True)
+    embed.add_field("Target", str(invite.target_user), inline=True)
+    embed.add_field("Guild", str(invite.guild), inline=True)
+    embed.add_field("Channel", str(invite.channel), inline=True)
+    embed.add_field(
+        "Expire",
+        f"<t:{int(invite.expires_at.timestamp())}:R>"
+        if invite.expires_at
+        else str(invite.expires_at),
+        inline=True,
+    )
 
     await ctx.respond(embed)
 
