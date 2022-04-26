@@ -52,9 +52,23 @@ class MemeView(miru.View):
         self.submissions = submissions
         self.index = index
 
-    @miru.button(label="Prev", style=hikari.ButtonStyle.PRIMARY)
-    async def prev(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        self.index -= 1
+    # @miru.button(label="Prev", style=hikari.ButtonStyle.PRIMARY)
+    # async def prev(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    #     self.index -= 1
+    #     if self.index == len(self.submissions):
+    #         self.index = 0
+
+    #     embed = hikari.Embed(
+    #         title=self.submissions[self.index]["title"],
+    #         url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
+    #         color=scripty.Color.dark_embed(),
+    #     )
+    #     embed.set_image(self.submissions[self.index]["url"])
+    #     await ctx.edit_response(embed)
+
+    @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
+    async def next(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+        self.index += 1
         if self.index == len(self.submissions):
             self.index = 0
 
@@ -74,20 +88,6 @@ class MemeView(miru.View):
         await ctx.edit_response(components=self.build())
 
         self.stop()
-
-    @miru.button(label="Next", style=hikari.ButtonStyle.PRIMARY)
-    async def next(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        self.index += 1
-        if self.index == len(self.submissions):
-            self.index = 0
-
-        embed = hikari.Embed(
-            title=self.submissions[self.index]["title"],
-            url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-            color=scripty.Color.dark_embed(),
-        )
-        embed.set_image(self.submissions[self.index]["url"])
-        await ctx.edit_response(embed)
 
     async def view_check(self, ctx: miru.Context) -> bool:
         assert self.message and self.message.interaction is not None
