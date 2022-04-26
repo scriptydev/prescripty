@@ -317,14 +317,10 @@ async def info_channel(
         "Created", f"<t:{int(channel.created_at.timestamp())}:R>", inline=True
     )
     embed.add_field("Type", str(channel.type), inline=True)
-    # embed.add_field("Position", str(channel.position), inline=True)
-    # embed.add_field("NSFW", str(channel.is_nsfw), inline=True)
-    # embed.add_field("Permissions", str(channel.permission_overwrites))
 
     await ctx.respond(embed)
 
 
-# invite info command
 @info.with_command
 @tanchi.as_slash_command("invite")
 async def info_invite(
