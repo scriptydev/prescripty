@@ -8,7 +8,7 @@ __copyright__ = "Copyright 2022-Present Scripty Development"
 __license__ = "Apache License Version 2.0"
 __version__ = "1.0.0a6"
 __maintainer__ = "Erich Nguyen"
-__email__ = "nverich07@gmail.com"
+__email__ = "erich.nguyen@outlook.com"
 __status__ = "Development"
 
 
