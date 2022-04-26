@@ -137,9 +137,13 @@ async def meme(
     for submission in range(len(reddit["data"]["children"])):
         if not reddit["data"]["children"][submission]["data"]["over_18"]:
             if not reddit["data"]["children"][submission]["data"]["is_video"]:
-                submissions.append(
-                    reddit["data"]["children"][submission]["data"]
-                )
+                if (
+                    "i.redd.it"
+                    in reddit["data"]["children"][submission]["data"]["url"]
+                ):
+                    submissions.append(
+                        reddit["data"]["children"][submission]["data"]
+                    )
 
     random.shuffle(submissions)
 
