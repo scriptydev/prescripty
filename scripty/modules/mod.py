@@ -355,7 +355,7 @@ async def unban_user_autocomplete(
     ban_map = {}
 
     for ban in bans:
-        if len(ban_map) > 25:
+        if len(ban_map) == 25:
             break
         if user.lower() in str(ban.user).lower():
             ban_map[str(ban.user)] = str(ban.user.id)
