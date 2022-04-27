@@ -3,6 +3,7 @@ __all__: list[str] = ["get_modules", "parse_duration"]
 
 import asyncio
 import datetime
+import functools
 import pathlib
 import typing
 
@@ -37,13 +38,15 @@ async def parse_duration(duration: str) -> datetime.datetime | None:
 
     parse_run = await loop.run_in_executor(
         None,
-        dateparser.parse,
-        duration,
-        {
-            "RETURN_AS_TIMEZONE_AWARE": True,
-            "PREFER_DATES_FROM": "future",
-            "STRICT_PARSING": True,
-        },
+        functools.partial(
+            dateparser.parse,
+            date_string=duration,
+            settings={  # type: ignore
+                "RETURN_AS_TIMEZONE_AWARE": True,
+                "PREFER_DATES_FROM": "future",
+                "STRICT_PARSING": True,
+            },
+        ),
     )
 
     return parse_run
