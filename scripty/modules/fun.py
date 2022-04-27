@@ -12,6 +12,54 @@ import scripty
 component = tanjun.Component()
 
 
+animal = component.with_slash_command(
+    tanjun.slash_command_group("animal", "Fun things related to animals")
+)
+
+
+@animal.with_command
+@tanchi.as_slash_command()
+async def cat(
+    ctx: tanjun.abc.Context,
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Get a random cat image"""
+    async with bot.aiohttp_session.get(
+        "https://api.thecatapi.com/v1/images/search",
+        headers={"x-api-key": scripty.THE_CAT_API_KEY},
+    ) as response:
+        data = await response.json()
+
+    embed = hikari.Embed(
+        title="Cat",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.set_image(data[0]["url"])
+
+    await ctx.respond(embed)
+
+
+@animal.with_command
+@tanchi.as_slash_command()
+async def dog(
+    ctx: tanjun.abc.Context,
+    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+) -> None:
+    """Get a random dog image"""
+    async with bot.aiohttp_session.get(
+        "https://dog.ceo/api/breeds/image/random"
+    ) as response:
+        data = await response.json()
+
+    embed = hikari.Embed(
+        title="Dog",
+        color=scripty.Color.dark_embed(),
+    )
+    embed.set_image(data["message"])
+
+    await ctx.respond(embed)
+
+
 @component.with_command
 @tanchi.as_slash_command()
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
