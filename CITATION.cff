@@ -15,6 +15,7 @@ authors:
 repository-code: 'https://github.com/GoogleGenius/scripty-hikari'
 url: 'https://scriptybotdev.web.app'
 keywords:
+  - bot
   - dependency-injection
   - discord
   - hikari
