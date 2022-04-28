@@ -201,9 +201,7 @@ async def info_member(
     embed.add_field("Roles", " ".join(role.mention for role in roles))
     embed.add_field(
         "Permissions",
-        f"Primary permission noted as `{hikari.Permissions.ADMINISTRATOR}`"
-        if hikari.Permissions.ADMINISTRATOR in member.permissions  # type: ignore
-        else " ".join(f"`{permission}`" for permission in member.permissions),  # type: ignore
+        " ".join(f"`{permission}`" for permission in member.permissions),  # type: ignore
         inline=True,
     )
     embed.set_thumbnail(member.avatar_url or member.default_avatar_url)
@@ -284,9 +282,7 @@ async def info_role(
     embed.add_field("Managed", str(role.is_managed), inline=True)
     embed.add_field(
         "Permissions",
-        f"Primary permission noted as `{hikari.Permissions.ADMINISTRATOR}`"
-        if hikari.Permissions.ADMINISTRATOR in role.permissions
-        else " ".join(f"`{permission}`" for permission in role.permissions),
+        " ".join(f"`{permission}`" for permission in role.permissions),
     )
     embed.set_thumbnail(role.icon_url)
 
