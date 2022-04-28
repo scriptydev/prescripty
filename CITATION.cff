@@ -18,8 +18,9 @@ keywords:
   - dependency-injection
   - discord
   - hikari
-  - hikari-tanjun
   - hikari-miru
+  - hikari-tanchi
+  - hikari-tanjun
   - python
 license: Apache-2.0
 version: 1.0.0a6
