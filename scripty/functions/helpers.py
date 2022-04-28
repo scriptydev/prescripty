@@ -17,7 +17,7 @@ def get_modules(
 
     Parameters
     ----------
-    path : str | Path
+    path : str | pathlib.Path
         The module to get the path of
 
     Returns

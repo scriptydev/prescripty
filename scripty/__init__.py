@@ -1,4 +1,10 @@
-"""Imagine a Bot"""
+"""
+Scripty
+=======
+Imagine a bot...
+----------------
+...that creates a fun place to talk and hang out. With advanced server moderation and utilities. A bot that does everything you want, intuitively.
+"""
 
 
 __author__ = ("Erich Nguyen", "Johan Joseph", "Hrishikesh Kondiboyina")

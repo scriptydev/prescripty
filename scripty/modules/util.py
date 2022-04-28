@@ -12,9 +12,14 @@ import scripty
 component = tanjun.Component()
 
 
-@component.with_command
-@tanchi.as_slash_command()
-async def about(
+stats = component.with_slash_command(
+    tanjun.slash_command_group("stats", "Statistics related to Scripty")
+)
+
+
+@stats.with_command
+@tanchi.as_slash_command("about")
+async def stats_about(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
@@ -54,9 +59,9 @@ class InviteView(miru.View):
         )
 
 
-@component.with_command
-@tanchi.as_slash_command()
-async def invite(ctx: tanjun.abc.SlashContext) -> None:
+@stats.with_command
+@tanchi.as_slash_command("invite")
+async def stats_invite(ctx: tanjun.abc.SlashContext) -> None:
     """Add bot to server"""
     view = InviteView()
 
@@ -69,9 +74,9 @@ async def invite(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.respond(embed, components=view.build())
 
 
-@component.with_command
-@tanchi.as_slash_command()
-async def ping(
+@stats.with_command
+@tanchi.as_slash_command("ping")
+async def stats_ping(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
@@ -84,9 +89,9 @@ async def ping(
     await ctx.respond(embed)
 
 
-@component.with_command
-@tanchi.as_slash_command()
-async def system(
+@stats.with_command
+@tanchi.as_slash_command("system")
+async def stats_system(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
@@ -123,9 +128,9 @@ async def system(
     await ctx.respond(embed)
 
 
-@component.with_command
-@tanchi.as_slash_command()
-async def uptime(
+@stats.with_command
+@tanchi.as_slash_command("uptime")
+async def stats_uptime(
     ctx: tanjun.abc.SlashContext,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:

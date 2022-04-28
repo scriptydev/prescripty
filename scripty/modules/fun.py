@@ -82,7 +82,7 @@ async def dice(
 
     Parameters
     ----------
-    sides : int
+    sides : tanchi.Range[int, ...]
         Number of sides on the die
     """
     embed = hikari.Embed(
