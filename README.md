@@ -1,4 +1,5 @@
 # scripty-hikari
+
 Yet another rewrite of the Scripty Discord bot with [Hikari](https://hikari-py.dev) in Python.
 
 | Scripty Developers                              |
