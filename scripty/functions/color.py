@@ -4,7 +4,7 @@ __all__: list[str] = ["Color"]
 import enum
 
 
-class Color(enum.Enum):
+class Color(enum.IntEnum):
     """An enum with color assigned to hex values"""
 
     BLURPLE = 0x5865F2
