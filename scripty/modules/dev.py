@@ -25,8 +25,6 @@ async def load_(
     module : str
         Module to load
     """
-    module = module.lower()
-
     await client.reload_modules_async(
         pathlib.Path(f"scripty/modules/{module}.py")
     )
@@ -55,8 +53,6 @@ async def reload(
     module : str
         Module to reload
     """
-    module = module.lower()
-
     await client.reload_modules_async(
         pathlib.Path(f"scripty/modules/{module}.py")
     )
@@ -104,8 +100,6 @@ async def unload_(
     module : str
         Module to unload
     """
-    module = module.lower()
-
     client.unload_modules(pathlib.Path(f"scripty/modules/{module}.py"))
 
     embed = hikari.Embed(
