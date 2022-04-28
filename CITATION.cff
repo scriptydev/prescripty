@@ -18,6 +18,8 @@ keywords:
   - bot
   - dependency-injection
   - discord
+  - discord-api
+  - discord-bot
   - hikari
   - hikari-miru
   - hikari-tanchi
