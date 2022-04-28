@@ -50,7 +50,7 @@ async def ban(
     embed = hikari.Embed(
         title="Ban",
         description=f"Banned **{str(user)}** \n Reason: `{reason or 'No reason provided'}`",
-        color=scripty.functions.Color.background_secondary(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -95,7 +95,7 @@ async def delete(
         return hikari.Embed(
             title="Delete",
             description=message,
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
 
     if tasks:
@@ -126,7 +126,7 @@ async def delete(
         embed = hikari.Embed(
             title="Delete Error",
             description="Unable to delete messages! \n Messages are older than `14 days` or do not exist",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
 
@@ -161,7 +161,7 @@ async def kick(
     embed = hikari.Embed(
         title="Kick",
         description=f"Kicked **{str(member)}** \n Reason: `{reason or 'No reason provided'}`",
-        color=scripty.functions.Color.background_secondary(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -199,7 +199,7 @@ async def slowmode_enable(
     embed = hikari.Embed(
         title="Slowmode",
         description=f"Set slowmode for **{str(channel)}** to `{duration}s`",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -229,7 +229,7 @@ async def slowmode_disable(
     embed = hikari.Embed(
         title="Slowmode",
         description=f"Removed slowmode from **{str(channel)}**",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -269,7 +269,7 @@ async def timeout_set(
         embed = hikari.Embed(
             title="Timeout Error",
             description="Unable to parse specified duration; invalid time!",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
 
@@ -277,7 +277,7 @@ async def timeout_set(
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration provided must be in the future!",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
 
@@ -285,7 +285,7 @@ async def timeout_set(
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration cannot be longer than `28 days`!",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
 
@@ -298,7 +298,7 @@ async def timeout_set(
         embed = hikari.Embed(
             title="Timeout",
             description=f"Timed out **{str(member)}** until {duration_resolved_full} \n Reason: `{reason or 'No reason provided'}`",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
 
         await ctx.respond(embed)
@@ -322,7 +322,7 @@ async def timeout_remove(
         embed = hikari.Embed(
             title="Timeout Error",
             description="You cannot remove timeout from member that is not timed out!",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
 
@@ -332,7 +332,7 @@ async def timeout_remove(
         embed = hikari.Embed(
             title="Timeout",
             description=f"Removed timeout from **{str(member)}**",
-            color=scripty.functions.Color.background_secondary(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
 
         await ctx.respond(embed)
@@ -391,7 +391,7 @@ async def unban(
         embed = hikari.Embed(
             title="Unban",
             description=f"Unbanned **{str(fetch_user)}**",
-            color=scripty.Color.dark_embed(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
 
         await ctx.respond(embed)
@@ -400,7 +400,7 @@ async def unban(
         embed = hikari.Embed(
             title="Unban Error",
             description="Unable to unban user that is not banned!",
-            color=scripty.Color.dark_embed(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
 
         await ctx.respond(embed)

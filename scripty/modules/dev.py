@@ -34,7 +34,7 @@ async def load_(
     embed = hikari.Embed(
         title="Load",
         description=f"`{module}` module loaded",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -64,7 +64,7 @@ async def reload(
     embed = hikari.Embed(
         title="Load",
         description=f"`{module}` module reloaded",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -83,7 +83,7 @@ async def sync(
     embed = hikari.Embed(
         title="Sync",
         description="Successfully synced global application commands",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -111,7 +111,7 @@ async def unload_(
     embed = hikari.Embed(
         title="Load",
         description=f"`{module}` module unloaded",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)

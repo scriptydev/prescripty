@@ -16,7 +16,7 @@ async def avatar(
     """Get user avatar"""
     embed = hikari.Embed(
         title=f"Avatar",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(user), icon=user.avatar_url or user.default_avatar_url
@@ -40,7 +40,7 @@ async def echo(ctx: tanjun.abc.SlashContext, text: str) -> None:
     embed = hikari.Embed(
         title="Echo",
         description=f"```{text}```",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(ctx.author),
@@ -67,7 +67,7 @@ async def poll(
     option_j: str | None = None,
 ) -> None:
     """Create a simple poll
-    
+
     Parameters
     ----------
     topic : str
@@ -113,7 +113,7 @@ async def poll(
             for key, value in options.items()
             if value is not None
         ),
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(ctx.author),

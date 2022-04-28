@@ -24,7 +24,7 @@ async def about(
 
     embed = hikari.Embed(
         title="About",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=bot_user.username,
@@ -63,7 +63,7 @@ async def invite(ctx: tanjun.abc.SlashContext) -> None:
     embed = hikari.Embed(
         title="Invite",
         description="Invite Scripty to your Discord Server!",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed, components=view.build())
@@ -79,7 +79,7 @@ async def ping(
     embed = hikari.Embed(
         title="Ping",
         description=f"Pong! `{round(bot.heartbeat_latency * 1000)}ms`",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     await ctx.respond(embed)
 
@@ -103,7 +103,7 @@ async def system(
 
     embed = hikari.Embed(
         title="System",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=app_user.username,
@@ -136,7 +136,7 @@ async def uptime(
     embed = hikari.Embed(
         title="Uptime",
         description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     await ctx.respond(embed)
 
@@ -177,7 +177,7 @@ async def info_member(
 
     embed = hikari.Embed(
         title=f"Info Member",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(member),
@@ -221,7 +221,7 @@ async def info_server(
 
     embed = hikari.Embed(
         title=f"Info Server",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Name", guild.name, inline=True)
     embed.add_field("ID", str(guild.id), inline=True)
@@ -265,7 +265,7 @@ async def info_role(
     """
     embed = hikari.Embed(
         title=f"Info Role",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Name", role.name, inline=True)
     embed.add_field("ID", str(role.id), inline=True)
@@ -309,7 +309,7 @@ async def info_channel(
 
     embed = hikari.Embed(
         title=f"Info Channel",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Name", str(channel.name), inline=True)
     embed.add_field("ID", str(channel.id), inline=True)
@@ -336,7 +336,7 @@ async def info_invite(
     """
     embed = hikari.Embed(
         title=f"Info Invite",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Code", invite.code, inline=True)
     embed.add_field("Inviter", str(invite.inviter), inline=True)

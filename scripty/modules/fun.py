@@ -32,7 +32,7 @@ async def cat(
 
     embed = hikari.Embed(
         title="Cat",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_image(data[0]["url"])
 
@@ -53,7 +53,7 @@ async def dog(
 
     embed = hikari.Embed(
         title="Dog",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_image(data["message"])
 
@@ -68,7 +68,7 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
     embed = hikari.Embed(
         title="Coin",
         description=random.choice(coin),
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     await ctx.respond(embed)
 
@@ -88,7 +88,7 @@ async def dice(
     embed = hikari.Embed(
         title="Dice",
         description=random.randint(1, sides),
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -109,7 +109,7 @@ class MemeView(miru.View):
     #     embed = hikari.Embed(
     #         title=self.submissions[self.index]["title"],
     #         url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-    #         color=scripty.Color.dark_embed(),
+    #         color=scripty.Color.GRAY_EMBED.value,
     #     )
     #     embed.set_image(self.submissions[self.index]["url"])
     #     await ctx.edit_response(embed)
@@ -123,7 +123,7 @@ class MemeView(miru.View):
         embed = hikari.Embed(
             title=self.submissions[self.index]["title"],
             url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-            color=scripty.Color.dark_embed(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
         embed.set_image(self.submissions[self.index]["url"])
         await ctx.edit_response(embed)
@@ -144,7 +144,7 @@ class MemeView(miru.View):
             embed = hikari.Embed(
                 title="Error",
                 description="This command was not invoked by you!",
-                color=scripty.Color.dark_embed(),
+                color=scripty.Color.GRAY_EMBED.value,
             )
             await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
@@ -202,7 +202,7 @@ async def meme(
     embed = hikari.Embed(
         title=submissions[index]["title"],
         url=f"https://reddit.com{submissions[index]['permalink']}",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_image(submissions[index]["url"])
 
@@ -240,7 +240,7 @@ class RPSView(miru.View):
         return hikari.Embed(
             title="RPS",
             description=message,
-            color=scripty.Color.dark_embed(),
+            color=scripty.Color.GRAY_EMBED.value,
         )
 
     def determine_outcome(self, player_choice: str) -> hikari.Embed:
@@ -286,7 +286,7 @@ class RPSView(miru.View):
             embed = hikari.Embed(
                 title="Error",
                 description="This command was not invoked by you!",
-                color=scripty.Color.dark_embed(),
+                color=scripty.Color.GRAY_EMBED.value,
             )
             await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
@@ -318,7 +318,7 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
     embed = hikari.Embed(
         title="RPS",
         description="Click on the button options to continue the game!",
-        color=scripty.Color.dark_embed(),
+        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed, components=view.build())
