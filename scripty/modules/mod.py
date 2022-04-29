@@ -1,8 +1,7 @@
 import asyncio
 import datetime
+import functools
 import typing
-
-from functools import lru_cache
 
 import hikari
 import tanchi
@@ -178,31 +177,60 @@ slowmode = component.with_slash_command(
 @tanchi.as_slash_command("enable")
 async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
-    duration: tanchi.Range[1, 21600],
+    duration: tanchi.Converted[
+        datetime.timedelta, scripty.parse_to_timedelta_from_now
+    ],
     channel: hikari.TextableGuildChannel | None = None,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
-    """Set slowmode for channel
+    """Enable slowmode for channel
 
     Parameters
     ----------
     channel : hikari.TextableGuildChannel
-        Channel to set slowmode
-    duration : tanchi.Range[int, ...]
+        Channel to enable slowmode
+    duration : tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now]
         Duration of slowmode
     """
     channel = channel or ctx.get_channel()
     assert isinstance(channel, hikari.TextableGuildChannel)
 
-    await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
+    duration_limit = datetime.timedelta(hours=6)
 
-    embed = hikari.Embed(
-        title="Slowmode",
-        description=f"Set slowmode for **{str(channel)}** to `{duration}s`",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
+    if not duration:
+        embed = hikari.Embed(
+            title="Slowmode Error",
+            description="Unable to parse specified duration; invalid time!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
 
-    await ctx.respond(embed)
+    elif duration < datetime.timedelta():
+        embed = hikari.Embed(
+            title="Slowmode Error",
+            description="Duration provided must be in the future!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
+
+    elif duration > duration_limit:
+        embed = hikari.Embed(
+            title="Slowmode Error",
+            description="Duration cannot be longer than `6 hours`!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
+
+    else:
+        await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
+
+        embed = hikari.Embed(
+            title="Slowmode",
+            description=f"Set slowmode for **{str(channel)}** to `{duration}s`",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+
+        await ctx.respond(embed)
 
 
 @slowmode.with_command
@@ -214,12 +242,12 @@ async def slowmode_disable(
     channel: hikari.TextableGuildChannel | None = None,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
-    """Remove slowmode from channel
+    """Disable slowmode from channel
 
     Parameters
     ----------
     channel : hikari.TextableGuildChannel
-        Channel to remove slowmode
+        Channel to disable slowmode
     """
     channel = channel or ctx.get_channel()
     assert isinstance(channel, hikari.TextableGuildChannel)
@@ -247,7 +275,7 @@ timeout = component.with_slash_command(
 async def timeout_set(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
-    duration: tanchi.Converted[datetime.datetime, scripty.parse_duration],
+    duration: tanchi.Converted[datetime.datetime, scripty.parse_to_datetime],
     reason: hikari.UndefinedNoneOr[str] = None,
 ) -> None:
     """Set timeout for member
@@ -338,7 +366,7 @@ async def timeout_remove(
         await ctx.respond(embed)
 
 
-@lru_cache
+@functools.lru_cache
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
     user: str,
