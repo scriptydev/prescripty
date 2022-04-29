@@ -5,6 +5,7 @@ hikari-miru
 # hikari-tanchi (Pyright hates the PyPi version)
 git+https://github.com/thesadru/tanchi
 hikari-tanjun
+pandas
 psutil
 toml
 uvloop; sys_platform != "win32"
