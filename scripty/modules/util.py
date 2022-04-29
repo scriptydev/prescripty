@@ -29,6 +29,7 @@ async def stats_about(
 
     embed = hikari.Embed(
         title="About",
+        url=scripty.__repository__,
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
