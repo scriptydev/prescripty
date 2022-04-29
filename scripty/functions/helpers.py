@@ -39,6 +39,18 @@ def get_modules(
 
 
 async def parse_to_datetime(duration: str) -> datetime.datetime | None:
+    """Parse string duration to datetime
+
+    Parameters
+    ----------
+    duration : str
+        The string to parse from
+
+    Returns
+    -------
+    parse_run : datetime.datetime | None
+        The datetime from the input
+    """
     loop = asyncio.get_event_loop()
 
     parse_run = await loop.run_in_executor(
@@ -55,7 +67,8 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
     )
 
     if parse_run is None:
-        raise ValueError("could not parse to datetime from input")
+        # raise ValueError("could not parse to datetime from input")
+        return
 
     return parse_run
 
@@ -63,6 +76,19 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
 async def parse_to_timedelta_from_now(
     duration: str,
 ) -> datetime.timedelta | None:
+    """Parse string duration to timedelta from now
+
+    Parameters
+    ----------
+    duration : str
+        The string to parse from
+
+    Returns
+    -------
+    timedelta : pandas.Timedelta
+        The timedelta from now rounded to the nearest second
+    None
+    """
     loop = asyncio.get_event_loop()
 
     parse_run = await loop.run_in_executor(
@@ -79,12 +105,11 @@ async def parse_to_timedelta_from_now(
     )
 
     if parse_run is None:
-        raise ValueError("could not parse to datetime from input")
+        # raise ValueError("could not parse to datetime from input")
+        return
 
-    timedelta_from_now = parse_run - datetime.datetime.now(
-        datetime.timezone.utc
-    )
+    timedelta_calc = parse_run - datetime.datetime.now(datetime.timezone.utc)
 
-    timedelta_round = pandas.to_timedelta(timedelta_from_now).round("s")  # type: ignore
+    timedelta = pandas.to_timedelta(timedelta_calc).round("s")  # type: ignore
 
-    return timedelta_round
+    return timedelta
