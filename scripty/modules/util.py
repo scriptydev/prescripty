@@ -303,10 +303,10 @@ async def info_channel(
     channel : hikari.Channel
         The channel to get information about
     """
-    if channel is None:
-        channel = channel or ctx.get_channel()
+    channel = channel or ctx.get_channel()
 
-    assert channel is not None, "Channel was None"
+    if channel is None:
+        raise Exception("channel was None")
 
     embed = hikari.Embed(
         title=f"Info Channel",

@@ -39,8 +39,8 @@ async def ban(
     reason = reason or hikari.UNDEFINED
     guild = ctx.guild_id
 
-    if not guild:
-        return
+    if guild is None:
+        raise Exception("guild is None")
 
     await bot.rest.ban_user(
         guild, user, delete_message_days=delete_message_days, reason=reason
@@ -193,11 +193,13 @@ async def slowmode_enable(
         Duration of slowmode
     """
     channel = channel or ctx.get_channel()
-    assert isinstance(channel, hikari.TextableGuildChannel)
+    
+    if channel is None:
+        raise Exception("channel not found; returned None")
 
     duration_limit = datetime.timedelta(hours=6)
 
-    if not duration:
+    if duration is None:
         embed = hikari.Embed(
             title="Slowmode Error",
             description="Unable to parse specified duration; invalid time!",
@@ -250,7 +252,9 @@ async def slowmode_disable(
         Channel to disable slowmode
     """
     channel = channel or ctx.get_channel()
-    assert isinstance(channel, hikari.TextableGuildChannel)
+
+    if channel is None:
+        raise Exception("channel not found; returned None")
 
     await bot.rest.edit_channel(channel, rate_limit_per_user=0)
 
@@ -293,7 +297,7 @@ async def timeout_set(
         datetime.timezone.utc
     ) + datetime.timedelta(days=28)
 
-    if not duration:
+    if duration is None:
         embed = hikari.Embed(
             title="Timeout Error",
             description="Unable to parse specified duration; invalid time!",
@@ -346,7 +350,7 @@ async def timeout_remove(
     member : hikari.Member
         Member to remove timeout
     """
-    if not member.communication_disabled_until():
+    if member.communication_disabled_until() is None:
         embed = hikari.Embed(
             title="Timeout Error",
             description="You cannot remove timeout from member that is not timed out!",
@@ -375,8 +379,8 @@ async def unban_user_autocomplete(
     """Autocomplete for banned users"""
     guild = ctx.guild_id
 
-    if not guild:
-        return
+    if guild is None:
+        raise Exception("guild is None")
 
     bans = await bot.rest.fetch_bans(guild)
 
@@ -410,8 +414,8 @@ async def unban(
     fetch_user = await bot.rest.fetch_user(user)
     guild = ctx.guild_id
 
-    if not guild:
-        return
+    if guild is None:
+        raise Exception("guild is None")
 
     try:
         await bot.rest.unban_user(guild, user)

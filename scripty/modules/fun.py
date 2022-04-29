@@ -138,7 +138,9 @@ class MemeView(miru.View):
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
-        assert self.message and self.message.interaction is not None
+        assert self.message is not None
+        if self.message.interaction is None:
+            raise Exception("message interaction is None")
 
         if ctx.user != self.message.interaction.user:
             embed = hikari.Embed(
@@ -232,7 +234,7 @@ class RPSView(miru.View):
 
     def get_key(self, value: int) -> str:
         if not 0 <= value <= 2:
-            raise ValueError("Invalid value")
+            raise ValueError("invalid value")
 
         return tuple(k for k, v in self.rps.items() if v == value)[0]
 
@@ -280,7 +282,9 @@ class RPSView(miru.View):
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
-        assert self.message and self.message.interaction is not None
+        assert self.message is not None
+        if self.message.interaction is None:
+            raise Exception("message interaction is None")
 
         if ctx.user != self.message.interaction.user:
             embed = hikari.Embed(
@@ -290,6 +294,7 @@ class RPSView(miru.View):
             )
             await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
             return False
+
         else:
             return True
 

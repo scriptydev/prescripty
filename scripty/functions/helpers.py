@@ -54,7 +54,7 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
         ),
     )
 
-    if not parse_run:
+    if parse_run is None:
         raise ValueError("could not parse to datetime from input")
 
     return parse_run
@@ -78,7 +78,7 @@ async def parse_to_timedelta_from_now(
         ),
     )
 
-    if not parse_run:
+    if parse_run is None:
         raise ValueError("could not parse to datetime from input")
 
     timedelta_from_now = parse_run - datetime.datetime.now(
