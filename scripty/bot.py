@@ -1,4 +1,4 @@
-__all__: list[str] = ["build_bot", "AppBot"]
+__all__: list[str] = ["AppBot", "build_bot"]
 
 
 import datetime
