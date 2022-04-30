@@ -20,5 +20,6 @@ __status__ = "Development"
 
 
 from .bot import *
+from .config import *
 from .constants import *
 from .functions import *
