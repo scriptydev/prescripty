@@ -13,7 +13,7 @@ component = tanjun.Component()
 @tanjun.with_owner_check(error_message=None)
 @tanjun.with_argument("module")
 @tanjun.as_message_command("load")
-async def load_(
+async def load(
     ctx: tanjun.abc.SlashContext,
     module: str,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
@@ -25,9 +25,7 @@ async def load_(
     module : str
         Module to load
     """
-    await client.reload_modules_async(
-        pathlib.Path(f"scripty/modules/{module}.py")
-    )
+    await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
 
     embed = hikari.Embed(
         title="Load",
@@ -54,9 +52,7 @@ async def reload(
     module : str
         Module to reload
     """
-    await client.reload_modules_async(
-        pathlib.Path(f"scripty/modules/{module}.py")
-    )
+    await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
 
     embed = hikari.Embed(
         title="Load",
@@ -90,7 +86,7 @@ async def sync(
 @tanjun.with_owner_check(error_message=None)
 @tanjun.with_argument("module")
 @tanjun.as_message_command("unload")
-async def unload_(
+async def unload(
     ctx: tanjun.abc.SlashContext,
     module: str,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
@@ -114,7 +110,7 @@ async def unload_(
 
 
 @tanjun.as_loader
-def load(client: tanjun.abc.Client) -> None:
+def load_component(client: tanjun.abc.Client) -> None:
     client.add_component(component.copy())
 
 

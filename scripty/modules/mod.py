@@ -42,13 +42,11 @@ async def ban(
     if guild is None:
         raise Exception("guild is None")
 
-    await bot.rest.ban_user(
-        guild, user, delete_message_days=delete_message_days, reason=reason
-    )
+    await bot.rest.ban_user(guild, user, delete_message_days=delete_message_days, reason=reason)
 
     embed = hikari.Embed(
         title="Ban",
-        description=f"Banned **{str(user)}** \n Reason: `{reason or 'No reason provided'}`",
+        description=f"Banned **{str(user)}**\nReason: `{reason or 'No reason provided'}`",
         color=scripty.Color.GRAY_EMBED.value,
     )
 
@@ -73,9 +71,7 @@ async def delete(
     """
     channel = ctx.channel_id
 
-    bulk_delete_limit = datetime.datetime.now(
-        datetime.timezone.utc
-    ) - datetime.timedelta(days=14)
+    bulk_delete_limit = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
 
     iterator = (
         bot.rest.fetch_messages(channel)
@@ -103,16 +99,12 @@ async def delete(
         if count < amount:
             if count == 1:
                 await ctx.respond(
-                    generate_embed(
-                        f"`{count} message` deleted \n Older messages past `14 days` cannot be deleted"
-                    )
+                    generate_embed(f"`{count} message` deleted\nOlder messages past `14 days` cannot be deleted")
                 )
 
             else:
                 await ctx.respond(
-                    generate_embed(
-                        f"`{count} messages` deleted \n Older messages past `14 days` cannot be deleted"
-                    )
+                    generate_embed(f"`{count} messages` deleted\nOlder messages past `14 days` cannot be deleted")
                 )
 
         elif count == 1:
@@ -124,7 +116,7 @@ async def delete(
     else:
         embed = hikari.Embed(
             title="Delete Error",
-            description="Unable to delete messages! \n Messages are older than `14 days` or do not exist",
+            description="Unable to delete messages!\nMessages are older than `14 days` or do not exist",
             color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
@@ -159,16 +151,14 @@ async def kick(
 
     embed = hikari.Embed(
         title="Kick",
-        description=f"Kicked **{str(member)}** \n Reason: `{reason or 'No reason provided'}`",
+        description=f"Kicked **{str(member)}**\nReason: `{reason or 'No reason provided'}`",
         color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
 
 
-slowmode = component.with_slash_command(
-    tanjun.slash_command_group("slowmode", "Slowmode channel")
-)
+slowmode = component.with_slash_command(tanjun.slash_command_group("slowmode", "Slowmode channel"))
 
 
 @slowmode.with_command
@@ -177,9 +167,7 @@ slowmode = component.with_slash_command(
 @tanchi.as_slash_command("enable")
 async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
-    duration: tanchi.Converted[
-        datetime.timedelta, scripty.parse_to_timedelta_from_now
-    ],
+    duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
@@ -193,7 +181,7 @@ async def slowmode_enable(
         Duration of slowmode
     """
     channel = channel or ctx.get_channel()
-    
+
     if channel is None:
         raise Exception("channel not found; returned None")
 
@@ -267,9 +255,7 @@ async def slowmode_disable(
     await ctx.respond(embed)
 
 
-timeout = component.with_slash_command(
-    tanjun.slash_command_group("timeout", "Timeout member")
-)
+timeout = component.with_slash_command(tanjun.slash_command_group("timeout", "Timeout member"))
 
 
 @timeout.with_command
@@ -293,9 +279,7 @@ async def timeout_set(
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
     """
-    timeout_limit = datetime.datetime.now(
-        datetime.timezone.utc
-    ) + datetime.timedelta(days=28)
+    timeout_limit = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=28)
 
     if duration is None:
         embed = hikari.Embed(
@@ -329,7 +313,7 @@ async def timeout_set(
 
         embed = hikari.Embed(
             title="Timeout",
-            description=f"Timed out **{str(member)}** until {duration_resolved_full} \n Reason: `{reason or 'No reason provided'}`",
+            description=f"Timed out **{str(member)}** until {duration_resolved_full}\nReason: `{reason or 'No reason provided'}`",
             color=scripty.Color.GRAY_EMBED.value,
         )
 
@@ -340,9 +324,7 @@ async def timeout_set(
 @tanjun.with_own_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanchi.as_slash_command("remove")
-async def timeout_remove(
-    ctx: tanjun.abc.SlashContext, member: hikari.Member
-) -> None:
+async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) -> None:
     """Remove timeout from member
 
     Parameters
@@ -439,7 +421,7 @@ async def unban(
 
 
 @tanjun.as_loader
-def load(client: tanjun.abc.Client) -> None:
+def load_component(client: tanjun.abc.Client) -> None:
     client.add_component(component.copy())
 
 

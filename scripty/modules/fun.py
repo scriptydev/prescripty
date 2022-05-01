@@ -12,9 +12,7 @@ import scripty
 component = tanjun.Component()
 
 
-animal = component.with_slash_command(
-    tanjun.slash_command_group("animal", "Fun things related to animals")
-)
+animal = component.with_slash_command(tanjun.slash_command_group("animal", "Fun things related to animals"))
 
 
 @animal.with_command
@@ -46,9 +44,7 @@ async def dog(
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Get a random dog image"""
-    async with bot.aiohttp_session.get(
-        "https://dog.ceo/api/breeds/image/random"
-    ) as response:
+    async with bot.aiohttp_session.get("https://dog.ceo/api/breeds/image/random") as response:
         data = await response.json()
 
     embed = hikari.Embed(
@@ -75,9 +71,7 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
 
 @component.with_command
 @tanchi.as_slash_command()
-async def dice(
-    ctx: tanjun.abc.SlashContext, sides: tanchi.Range[2, ...] = 6
-) -> None:
+async def dice(ctx: tanjun.abc.SlashContext, sides: tanchi.Range[2, ...] = 6) -> None:
     """Roll a die
 
     Parameters
@@ -178,22 +172,15 @@ async def meme(
     """The hottest Reddit r/memes"""
     reddit_url = "https://reddit.com/r/memes/hot.json"
 
-    async with bot.aiohttp_session.get(
-        reddit_url, headers={"User-Agent": "Scripty"}
-    ) as response:
+    async with bot.aiohttp_session.get(reddit_url, headers={"User-Agent": "Scripty"}) as response:
         reddit = await response.json()
 
     submissions: typing.Any = []
     for submission in range(len(reddit["data"]["children"])):
         if not reddit["data"]["children"][submission]["data"]["over_18"]:
             if not reddit["data"]["children"][submission]["data"]["is_video"]:
-                if (
-                    "i.redd.it"
-                    in reddit["data"]["children"][submission]["data"]["url"]
-                ):
-                    submissions.append(
-                        reddit["data"]["children"][submission]["data"]
-                    )
+                if "i.redd.it" in reddit["data"]["children"][submission]["data"]["url"]:
+                    submissions.append(reddit["data"]["children"][submission]["data"])
 
     random.shuffle(submissions)
 
@@ -250,19 +237,13 @@ class RPSView(miru.View):
         computer_choice = self.get_key(self._rps)
 
         if (player_value + 1) % 3 == self._rps:
-            return self.generate_embed(
-                f"You lost! `{computer_choice}` beats `{player_choice}`"
-            )
+            return self.generate_embed(f"You lost! `{computer_choice}` beats `{player_choice}`")
 
         elif player_value == self._rps:
-            return self.generate_embed(
-                f"You tied! Both chose `{player_choice}`"
-            )
+            return self.generate_embed(f"You tied! Both chose `{player_choice}`")
 
         else:
-            return self.generate_embed(
-                f"You won! `{player_choice}` beats `{computer_choice}`"
-            )
+            return self.generate_embed(f"You won! `{player_choice}` beats `{computer_choice}`")
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
     async def rock(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
@@ -276,9 +257,7 @@ class RPSView(miru.View):
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
     async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        await ctx.edit_response(
-            self.determine_outcome("Scissors"), components=[]
-        )
+        await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
@@ -334,7 +313,7 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
 
 
 @tanjun.as_loader
-def load(client: tanjun.abc.Client) -> None:
+def load_component(client: tanjun.abc.Client) -> None:
     client.add_component(component.copy())
 
 
