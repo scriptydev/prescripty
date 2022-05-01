@@ -17,3 +17,6 @@ reportIncompatibleVariableOverride = "none"
 reportUnknownMemberType = "warning"
 reportUntypedFunctionDecorator = "warning"
 reportOptionalMemberAccess = "warning"
+
+[tool.black]
+lineLength = 79

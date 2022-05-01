@@ -13,7 +13,6 @@ import typing
 
 import dateparser
 import pandas
-import pandas._typing
 
 
 def get_modules(
@@ -68,7 +67,6 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
     )
 
     if parse is None:
-        # raise ValueError("could not parse to datetime from input")
         return
 
     return parse
@@ -86,7 +84,7 @@ async def parse_to_timedelta_from_now(
 
     Returns
     -------
-    timedelta : typing.Any
+    timedelta : pandas.Timedelta | None
         The timedelta from now rounded to the nearest second
     None
     """
@@ -106,11 +104,9 @@ async def parse_to_timedelta_from_now(
     )
 
     if parse is None:
-        # raise ValueError("could not parse to datetime from input")
         return
 
     timedelta_calc = parse - datetime.datetime.now(datetime.timezone.utc)
-
-    timedelta = pandas.to_timedelta(timedelta_calc).round("s")
+    timedelta: pandas.Timedelta = pandas.to_timedelta(timedelta_calc).round("s")  # type: ignore
 
     return timedelta

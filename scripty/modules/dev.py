@@ -25,7 +25,9 @@ async def load(
     module : str
         Module to load
     """
-    await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
+    await client.reload_modules_async(
+        pathlib.Path(f"scripty/modules/{module}.py")
+    )
 
     embed = hikari.Embed(
         title="Load",
@@ -52,7 +54,9 @@ async def reload(
     module : str
         Module to reload
     """
-    await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
+    await client.reload_modules_async(
+        pathlib.Path(f"scripty/modules/{module}.py")
+    )
 
     embed = hikari.Embed(
         title="Load",

@@ -10,13 +10,17 @@ component = tanjun.Component()
 
 @component.with_command
 @tanjun.as_user_menu("Avatar")
-async def avatar(ctx: tanjun.abc.MenuContext, user: hikari.User | hikari.InteractionMember) -> None:
+async def avatar(
+    ctx: tanjun.abc.MenuContext, user: hikari.User | hikari.InteractionMember
+) -> None:
     """Get user avatar"""
     embed = hikari.Embed(
         title=f"Avatar",
         color=scripty.Color.GRAY_EMBED.value,
     )
-    embed.set_author(name=str(user), icon=user.avatar_url or user.default_avatar_url)
+    embed.set_author(
+        name=str(user), icon=user.avatar_url or user.default_avatar_url
+    )
     embed.set_image(user.avatar_url or user.default_avatar_url)
 
     await ctx.respond(embed)
@@ -104,7 +108,11 @@ async def poll(
 
     embed = hikari.Embed(
         title=topic,
-        description="\n\n".join(f"{key} {value}" for key, value in options.items() if value is not None),
+        description="\n\n".join(
+            f"{key} {value}"
+            for key, value in options.items()
+            if value is not None
+        ),
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(

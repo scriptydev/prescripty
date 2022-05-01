@@ -12,7 +12,9 @@ import scripty
 component = tanjun.Component()
 
 
-stats = component.with_slash_command(tanjun.slash_command_group("stats", "Statistics related to Scripty"))
+stats = component.with_slash_command(
+    tanjun.slash_command_group("stats", "Statistics related to Scripty")
+)
 
 
 @stats.with_command
@@ -33,11 +35,19 @@ async def stats_about(
         icon=bot_user.avatar_url or bot_user.default_avatar_url,
     )
     embed.add_field("Version", f"Scripty {scripty.__version__}", inline=True)
-    embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
+    embed.add_field(
+        "Language", f"Python {platform.python_version()}", inline=True
+    )
     embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
-    embed.add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
-    embed.add_field("Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True)
-    embed.add_field("Developers", f"{' | '.join(scripty.__discord__)}", inline=True)
+    embed.add_field(
+        "Repository", f"[GitHub]({scripty.__repository__})", inline=True
+    )
+    embed.add_field(
+        "Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True
+    )
+    embed.add_field(
+        "Developers", f"{' | '.join(scripty.__discord__)}", inline=True
+    )
     embed.set_footer("We stand with 🇺🇦 Ukraine")
 
     await ctx.respond(embed)
@@ -136,59 +146,70 @@ async def stats_uptime(
     await ctx.respond(embed)
 
 
-info = component.with_slash_command(tanjun.slash_command_group("info", "Get information"))
+info = component.with_slash_command(
+    tanjun.slash_command_group("info", "Get information")
+)
 
 
 @info.with_command
-@tanchi.as_slash_command("member")
-async def info_member(
+@tanchi.as_slash_command("user")
+async def info_user(
     ctx: tanjun.abc.SlashContext,
-    member: hikari.Member | None = None,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    user: hikari.User | None = None,
 ) -> None:
-    """Get information about member
+    """Get information about user
 
     Parameters
     ----------
-    member : hikari.Member | None
-        The member to get information about
+    user : hikari.User | None
+        The user to get information about
     """
-    guild = ctx.guild_id
+    if not user:
+        user = ctx.member or ctx.author
 
-    if guild is None:
-        return
+    member = isinstance(user, hikari.Member)
 
-    if member:
-        await bot.rest.fetch_member(guild, member)
-
-    else:
-        member = ctx.member
-
-    assert member is not None, "Member was None"
-
-    roles = member.get_roles()
+    roles = user.get_roles() if member else [None]
 
     embed = hikari.Embed(
         title=f"Info Member",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
-        name=str(member),
-        icon=member.avatar_url or member.default_avatar_url,
+        name=str(user),
+        icon=user.avatar_url or user.default_avatar_url,
     )
-    embed.add_field("Name", member.display_name, inline=True)
-    embed.add_field("Discriminator", member.discriminator, inline=True)
-    embed.add_field("ID", str(member.id), inline=True)
-    embed.add_field("Nickname", str(member.nickname), inline=True)
-    embed.add_field("Created", f"<t:{int(member.created_at.timestamp())}:R>", inline=True)
-    embed.add_field("Joined", f"<t:{int(member.joined_at.timestamp())}:R>", inline=True)
-    embed.add_field("Roles", " ".join(role.mention for role in roles))
+    embed.add_field("Name", user.username, inline=True)
+    embed.add_field("Discriminator", user.discriminator, inline=True)
+    embed.add_field("ID", str(user.id), inline=True)
     embed.add_field(
-        "Permissions",
-        " ".join(f"`{permission}`" for permission in member.permissions),  # type: ignore
+        "Created", f"<t:{int(user.created_at.timestamp())}:R>", inline=True
+    )
+    embed.add_field(
+        "Joined",
+        f"<t:{int(user.joined_at.timestamp())}:R>"
+        if member
+        else "Not in guild",
         inline=True,
     )
-    embed.set_thumbnail(member.avatar_url or member.default_avatar_url)
+    embed.add_field(
+        "Nickname",
+        str(user.nickname) if member else "`Not in Guild`",
+        inline=True,
+    )
+    embed.add_field(
+        "Roles",
+        " ".join(role.mention for role in roles if role)
+        if member
+        else "Not in guild",
+    )
+    embed.add_field(
+        "Permissions",
+        " ".join(f"`{permission}`" for permission in user.permissions)  # type: ignore
+        if isinstance(user, hikari.Member)
+        else "Not in guild",
+    )
+    embed.set_thumbnail(user.avatar_url or user.default_avatar_url)
     await ctx.respond(embed)
 
 
@@ -213,7 +234,9 @@ async def info_server(
     embed.add_field("Name", guild.name, inline=True)
     embed.add_field("ID", str(guild.id), inline=True)
     embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
-    embed.add_field("Created", f"<t:{int(guild.created_at.timestamp())}:R>", inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(guild.created_at.timestamp())}:R>", inline=True
+    )
     embed.add_field(
         "Members",
         f"{guild.approximate_active_member_count}/{guild.approximate_member_count}",
@@ -223,9 +246,13 @@ async def info_server(
     embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
     embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
     embed.add_field("Region", guild.preferred_locale, inline=True)
-    embed.add_field("Premium Boosts", str(guild.premium_subscription_count), inline=True)
+    embed.add_field(
+        "Premium Boosts", str(guild.premium_subscription_count), inline=True
+    )
     embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
-    embed.add_field("Verification Level", str(guild.verification_level), inline=True)
+    embed.add_field(
+        "Verification Level", str(guild.verification_level), inline=True
+    )
     embed.set_thumbnail(guild.icon_url)
 
     await ctx.respond(embed)
@@ -250,7 +277,9 @@ async def info_role(
     )
     embed.add_field("Name", role.name, inline=True)
     embed.add_field("ID", str(role.id), inline=True)
-    embed.add_field("Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True
+    )
     embed.add_field("Color", str(role.color), inline=True)
     embed.add_field("Position", str(role.position), inline=True)
     embed.add_field("Mentionable", str(role.is_mentionable), inline=True)
@@ -290,7 +319,9 @@ async def info_channel(
     )
     embed.add_field("Name", str(channel.name), inline=True)
     embed.add_field("ID", str(channel.id), inline=True)
-    embed.add_field("Created", f"<t:{int(channel.created_at.timestamp())}:R>", inline=True)
+    embed.add_field(
+        "Created", f"<t:{int(channel.created_at.timestamp())}:R>", inline=True
+    )
     embed.add_field("Type", str(channel.type), inline=True)
 
     await ctx.respond(embed)
@@ -320,7 +351,9 @@ async def info_invite(
     embed.add_field("Channel", str(invite.channel), inline=True)
     embed.add_field(
         "Expire",
-        f"<t:{int(invite.expires_at.timestamp())}:R>" if invite.expires_at else str(invite.expires_at),
+        f"<t:{int(invite.expires_at.timestamp())}:R>"
+        if invite.expires_at
+        else str(invite.expires_at),
         inline=True,
     )
 
