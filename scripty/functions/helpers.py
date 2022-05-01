@@ -110,6 +110,6 @@ async def parse_to_timedelta_from_now(
 
     timedelta_calc = parse_run - datetime.datetime.now(datetime.timezone.utc)
 
-    timedelta: typing.Any = pandas.to_timedelta(timedelta_calc).round("s")  # type: ignore
+    timedelta = pandas.to_timedelta(timedelta_calc).round("s")
 
     return timedelta

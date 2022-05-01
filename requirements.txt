@@ -6,6 +6,7 @@ hikari-miru
 git+https://github.com/thesadru/tanchi
 hikari-tanjun
 pandas
+pandas-stubs
 psutil
 toml
 uvloop; sys_platform != "win32"
