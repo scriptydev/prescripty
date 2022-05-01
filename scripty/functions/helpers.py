@@ -13,6 +13,7 @@ import typing
 
 import dateparser
 import pandas
+import pandas._typing
 
 
 def get_modules(
@@ -27,7 +28,7 @@ def get_modules(
 
     Returns
     -------
-    modules : typing.Generator[Path, None, None]
+    modules : typing.Generator[pathlib.Path, None, None]
         The paths of the modules
     """
     if isinstance(path, str):
@@ -48,12 +49,12 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
 
     Returns
     -------
-    parse_run : datetime.datetime | None
+    parse : datetime.datetime | None
         The datetime from the input
     """
     loop = asyncio.get_event_loop()
 
-    parse_run = await loop.run_in_executor(
+    parse = await loop.run_in_executor(
         None,
         functools.partial(
             dateparser.parse,
@@ -66,16 +67,16 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
         ),
     )
 
-    if parse_run is None:
+    if parse is None:
         # raise ValueError("could not parse to datetime from input")
         return
 
-    return parse_run
+    return parse
 
 
 async def parse_to_timedelta_from_now(
     duration: str,
-) -> datetime.timedelta | None:
+) -> pandas.Timedelta | None:
     """Parse string duration to timedelta from now
 
     Parameters
@@ -91,7 +92,7 @@ async def parse_to_timedelta_from_now(
     """
     loop = asyncio.get_event_loop()
 
-    parse_run = await loop.run_in_executor(
+    parse = await loop.run_in_executor(
         None,
         functools.partial(
             dateparser.parse,
@@ -104,11 +105,11 @@ async def parse_to_timedelta_from_now(
         ),
     )
 
-    if parse_run is None:
+    if parse is None:
         # raise ValueError("could not parse to datetime from input")
         return
 
-    timedelta_calc = parse_run - datetime.datetime.now(datetime.timezone.utc)
+    timedelta_calc = parse - datetime.datetime.now(datetime.timezone.utc)
 
     timedelta = pandas.to_timedelta(timedelta_calc).round("s")
 
