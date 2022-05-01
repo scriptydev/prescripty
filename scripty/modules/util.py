@@ -189,7 +189,7 @@ async def info_user(
         "Joined",
         f"<t:{int(user.joined_at.timestamp())}:R>"
         if member
-        else "Not in guild",
+        else "`Not in Guild`",
         inline=True,
     )
     embed.add_field(
@@ -201,13 +201,13 @@ async def info_user(
         "Roles",
         " ".join(role.mention for role in roles if role)
         if member
-        else "Not in guild",
+        else "`Not in Guild`",
     )
     embed.add_field(
         "Permissions",
         " ".join(f"`{permission}`" for permission in user.permissions)  # type: ignore
         if isinstance(user, hikari.Member)
-        else "Not in guild",
+        else "`Not in Guild`",
     )
     embed.set_thumbnail(user.avatar_url or user.default_avatar_url)
     await ctx.respond(embed)
