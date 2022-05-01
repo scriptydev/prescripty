@@ -172,7 +172,7 @@ async def info_user(
     roles = user.get_roles() if member else [None]
 
     embed = hikari.Embed(
-        title=f"Info Member",
+        title=f"Info",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
@@ -223,39 +223,51 @@ async def info_server(
     guild = ctx.guild_id
 
     if guild is None:
-        return
+        embed = hikari.Embed(
+            title="Info",
+            description="This command was not invoked in a guild!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
 
-    guild = await bot.rest.fetch_guild(guild)
+    else:
+        guild = await bot.rest.fetch_guild(guild)
 
-    embed = hikari.Embed(
-        title=f"Info Server",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
-    embed.add_field("Name", guild.name, inline=True)
-    embed.add_field("ID", str(guild.id), inline=True)
-    embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
-    embed.add_field(
-        "Created", f"<t:{int(guild.created_at.timestamp())}:R>", inline=True
-    )
-    embed.add_field(
-        "Members",
-        f"{guild.approximate_active_member_count}/{guild.approximate_member_count}",
-        inline=True,
-    )
-    embed.add_field("Channels", str(len(guild.get_channels())), inline=True)
-    embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
-    embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
-    embed.add_field("Region", guild.preferred_locale, inline=True)
-    embed.add_field(
-        "Premium Boosts", str(guild.premium_subscription_count), inline=True
-    )
-    embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
-    embed.add_field(
-        "Verification Level", str(guild.verification_level), inline=True
-    )
-    embed.set_thumbnail(guild.icon_url)
+        embed = hikari.Embed(
+            title=f"Info",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        embed.add_field("Name", guild.name, inline=True)
+        embed.add_field("ID", str(guild.id), inline=True)
+        embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
+        embed.add_field(
+            "Created",
+            f"<t:{int(guild.created_at.timestamp())}:R>",
+            inline=True,
+        )
+        embed.add_field(
+            "Members",
+            f"{guild.approximate_active_member_count}/{guild.approximate_member_count}",
+            inline=True,
+        )
+        embed.add_field(
+            "Channels", str(len(guild.get_channels())), inline=True
+        )
+        embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
+        embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
+        embed.add_field("Region", guild.preferred_locale, inline=True)
+        embed.add_field(
+            "Premium Boosts",
+            str(guild.premium_subscription_count),
+            inline=True,
+        )
+        embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
+        embed.add_field(
+            "Verification Level", str(guild.verification_level), inline=True
+        )
+        embed.set_thumbnail(guild.icon_url)
 
-    await ctx.respond(embed)
+        await ctx.respond(embed)
 
 
 @info.with_command
@@ -272,7 +284,7 @@ async def info_role(
         The role to get information about
     """
     embed = hikari.Embed(
-        title=f"Info Role",
+        title=f"Info",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Name", role.name, inline=True)
@@ -311,20 +323,28 @@ async def info_channel(
     channel = channel or ctx.get_channel()
 
     if channel is None:
-        raise Exception("channel was None")
+        embed = hikari.Embed(
+            title="Info Error",
+            description="This command must be invoked in a guild!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
 
-    embed = hikari.Embed(
-        title=f"Info Channel",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
-    embed.add_field("Name", str(channel.name), inline=True)
-    embed.add_field("ID", str(channel.id), inline=True)
-    embed.add_field(
-        "Created", f"<t:{int(channel.created_at.timestamp())}:R>", inline=True
-    )
-    embed.add_field("Type", str(channel.type), inline=True)
+    else:
+        embed = hikari.Embed(
+            title=f"Info",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        embed.add_field("Name", str(channel.name), inline=True)
+        embed.add_field("ID", str(channel.id), inline=True)
+        embed.add_field(
+            "Created",
+            f"<t:{int(channel.created_at.timestamp())}:R>",
+            inline=True,
+        )
+        embed.add_field("Type", str(channel.type), inline=True)
 
-    await ctx.respond(embed)
+        await ctx.respond(embed)
 
 
 @info.with_command
@@ -341,7 +361,7 @@ async def info_invite(
         The invite to get information about
     """
     embed = hikari.Embed(
-        title=f"Info Invite",
+        title=f"Info",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Code", invite.code, inline=True)

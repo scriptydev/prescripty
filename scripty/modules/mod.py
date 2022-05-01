@@ -40,19 +40,25 @@ async def ban(
     guild = ctx.guild_id
 
     if guild is None:
-        raise Exception("guild is None")
+        embed = hikari.Embed(
+            title="Ban Error",
+            description="This command must be invoked in a guild!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
+    
+    else:
+        await bot.rest.ban_user(
+            guild, user, delete_message_days=delete_message_days, reason=reason
+        )
 
-    await bot.rest.ban_user(
-        guild, user, delete_message_days=delete_message_days, reason=reason
-    )
+        embed = hikari.Embed(
+            title="Ban",
+            description=f"Banned **{str(user)}**\nReason: `{reason or 'No reason provided'}`",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
 
-    embed = hikari.Embed(
-        title="Ban",
-        description=f"Banned **{str(user)}**\nReason: `{reason or 'No reason provided'}`",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
-
-    await ctx.respond(embed)
+        await ctx.respond(embed)
 
 
 @component.with_command
@@ -153,17 +159,23 @@ async def kick(
     guild = ctx.guild_id
 
     if guild is None:
-        return
+        embed = hikari.Embed(
+            title="Kick Error",
+            description="This command must be invoked in a guild!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
+    
+    else:
+        await bot.rest.kick_user(guild, member)
 
-    await bot.rest.kick_user(guild, member)
+        embed = hikari.Embed(
+            title="Kick",
+            description=f"Kicked **{str(member)}**\nReason: `{reason or 'No reason provided'}`",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
 
-    embed = hikari.Embed(
-        title="Kick",
-        description=f"Kicked **{str(member)}**\nReason: `{reason or 'No reason provided'}`",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
-
-    await ctx.respond(embed)
+        await ctx.respond(embed)
 
 
 slowmode = component.with_slash_command(
@@ -194,12 +206,17 @@ async def slowmode_enable(
     """
     channel = channel or ctx.get_channel()
 
-    if channel is None:
-        raise Exception("channel not found; returned None")
-
     duration_limit = datetime.timedelta(hours=6)
 
-    if duration is None:
+    if channel is None:
+        embed = hikari.Embed(
+            title="Slowmode Error",
+            description="This command must be invoked in a guild!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
+
+    elif duration is None:
         embed = hikari.Embed(
             title="Slowmode Error",
             description="Unable to parse specified duration; invalid time!",
@@ -254,17 +271,23 @@ async def slowmode_disable(
     channel = channel or ctx.get_channel()
 
     if channel is None:
-        raise Exception("channel not found; returned None")
+        embed = hikari.Embed(
+            title="Slowmode Error",
+            description="This command must be invoked in a guild!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
 
-    await bot.rest.edit_channel(channel, rate_limit_per_user=0)
+    else:
+        await bot.rest.edit_channel(channel, rate_limit_per_user=0)
 
-    embed = hikari.Embed(
-        title="Slowmode",
-        description=f"Removed slowmode from **{str(channel)}**",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
+        embed = hikari.Embed(
+            title="Slowmode",
+            description=f"Removed slowmode from **{str(channel)}**",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
 
-    await ctx.respond(embed)
+        await ctx.respond(embed)
 
 
 timeout = component.with_slash_command(
@@ -380,7 +403,7 @@ async def unban_user_autocomplete(
     guild = ctx.guild_id
 
     if guild is None:
-        raise Exception("guild is None")
+        return
 
     bans = await bot.rest.fetch_bans(guild)
 
@@ -415,27 +438,33 @@ async def unban(
     guild = ctx.guild_id
 
     if guild is None:
-        raise Exception("guild is None")
-
-    try:
-        await bot.rest.unban_user(guild, user)
-
-        embed = hikari.Embed(
-            title="Unban",
-            description=f"Unbanned **{str(fetch_user)}**",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-
-        await ctx.respond(embed)
-
-    except hikari.NotFoundError:
         embed = hikari.Embed(
             title="Unban Error",
-            description="Unable to unban user that is not banned!",
+            description="This command must be invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-
         await ctx.respond(embed)
+
+    else:
+        try:
+            await bot.rest.unban_user(guild, user)
+
+            embed = hikari.Embed(
+                title="Unban",
+                description=f"Unbanned **{str(fetch_user)}**",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
+
+            await ctx.respond(embed)
+
+        except hikari.NotFoundError:
+            embed = hikari.Embed(
+                title="Unban Error",
+                description="Unable to unban user that is not banned!",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
+
+            await ctx.respond(embed)
 
 
 @tanjun.as_loader
