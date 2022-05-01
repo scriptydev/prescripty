@@ -46,7 +46,7 @@ async def ban(
             color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
-    
+
     else:
         await bot.rest.ban_user(
             guild, user, delete_message_days=delete_message_days, reason=reason
@@ -130,7 +130,10 @@ async def delete(
     else:
         embed = hikari.Embed(
             title="Delete Error",
-            description="Unable to delete messages!\nMessages are older than `14 days` or do not exist",
+            description=(
+                "Unable to delete messages!\n"
+                "Messages are older than `14 days` or do not exist"
+            ),
             color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
@@ -165,13 +168,16 @@ async def kick(
             color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
-    
+
     else:
         await bot.rest.kick_user(guild, member)
 
         embed = hikari.Embed(
             title="Kick",
-            description=f"Kicked **{str(member)}**\nReason: `{reason or 'No reason provided'}`",
+            description=(
+                f"Kicked **{str(member)}**\n"
+                f"Reason: `{reason or 'No reason provided'}`"
+            ),
             color=scripty.Color.GRAY_EMBED.value,
         )
 
@@ -201,7 +207,9 @@ async def slowmode_enable(
     ----------
     channel : hikari.TextableGuildChannel
         Channel to enable slowmode
-    duration : tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now]
+    duration : tanchi.Converted[
+        datetime.timedelta, scripty.parse_to_timedelta_from_now
+    ]
         Duration of slowmode
     """
     channel = channel or ctx.get_channel()
@@ -376,7 +384,7 @@ async def timeout_remove(
     if member.communication_disabled_until() is None:
         embed = hikari.Embed(
             title="Timeout Error",
-            description="You cannot remove timeout from member that is not timed out!",
+            description="Member specified is not already timed out!",
             color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)

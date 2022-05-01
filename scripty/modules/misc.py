@@ -15,7 +15,7 @@ async def avatar(
 ) -> None:
     """Get user avatar"""
     embed = hikari.Embed(
-        title=f"Avatar",
+        title="Avatar",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(

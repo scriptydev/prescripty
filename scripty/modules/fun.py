@@ -187,10 +187,9 @@ async def meme(
     for submission in range(len(reddit["data"]["children"])):
         if not reddit["data"]["children"][submission]["data"]["over_18"]:
             if not reddit["data"]["children"][submission]["data"]["is_video"]:
-                if (
-                    "i.redd.it"
-                    in reddit["data"]["children"][submission]["data"]["url"]
-                ):
+                if reddit["data"]["children"][submission]["data"][
+                    "url"
+                ].startswith("https://i.redd.it"):
                     submissions.append(
                         reddit["data"]["children"][submission]["data"]
                     )

@@ -159,7 +159,7 @@ async def info_user(
     roles = user.get_roles() if member else [None]
 
     embed = hikari.Embed(
-        title=f"Info",
+        title="Info",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
@@ -221,7 +221,7 @@ async def info_server(
         guild = await bot.rest.fetch_guild(guild)
 
         embed = hikari.Embed(
-            title=f"Info",
+            title="Info",
             color=scripty.Color.GRAY_EMBED.value,
         )
         embed.add_field("Name", guild.name, inline=True)
@@ -234,7 +234,8 @@ async def info_server(
         )
         embed.add_field(
             "Members",
-            f"{guild.approximate_active_member_count}/{guild.approximate_member_count}",
+            f"{guild.approximate_active_member_count}/"
+            f"{guild.approximate_member_count}",
             inline=True,
         )
         embed.add_field(
@@ -271,7 +272,7 @@ async def info_role(
         The role to get information about
     """
     embed = hikari.Embed(
-        title=f"Info",
+        title="Info",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Name", role.name, inline=True)
@@ -319,7 +320,7 @@ async def info_channel(
 
     else:
         embed = hikari.Embed(
-            title=f"Info",
+            title="Info",
             color=scripty.Color.GRAY_EMBED.value,
         )
         embed.add_field("Name", str(channel.name), inline=True)
@@ -348,7 +349,7 @@ async def info_invite(
         The invite to get information about
     """
     embed = hikari.Embed(
-        title=f"Info",
+        title="Info",
         color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Code", invite.code, inline=True)
