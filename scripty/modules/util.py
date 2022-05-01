@@ -17,6 +17,17 @@ stats = component.with_slash_command(
 )
 
 
+class InviteView(miru.View):
+    def __init__(self) -> None:
+        super().__init__()
+        self.add_item(
+            miru.Button(
+                label="Add Scripty to Server",
+                url=scripty.INVITE_URL,
+            )
+        )
+
+
 @stats.with_command
 @tanchi.as_slash_command("about")
 async def stats_about(
@@ -25,6 +36,8 @@ async def stats_about(
 ) -> None:
     """About the Scripty Discord bot"""
     bot_user = bot.get_me() or await bot.rest.fetch_my_user()
+
+    view = InviteView()
 
     embed = hikari.Embed(
         title="About",
@@ -46,35 +59,11 @@ async def stats_about(
         "Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True
     )
     embed.add_field(
-        "Developers", f"{' | '.join(scripty.__discord__)}", inline=True
+        "Developers",
+        " ".join(f"`{dev}`" for dev in scripty.__discord__),
+        inline=True,
     )
-    embed.set_footer("We stand with 🇺🇦 Ukraine")
-
-    await ctx.respond(embed)
-
-
-class InviteView(miru.View):
-    def __init__(self) -> None:
-        super().__init__()
-        self.add_item(
-            miru.Button(
-                label="Add to Server",
-                url=scripty.INVITE_URL,
-            )
-        )
-
-
-@stats.with_command
-@tanchi.as_slash_command("invite")
-async def stats_invite(ctx: tanjun.abc.SlashContext) -> None:
-    """Add bot to server"""
-    view = InviteView()
-
-    embed = hikari.Embed(
-        title="Invite",
-        description="Invite Scripty to your Discord Server!",
-        color=scripty.Color.GRAY_EMBED.value,
-    )
+    embed.set_footer("#StandWithUkraine")
 
     await ctx.respond(embed, components=view.build())
 
@@ -105,6 +94,14 @@ async def stats_system(
 
     system = platform.uname()
 
+    boot_timestamp = round(psutil.boot_time())
+    boot_resolved_full = f"<t:{boot_timestamp}:F>"
+    boot_resolved_relative = f"<t:{boot_timestamp}:R>"
+
+    uptime_timestamp = round(bot.uptime.timestamp())
+    uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
+    uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
+
     embed = hikari.Embed(
         title="System",
         color=scripty.Color.GRAY_EMBED.value,
@@ -124,25 +121,15 @@ async def stats_system(
         f"{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",  # type: ignore
         inline=True,
     )
-
-    await ctx.respond(embed)
-
-
-@stats.with_command
-@tanchi.as_slash_command("uptime")
-async def stats_uptime(
-    ctx: tanjun.abc.SlashContext,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
-) -> None:
-    """Replies with bot uptime"""
-    uptime_timestamp = int(bot.uptime.timestamp())
-    uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
-    uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
-    embed = hikari.Embed(
-        title="Uptime",
-        description=f"Started {uptime_resolved_relative} {uptime_resolved_full}",
-        color=scripty.Color.GRAY_EMBED.value,
+    embed.add_field(
+        "Boot Time",
+        f"Started {boot_resolved_relative} {boot_resolved_full}",
     )
+    embed.add_field(
+        "Uptime",
+        f"Online {uptime_resolved_relative} {uptime_resolved_full}",
+    )
+
     await ctx.respond(embed)
 
 
