@@ -1,7 +1,6 @@
 import pathlib
 
 import hikari
-import tanchi
 import tanjun
 
 import scripty
@@ -11,8 +10,9 @@ component = tanjun.Component()
 
 
 @component.with_command
-@tanjun.with_owner_check
-@tanchi.as_slash_command("load", default_to_ephemeral=True)
+@tanjun.with_owner_check(error_message=None)
+@tanjun.with_argument("module")
+@tanjun.as_message_command("load")
 async def load_(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -39,8 +39,9 @@ async def load_(
 
 
 @component.with_command
-@tanjun.with_owner_check
-@tanchi.as_slash_command(default_to_ephemeral=True)
+@tanjun.with_owner_check(error_message=None)
+@tanjun.with_argument("module")
+@tanjun.as_message_command("reload")
 async def reload(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -67,8 +68,8 @@ async def reload(
 
 
 @component.with_command
-@tanjun.with_owner_check
-@tanchi.as_slash_command(default_to_ephemeral=True)
+@tanjun.with_owner_check(error_message=None)
+@tanjun.as_message_command("sync")
 async def sync(
     ctx: tanjun.abc.SlashContext,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
@@ -86,8 +87,9 @@ async def sync(
 
 
 @component.with_command
-@tanjun.with_owner_check
-@tanchi.as_slash_command("unload", default_to_ephemeral=True)
+@tanjun.with_owner_check(error_message=None)
+@tanjun.with_argument("module")
+@tanjun.as_message_command("unload")
 async def unload_(
     ctx: tanjun.abc.SlashContext,
     module: str,
@@ -103,7 +105,7 @@ async def unload_(
     client.unload_modules(pathlib.Path(f"scripty/modules/{module}.py"))
 
     embed = hikari.Embed(
-        title="Load",
+        title="Unload",
         description=f"`{module}` module unloaded",
         color=scripty.Color.GRAY_EMBED.value,
     )
