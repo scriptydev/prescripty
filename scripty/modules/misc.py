@@ -43,8 +43,6 @@ async def translate_menu(
             description="Message is empty",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         translate = await translator.translate(  # type: ignore
             message.content, targetlang="en"
@@ -65,7 +63,8 @@ async def translate_menu(
         )
         embed.add_field("Translated -> EN", f"```{translate.text}```")  # type: ignore
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @component.with_command

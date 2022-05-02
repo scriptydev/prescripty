@@ -45,8 +45,6 @@ async def ban(
             description="This command must be invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         await bot.rest.ban_user(
             guild, user, delete_message_days=delete_message_days, reason=reason
@@ -58,7 +56,8 @@ async def ban(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @component.with_command
@@ -167,8 +166,6 @@ async def kick(
             description="This command must be invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         await bot.rest.kick_user(guild, member)
 
@@ -181,7 +178,8 @@ async def kick(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 slowmode = component.with_slash_command(
@@ -222,32 +220,24 @@ async def slowmode_enable(
             description="This command must be invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     elif duration is None:
         embed = hikari.Embed(
             title="Slowmode Error",
             description="Unable to parse specified duration; invalid time!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     elif duration < datetime.timedelta():
         embed = hikari.Embed(
             title="Slowmode Error",
             description="Duration provided must be in the future!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     elif duration > duration_limit:
         embed = hikari.Embed(
             title="Slowmode Error",
             description="Duration cannot be longer than `6 hours`!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
 
@@ -257,7 +247,8 @@ async def slowmode_enable(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @slowmode.with_command
@@ -284,8 +275,6 @@ async def slowmode_disable(
             description="This command must be invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         await bot.rest.edit_channel(channel, rate_limit_per_user=0)
 
@@ -295,7 +284,8 @@ async def slowmode_disable(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 timeout = component.with_slash_command(
@@ -334,24 +324,18 @@ async def timeout_set(
             description="Unable to parse specified duration; invalid time!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     elif duration < datetime.datetime.now(datetime.timezone.utc):
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration provided must be in the future!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     elif duration > timeout_limit:
         embed = hikari.Embed(
             title="Timeout Error",
             description="Duration cannot be longer than `28 days`!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         duration_resolved = int(round(duration.timestamp()))
         duration_resolved_full = f"<t:{duration_resolved}:F>"
@@ -364,7 +348,8 @@ async def timeout_set(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @timeout.with_command
@@ -387,8 +372,6 @@ async def timeout_remove(
             description="Member specified is not already timed out!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         await member.edit(communication_disabled_until=None)
 
@@ -398,7 +381,8 @@ async def timeout_remove(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @functools.lru_cache
