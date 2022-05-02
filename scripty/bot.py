@@ -50,12 +50,7 @@ class AppBot(hikari.GatewayBot):
         self.subscribe(hikari.StartingEvent, self.on_starting)
         self.subscribe(hikari.StoppingEvent, self.on_stopping)
 
-        super().run(
-            activity=hikari.Activity(
-                name="v" + scripty.__version__,
-                type=hikari.ActivityType.PLAYING,
-            )
-        )
+        super().run()
 
 
 def create_client(bot: AppBot) -> tanjun.Client:

@@ -29,7 +29,7 @@ async def avatar(
 
 
 @component.with_command
-@tanjun.as_message_menu("Translate")
+@tanjun.as_message_menu("Translate to English")
 async def translate_menu(
     ctx: tanjun.abc.MenuContext,
     message: hikari.Message,
