@@ -82,7 +82,7 @@ async def parse_to_timedelta_from_now(
 
     Returns
     -------
-    timedelta : pandas.Timedelta | None
+    pandas.Timedelta | None
         The timedelta from now rounded to the nearest second
     None
     """
@@ -104,5 +104,5 @@ async def parse_to_timedelta_from_now(
     if parse is None:
         return
 
-    timedelta_calc = parse - datetime.datetime.now(datetime.timezone.utc)
-    return pandas.to_timedelta(timedelta_calc).round("s")
+    timedelta = parse - datetime.datetime.now(datetime.timezone.utc)
+    return pandas.to_timedelta(timedelta).round("s")  # type: ignore
