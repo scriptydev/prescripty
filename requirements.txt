@@ -8,6 +8,6 @@ hikari-tanjun==2.5.0a1
 pandas==1.4.2
 pandas-stubs==1.2.0.58
 psutil==5.9.0
-pyright==1.1.242
+pyright==1.1.243
 toml==0.10.2
 uvloop==0.16.0; sys_platform != "win32"
