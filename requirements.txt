@@ -1,5 +1,6 @@
 aiohttp==3.8.1
 dateparser==1.1.1
+gpytranslate==1.4.0
 hikari==2.0.0.dev108
 hikari-miru==1.1.1
 git+https://github.com/thesadru/tanchi.git

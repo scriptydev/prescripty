@@ -2,6 +2,8 @@ import hikari
 import tanchi
 import tanjun
 
+from gpytranslate import Translator  # type: ignore
+
 import scripty
 
 
@@ -22,6 +24,89 @@ async def avatar(
         name=str(user), icon=user.avatar_url or user.default_avatar_url
     )
     embed.set_image(user.avatar_url or user.default_avatar_url)
+
+    await ctx.respond(embed)
+
+
+@component.with_command
+@tanjun.as_message_menu("Translate")
+async def translate_menu(
+    ctx: tanjun.abc.MenuContext,
+    message: hikari.Message,
+) -> None:
+    """Translate message to English"""
+    translator = Translator()  # type: ignore
+
+    if not message.content:
+        embed = hikari.Embed(
+            title="Translate Error",
+            description="Message is empty",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed)
+
+    else:
+        translate = await translator.translate(  # type: ignore
+            message.content, targetlang="en"
+        )
+        translate_lang = await translator.detect(message.content)  # type: ignore
+
+        embed = hikari.Embed(
+            title="Translate",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        embed.set_author(
+            name=str(message.author),
+            icon=message.author.avatar_url
+            or message.author.default_avatar_url,
+        )
+        embed.add_field(
+            f"Original <- {translate_lang.upper()}", f"```{translate.orig}```"  # type: ignore
+        )
+        embed.add_field("Translated -> EN", f"```{translate.text}```")  # type: ignore
+
+        await ctx.respond(embed)
+
+
+@component.with_command
+@tanchi.as_slash_command("translate")
+async def translate_slash(
+    ctx: tanjun.abc.Context,
+    text: str,
+    source: str = "auto",
+    target: str = "en",
+) -> None:
+    """Translate message to a specified language
+
+    Parameters
+    ----------
+    text : str
+        Text to translate
+    source : str
+        Language to translate from
+    target : str
+        Language to translate to
+    """
+    translator = Translator()  # type: ignore
+    translate = await translator.translate(  # type: ignore
+        text, sourcelang=source, targetlang=target
+    )
+    translate_lang = await translator.detect(text)  # type: ignore
+
+    embed = hikari.Embed(
+        title="Translate",
+        color=scripty.Color.GRAY_EMBED.value,
+    )
+    embed.set_author(
+        name=str(ctx.author),
+        icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
+    )
+    embed.add_field(
+        f"Original <- {translate_lang.upper()}", f"```{translate.orig}```"  # type: ignore
+    )
+    embed.add_field(
+        f"Translated -> {target.upper()}", f"```{translate.text}```"  # type: ignore
+    )
 
     await ctx.respond(embed)
 
