@@ -33,9 +33,7 @@ def get_modules(
     if isinstance(path, str):
         path = pathlib.Path(path)
 
-    modules = path.rglob("[!_]*.py")
-
-    return modules
+    return path.rglob("[!_]*.py")
 
 
 async def parse_to_datetime(duration: str) -> datetime.datetime | None:
@@ -107,6 +105,4 @@ async def parse_to_timedelta_from_now(
         return
 
     timedelta_calc = parse - datetime.datetime.now(datetime.timezone.utc)
-    timedelta: pandas.Timedelta = pandas.to_timedelta(timedelta_calc).round("s")  # type: ignore
-
-    return timedelta
+    return pandas.to_timedelta(timedelta_calc).round("s")

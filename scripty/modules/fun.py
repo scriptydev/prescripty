@@ -142,16 +142,15 @@ class MemeView(miru.View):
         if self.message.interaction is None:
             raise Exception("message interaction is None")
 
-        if ctx.user != self.message.interaction.user:
-            embed = hikari.Embed(
-                title="Error",
-                description="This command was not invoked by you!",
-                color=scripty.Color.GRAY_EMBED.value,
-            )
-            await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
-            return False
-        else:
+        if ctx.user == self.message.interaction.user:
             return True
+        embed = hikari.Embed(
+            title="Error",
+            description="This command was not invoked by you!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+        return False
 
     async def on_timeout(self) -> None:
         for item in self.children:
@@ -183,16 +182,15 @@ async def meme(
     ) as response:
         reddit = await response.json()
 
-    submissions: typing.Any = []
-    for submission in range(len(reddit["data"]["children"])):
-        if not reddit["data"]["children"][submission]["data"]["over_18"]:
-            if not reddit["data"]["children"][submission]["data"]["is_video"]:
-                if reddit["data"]["children"][submission]["data"][
-                    "url"
-                ].startswith("https://i.redd.it"):
-                    submissions.append(
-                        reddit["data"]["children"][submission]["data"]
-                    )
+    submissions: typing.Any = [
+        reddit["data"]["children"][submission]["data"]
+        for submission in range(len(reddit["data"]["children"]))
+        if not reddit["data"]["children"][submission]["data"]["over_18"]
+        and not reddit["data"]["children"][submission]["data"]["is_video"]
+        and reddit["data"]["children"][submission]["data"]["url"].startswith(
+            "https://i.redd.it"
+        )
+    ]
 
     random.shuffle(submissions)
 
@@ -285,17 +283,15 @@ class RPSView(miru.View):
         if self.message.interaction is None:
             raise Exception("message interaction is None")
 
-        if ctx.user != self.message.interaction.user:
-            embed = hikari.Embed(
-                title="Error",
-                description="This command was not invoked by you!",
-                color=scripty.Color.GRAY_EMBED.value,
-            )
-            await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
-            return False
-
-        else:
+        if ctx.user == self.message.interaction.user:
             return True
+        embed = hikari.Embed(
+            title="Error",
+            description="This command was not invoked by you!",
+            color=scripty.Color.GRAY_EMBED.value,
+        )
+        await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
+        return False
 
     async def on_timeout(self) -> None:
         for item in self.children:

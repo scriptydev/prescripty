@@ -215,8 +215,6 @@ async def info_server(
             description="This command was not invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         guild = await bot.rest.fetch_guild(guild)
 
@@ -255,7 +253,8 @@ async def info_server(
         )
         embed.set_thumbnail(guild.icon_url)
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @info.with_command
@@ -316,8 +315,6 @@ async def info_channel(
             description="This command must be invoked in a guild!",
             color=scripty.Color.GRAY_EMBED.value,
         )
-        await ctx.respond(embed)
-
     else:
         embed = hikari.Embed(
             title="Info",
@@ -332,7 +329,8 @@ async def info_channel(
         )
         embed.add_field("Type", str(channel.type), inline=True)
 
-        await ctx.respond(embed)
+
+    await ctx.respond(embed)
 
 
 @info.with_command
