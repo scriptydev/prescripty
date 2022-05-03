@@ -1,6 +1,6 @@
 __all__: list[str] = [
     "get_modules",
-    "parse_to_datetime",
+    "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
 ]
 
@@ -27,7 +27,7 @@ def get_modules(
 
     Returns
     -------
-    modules : typing.Generator[pathlib.Path, None, None]
+    typing.Generator[pathlib.Path, None, None]
         The paths of the modules
     """
     if isinstance(path, str):
@@ -36,7 +36,7 @@ def get_modules(
     return path.rglob("[!_]*.py")
 
 
-async def parse_to_datetime(duration: str) -> datetime.datetime | None:
+async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
     """Parse string duration to datetime
 
     Parameters
@@ -46,12 +46,12 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
 
     Returns
     -------
-    parse : datetime.datetime | None
+    parse_duration : datetime.datetime | None
         The datetime from the input
     """
     loop = asyncio.get_event_loop()
 
-    parse = await loop.run_in_executor(
+    parse_duration = await loop.run_in_executor(
         None,
         functools.partial(
             dateparser.parse,
@@ -64,10 +64,13 @@ async def parse_to_datetime(duration: str) -> datetime.datetime | None:
         ),
     )
 
-    if parse is None:
-        return
+    if parse_duration is None:
+        return None
 
-    return parse
+    if parse_duration < datetime.datetime.now(datetime.timezone.utc):
+        return None
+
+    return parse_duration
 
 
 async def parse_to_timedelta_from_now(
@@ -82,13 +85,13 @@ async def parse_to_timedelta_from_now(
 
     Returns
     -------
-    pandas.Timedelta | None
+    timedelta : pandas.Timedelta | None
         The timedelta from now rounded to the nearest second
     None
     """
+    datetime_now = datetime.datetime.now(datetime.timezone.utc)
     loop = asyncio.get_event_loop()
-
-    parse = await loop.run_in_executor(
+    parse_duration = await loop.run_in_executor(
         None,
         functools.partial(
             dateparser.parse,
@@ -101,8 +104,11 @@ async def parse_to_timedelta_from_now(
         ),
     )
 
-    if parse is None:
-        return
+    if parse_duration is None:
+        return None
 
-    timedelta = parse - datetime.datetime.now(datetime.timezone.utc)
-    return pandas.to_timedelta(timedelta).round("s")  # type: ignore
+    if parse_duration < datetime.datetime.now(datetime.timezone.utc):
+        return None
+
+    calculate_delta = parse_duration - datetime_now
+    return pandas.to_timedelta(calculate_delta).round("s")  # type: ignore

@@ -40,24 +40,26 @@ async def ban(
     guild = ctx.guild_id
 
     if guild is None:
-        embed = hikari.Embed(
-            title="Ban Error",
-            description="This command must be invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
+        await ctx.respond(
+            hikari.Embed(
+                title="Ban Error",
+                description="This command must be invoked in a guild!",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
         )
-    else:
-        await bot.rest.ban_user(
-            guild, user, delete_message_days=delete_message_days, reason=reason
-        )
+        return
 
-        embed = hikari.Embed(
+    await bot.rest.ban_user(
+        guild, user, delete_message_days=delete_message_days, reason=reason
+    )
+
+    await ctx.respond(
+        hikari.Embed(
             title="Ban",
             description=f"Banned **{str(user)}**\nReason: `{reason or 'No reason provided'}`",
             color=scripty.Color.GRAY_EMBED.value,
         )
-
-
-    await ctx.respond(embed)
+    )
 
 
 @component.with_command
@@ -112,30 +114,30 @@ async def delete(
                         f"`{count} message` deleted\nOlder messages past `14 days` cannot be deleted"
                     )
                 )
+                return
 
-            else:
-                await ctx.respond(
-                    generate_embed(
-                        f"`{count} messages` deleted\nOlder messages past `14 days` cannot be deleted"
-                    )
+            await ctx.respond(
+                generate_embed(
+                    f"`{count} messages` deleted\nOlder messages past `14 days` cannot be deleted"
                 )
+            )
 
-        elif count == 1:
+        if count == 1:
             await ctx.respond(generate_embed(f"`{count} message` deleted"))
+            return
 
-        else:
-            await ctx.respond(generate_embed(f"`{count} messages` deleted"))
+        await ctx.respond(generate_embed(f"`{count} messages` deleted"))
+        return
 
-    else:
-        embed = hikari.Embed(
-            title="Delete Error",
-            description=(
-                "Unable to delete messages!\n"
-                "Messages are older than `14 days` or do not exist"
-            ),
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-        await ctx.respond(embed)
+    embed = hikari.Embed(
+        title="Delete Error",
+        description=(
+            "Unable to delete messages!\n"
+            "Messages are older than `14 days` or do not exist"
+        ),
+        color=scripty.Color.GRAY_EMBED.value,
+    )
+    await ctx.respond(embed)
 
 
 @component.with_command
@@ -178,7 +180,6 @@ async def kick(
             color=scripty.Color.GRAY_EMBED.value,
         )
 
-
     await ctx.respond(embed)
 
 
@@ -211,44 +212,33 @@ async def slowmode_enable(
         Duration of slowmode
     """
     channel = channel or ctx.get_channel()
-
     duration_limit = datetime.timedelta(hours=6)
+    error = hikari.Embed(
+        title="Slowmode Error",
+        color=scripty.Color.GRAY_EMBED.value,
+    )
 
     if channel is None:
-        embed = hikari.Embed(
-            title="Slowmode Error",
-            description="This command must be invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    elif duration is None:
-        embed = hikari.Embed(
-            title="Slowmode Error",
-            description="Unable to parse specified duration; invalid time!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    elif duration < datetime.timedelta():
-        embed = hikari.Embed(
-            title="Slowmode Error",
-            description="Duration provided must be in the future!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    elif duration > duration_limit:
-        embed = hikari.Embed(
-            title="Slowmode Error",
-            description="Duration cannot be longer than `6 hours`!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    else:
-        await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
+        error.description = "This command must be invoked in a guild!"
+        await ctx.respond(error)
+        return
+    if duration is None:
+        error.description = "Unable to parse specified duration; invalid time!"
+        await ctx.respond(error)
+        return
+    if duration > duration_limit:
+        error.description = "Duration cannot be greater than `6 hours!`"
+        await ctx.respond(error)
+        return
 
-        embed = hikari.Embed(
+    await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
+    await ctx.respond(
+        hikari.Embed(
             title="Slowmode",
-            description=f"Set slowmode for **{str(channel)}** to `{duration}s`",
+            description=f"Enabled slowmode for **{str(channel)}** to `{duration}s`",
             color=scripty.Color.GRAY_EMBED.value,
         )
-
-
-    await ctx.respond(embed)
+    )
 
 
 @slowmode.with_command
@@ -270,22 +260,23 @@ async def slowmode_disable(
     channel = channel or ctx.get_channel()
 
     if channel is None:
-        embed = hikari.Embed(
-            title="Slowmode Error",
-            description="This command must be invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
+        await ctx.respond(
+            hikari.Embed(
+                title="Slowmode Error",
+                description="This command must be invoked in a guild!",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
         )
-    else:
-        await bot.rest.edit_channel(channel, rate_limit_per_user=0)
+        return
 
-        embed = hikari.Embed(
+    await bot.rest.edit_channel(channel, rate_limit_per_user=0)
+    await ctx.respond(
+        hikari.Embed(
             title="Slowmode",
             description=f"Removed slowmode from **{str(channel)}**",
             color=scripty.Color.GRAY_EMBED.value,
         )
-
-
-    await ctx.respond(embed)
+    )
 
 
 timeout = component.with_slash_command(
@@ -300,7 +291,9 @@ timeout = component.with_slash_command(
 async def timeout_set(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
-    duration: tanchi.Converted[datetime.datetime, scripty.parse_to_datetime],
+    duration: tanchi.Converted[
+        datetime.datetime, scripty.parse_to_future_datetime
+    ],
     reason: hikari.UndefinedNoneOr[str] = None,
 ) -> None:
     """Set timeout for member
@@ -317,39 +310,37 @@ async def timeout_set(
     timeout_limit = datetime.datetime.now(
         datetime.timezone.utc
     ) + datetime.timedelta(days=28)
+    error = hikari.Embed(
+        title="Timeout Error", color=scripty.Color.GRAY_EMBED.value
+    )
 
     if duration is None:
-        embed = hikari.Embed(
-            title="Timeout Error",
-            description="Unable to parse specified duration; invalid time!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    elif duration < datetime.datetime.now(datetime.timezone.utc):
-        embed = hikari.Embed(
-            title="Timeout Error",
-            description="Duration provided must be in the future!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    elif duration > timeout_limit:
-        embed = hikari.Embed(
-            title="Timeout Error",
-            description="Duration cannot be longer than `28 days`!",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-    else:
-        duration_resolved = int(round(duration.timestamp()))
-        duration_resolved_full = f"<t:{duration_resolved}:F>"
+        error.description = "Unable to parse specified duration; invalid time!"
+        await ctx.respond(error)
+        return
+    if duration < datetime.datetime.now(datetime.timezone.utc):
+        error.description = "Duration provided must be in the future!"
+        await ctx.respond(error)
+        return
+    if duration > timeout_limit:
+        error.description = "Duration cannot be longer than `28 days`!"
+        await ctx.respond(error)
+        return
 
-        await member.edit(communication_disabled_until=duration)
+    duration_resolved = int(round(duration.timestamp()))
+    duration_resolved_full = f"<t:{duration_resolved}:F>"
 
-        embed = hikari.Embed(
+    await member.edit(communication_disabled_until=duration)
+    await ctx.respond(
+        hikari.Embed(
             title="Timeout",
-            description=f"Timed out **{str(member)}** until {duration_resolved_full}\nReason: `{reason or 'No reason provided'}`",
+            description=(
+                f"Timed out **{str(member)}** until {duration_resolved_full}\n"
+                f"Reason: `{reason or 'No reason provided'}`"
+            ),
             color=scripty.Color.GRAY_EMBED.value,
         )
-
-
-    await ctx.respond(embed)
+    )
 
 
 @timeout.with_command
@@ -380,7 +371,6 @@ async def timeout_remove(
             description=f"Removed timeout from **{str(member)}**",
             color=scripty.Color.GRAY_EMBED.value,
         )
-
 
     await ctx.respond(embed)
 
