@@ -163,15 +163,18 @@ async def kick(
     guild = ctx.guild_id
 
     if guild is None:
-        embed = hikari.Embed(
-            title="Kick Error",
-            description="This command must be invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
+        await ctx.respond(
+            hikari.Embed(
+                title="Kick Error",
+                description="This command must be invoked in a guild!",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
         )
-    else:
-        await bot.rest.kick_user(guild, member)
+        return
 
-        embed = hikari.Embed(
+    await bot.rest.kick_user(guild, member)
+    await ctx.respond(
+        hikari.Embed(
             title="Kick",
             description=(
                 f"Kicked **{str(member)}**\n"
@@ -179,8 +182,7 @@ async def kick(
             ),
             color=scripty.Color.GRAY_EMBED.value,
         )
-
-    await ctx.respond(embed)
+    )
 
 
 slowmode = component.with_slash_command(
@@ -357,22 +359,27 @@ async def timeout_remove(
     member : hikari.Member
         Member to remove timeout
     """
+
+    async def _remove_timeout() -> None:
+        await member.edit(communication_disabled_until=None)
+        await ctx.respond(
+            hikari.Embed(
+                title="Timeout",
+                description=f"Removed timeout from **{str(member)}**",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
+        )
+
     if member.communication_disabled_until() is None:
-        embed = hikari.Embed(
-            title="Timeout Error",
-            description="Member specified is not already timed out!",
-            color=scripty.Color.GRAY_EMBED.value,
+        await ctx.respond(
+            hikari.Embed(
+                title="Timeout Error",
+                description="Member specified is not already timed out!",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
         )
     else:
-        await member.edit(communication_disabled_until=None)
-
-        embed = hikari.Embed(
-            title="Timeout",
-            description=f"Removed timeout from **{str(member)}**",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-
-    await ctx.respond(embed)
+        await _remove_timeout()
 
 
 @functools.lru_cache
@@ -392,7 +399,7 @@ async def unban_user_autocomplete(
     ban_map = {}
 
     for ban in bans:
-        if len(ban_map) == 25:
+        if len(ban_map) == 10:
             break
         if user.lower() in str(ban.user).lower():
             ban_map[str(ban.user)] = str(ban.user.id)

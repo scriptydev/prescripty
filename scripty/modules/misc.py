@@ -38,31 +38,32 @@ async def translate_menu(
     translator = Translator()  # type: ignore
 
     if not message.content:
-        embed = hikari.Embed(
-            title="Translate Error",
-            description="Message is empty",
-            color=scripty.Color.GRAY_EMBED.value,
+        await ctx.respond(
+            hikari.Embed(
+                title="Translate Error",
+                description="Message is empty",
+                color=scripty.Color.GRAY_EMBED.value,
+            )
         )
-    else:
-        translate = await translator.translate(  # type: ignore
-            message.content, targetlang="en"
-        )
-        translate_lang = await translator.detect(message.content)  # type: ignore
+        return
 
-        embed = hikari.Embed(
-            title="Translate",
-            color=scripty.Color.GRAY_EMBED.value,
-        )
-        embed.set_author(
-            name=str(message.author),
-            icon=message.author.avatar_url
-            or message.author.default_avatar_url,
-        )
-        embed.add_field(
-            f"Original <- {translate_lang.upper()}", f"```{translate.orig}```"  # type: ignore
-        )
-        embed.add_field("Translated -> EN", f"```{translate.text}```")  # type: ignore
+    translate = await translator.translate(  # type: ignore
+        message.content, targetlang="en"
+    )
+    translate_lang = await translator.detect(message.content)  # type: ignore
 
+    embed = hikari.Embed(
+        title="Translate",
+        color=scripty.Color.GRAY_EMBED.value,
+    )
+    embed.set_author(
+        name=str(message.author),
+        icon=message.author.avatar_url or message.author.default_avatar_url,
+    )
+    embed.add_field(
+        f"Original <- {translate_lang.upper()}", f"```{translate.orig}```"  # type: ignore
+    )
+    embed.add_field("Translated -> EN", f"```{translate.text}```")  # type: ignore
 
     await ctx.respond(embed)
 

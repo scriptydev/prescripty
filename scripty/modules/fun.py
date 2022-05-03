@@ -251,15 +251,14 @@ class RPSView(miru.View):
                 f"You lost! `{computer_choice}` beats `{player_choice}`"
             )
 
-        elif player_value == self._rps:
+        if player_value == self._rps:
             return self.generate_embed(
                 f"You tied! Both chose `{player_choice}`"
             )
 
-        else:
-            return self.generate_embed(
-                f"You won! `{player_choice}` beats `{computer_choice}`"
-            )
+        return self.generate_embed(
+            f"You won! `{player_choice}` beats `{computer_choice}`"
+        )
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
     async def rock(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
