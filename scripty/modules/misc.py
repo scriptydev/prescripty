@@ -2,7 +2,7 @@ import hikari
 import tanchi
 import tanjun
 
-from gpytranslate import Translator  # type: ignore
+from gpytranslate import Translator
 
 import scripty
 
@@ -16,13 +16,10 @@ async def avatar(
     ctx: tanjun.abc.MenuContext, user: hikari.User | hikari.InteractionMember
 ) -> None:
     """Get user avatar"""
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Avatar",
-        color=scripty.Color.GRAY_EMBED.value,
     )
-    embed.set_author(
-        name=str(user), icon=user.avatar_url or user.default_avatar_url
-    )
+    embed.set_author(name=str(user), icon=user.avatar_url or user.default_avatar_url)
     embed.set_image(user.avatar_url or user.default_avatar_url)
 
     await ctx.respond(embed)
@@ -35,14 +32,13 @@ async def translate_menu(
     message: hikari.Message,
 ) -> None:
     """Translate message to English"""
-    translator = Translator()  # type: ignore
+    translator = Translator()
 
     if not message.content:
         await ctx.respond(
-            hikari.Embed(
+            scripty.Embed(
                 title="Translate Error",
                 description="Message is empty",
-                color=scripty.Color.GRAY_EMBED.value,
             )
         )
         return
@@ -52,9 +48,8 @@ async def translate_menu(
     )
     translate_lang = await translator.detect(message.content)  # type: ignore
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Translate",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(message.author),
@@ -87,15 +82,14 @@ async def translate_slash(
     target : str
         Language to translate to
     """
-    translator = Translator()  # type: ignore
+    translator = Translator()
     translate = await translator.translate(  # type: ignore
         text, sourcelang=source, targetlang=target
     )
     translate_lang = await translator.detect(text)  # type: ignore
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Translate",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(ctx.author),
@@ -122,10 +116,9 @@ async def echo(ctx: tanjun.abc.SlashContext, text: str) -> None:
     text : str
         Text to repeat
     """
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Echo",
         description=f"```{text}```",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(ctx.author),
@@ -191,14 +184,11 @@ async def poll(
         "\U0001f1ef": option_j,
     }
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title=topic,
         description="\n\n".join(
-            f"{key} {value}"
-            for key, value in options.items()
-            if value is not None
+            f"{key} {value}" for key, value in options.items() if value is not None
         ),
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(ctx.author),

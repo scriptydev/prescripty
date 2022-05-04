@@ -41,10 +41,9 @@ async def ban(
 
     if guild is None:
         await ctx.respond(
-            hikari.Embed(
+            scripty.Embed(
                 title="Ban Error",
                 description="This command must be invoked in a guild!",
-                color=scripty.Color.GRAY_EMBED.value,
             )
         )
         return
@@ -54,10 +53,9 @@ async def ban(
     )
 
     await ctx.respond(
-        hikari.Embed(
+        scripty.Embed(
             title="Ban",
             description=f"Banned **{str(user)}**\nReason: `{reason or 'No reason provided'}`",
-            color=scripty.Color.GRAY_EMBED.value,
         )
     )
 
@@ -97,11 +95,10 @@ async def delete(
         task = asyncio.create_task(bot.rest.delete_messages(channel, messages))
         tasks.append(task)
 
-    def generate_embed(message: str) -> hikari.Embed:
-        return hikari.Embed(
+    def generate_embed(message: str) -> scripty.Embed:
+        return scripty.Embed(
             title="Delete",
             description=message,
-            color=scripty.Color.GRAY_EMBED.value,
         )
 
     if tasks:
@@ -129,13 +126,12 @@ async def delete(
         await ctx.respond(generate_embed(f"`{count} messages` deleted"))
         return
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Delete Error",
         description=(
             "Unable to delete messages!\n"
             "Messages are older than `14 days` or do not exist"
         ),
-        color=scripty.Color.GRAY_EMBED.value,
     )
     await ctx.respond(embed)
 
@@ -164,23 +160,21 @@ async def kick(
 
     if guild is None:
         await ctx.respond(
-            hikari.Embed(
+            scripty.Embed(
                 title="Kick Error",
                 description="This command must be invoked in a guild!",
-                color=scripty.Color.GRAY_EMBED.value,
             )
         )
         return
 
     await bot.rest.kick_user(guild, member)
     await ctx.respond(
-        hikari.Embed(
+        scripty.Embed(
             title="Kick",
             description=(
                 f"Kicked **{str(member)}**\n"
                 f"Reason: `{reason or 'No reason provided'}`"
             ),
-            color=scripty.Color.GRAY_EMBED.value,
         )
     )
 
@@ -196,9 +190,7 @@ slowmode = component.with_slash_command(
 @tanchi.as_slash_command("enable")
 async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
-    duration: tanchi.Converted[
-        datetime.timedelta, scripty.parse_to_timedelta_from_now
-    ],
+    duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
@@ -215,9 +207,8 @@ async def slowmode_enable(
     """
     channel = channel or ctx.get_channel()
     duration_limit = datetime.timedelta(hours=6)
-    error = hikari.Embed(
+    error = scripty.Embed(
         title="Slowmode Error",
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
     if channel is None:
@@ -235,10 +226,9 @@ async def slowmode_enable(
 
     await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
     await ctx.respond(
-        hikari.Embed(
+        scripty.Embed(
             title="Slowmode",
             description=f"Enabled slowmode for **{str(channel)}** to `{duration}s`",
-            color=scripty.Color.GRAY_EMBED.value,
         )
     )
 
@@ -263,20 +253,18 @@ async def slowmode_disable(
 
     if channel is None:
         await ctx.respond(
-            hikari.Embed(
+            scripty.Embed(
                 title="Slowmode Error",
                 description="This command must be invoked in a guild!",
-                color=scripty.Color.GRAY_EMBED.value,
             )
         )
         return
 
     await bot.rest.edit_channel(channel, rate_limit_per_user=0)
     await ctx.respond(
-        hikari.Embed(
+        scripty.Embed(
             title="Slowmode",
             description=f"Removed slowmode from **{str(channel)}**",
-            color=scripty.Color.GRAY_EMBED.value,
         )
     )
 
@@ -293,9 +281,7 @@ timeout = component.with_slash_command(
 async def timeout_set(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
-    duration: tanchi.Converted[
-        datetime.datetime, scripty.parse_to_future_datetime
-    ],
+    duration: tanchi.Converted[datetime.datetime, scripty.parse_to_future_datetime],
     reason: hikari.UndefinedNoneOr[str] = None,
 ) -> None:
     """Set timeout for member
@@ -309,12 +295,10 @@ async def timeout_set(
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
     """
-    timeout_limit = datetime.datetime.now(
-        datetime.timezone.utc
-    ) + datetime.timedelta(days=28)
-    error = hikari.Embed(
-        title="Timeout Error", color=scripty.Color.GRAY_EMBED.value
+    timeout_limit = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
+        days=28
     )
+    error = scripty.Embed(title="Timeout Error", color=scripty.Color.GRAY_EMBED.value)
 
     if duration is None:
         error.description = "Unable to parse specified duration; invalid time!"
@@ -334,13 +318,12 @@ async def timeout_set(
 
     await member.edit(communication_disabled_until=duration)
     await ctx.respond(
-        hikari.Embed(
+        scripty.Embed(
             title="Timeout",
             description=(
                 f"Timed out **{str(member)}** until {duration_resolved_full}\n"
                 f"Reason: `{reason or 'No reason provided'}`"
             ),
-            color=scripty.Color.GRAY_EMBED.value,
         )
     )
 
@@ -349,9 +332,7 @@ async def timeout_set(
 @tanjun.with_own_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.MODERATE_MEMBERS)
 @tanchi.as_slash_command("remove")
-async def timeout_remove(
-    ctx: tanjun.abc.SlashContext, member: hikari.Member
-) -> None:
+async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) -> None:
     """Remove timeout from member
 
     Parameters
@@ -363,19 +344,17 @@ async def timeout_remove(
     async def _remove_timeout() -> None:
         await member.edit(communication_disabled_until=None)
         await ctx.respond(
-            hikari.Embed(
+            scripty.Embed(
                 title="Timeout",
                 description=f"Removed timeout from **{str(member)}**",
-                color=scripty.Color.GRAY_EMBED.value,
             )
         )
 
     if member.communication_disabled_until() is None:
         await ctx.respond(
-            hikari.Embed(
+            scripty.Embed(
                 title="Timeout Error",
                 description="Member specified is not already timed out!",
-                color=scripty.Color.GRAY_EMBED.value,
             )
         )
     else:
@@ -427,10 +406,9 @@ async def unban(
     guild = ctx.guild_id
 
     if guild is None:
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Unban Error",
             description="This command must be invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed)
 
@@ -438,19 +416,17 @@ async def unban(
         try:
             await bot.rest.unban_user(guild, user)
 
-            embed = hikari.Embed(
+            embed = scripty.Embed(
                 title="Unban",
                 description=f"Unbanned **{str(fetch_user)}**",
-                color=scripty.Color.GRAY_EMBED.value,
             )
 
             await ctx.respond(embed)
 
         except hikari.NotFoundError:
-            embed = hikari.Embed(
+            embed = scripty.Embed(
                 title="Unban Error",
                 description="Unable to unban user that is not banned!",
-                color=scripty.Color.GRAY_EMBED.value,
             )
 
             await ctx.respond(embed)

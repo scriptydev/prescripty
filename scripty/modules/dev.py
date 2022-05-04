@@ -1,6 +1,5 @@
 import pathlib
 
-import hikari
 import tanjun
 
 import scripty
@@ -25,14 +24,11 @@ async def load(
     module : str
         Module to load
     """
-    await client.reload_modules_async(
-        pathlib.Path(f"scripty/modules/{module}.py")
-    )
+    await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Load",
         description=f"`{module}` module loaded",
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -54,14 +50,11 @@ async def reload(
     module : str
         Module to reload
     """
-    await client.reload_modules_async(
-        pathlib.Path(f"scripty/modules/{module}.py")
-    )
+    await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Load",
         description=f"`{module}` module reloaded",
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -77,10 +70,9 @@ async def sync(
     """Sync global application commands"""
     await client.declare_global_commands()
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Sync",
         description="Successfully synced global application commands",
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -104,10 +96,9 @@ async def unload(
     """
     client.unload_modules(pathlib.Path(f"scripty/modules/{module}.py"))
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Unload",
         description=f"`{module}` module unloaded",
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)

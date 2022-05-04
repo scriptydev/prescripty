@@ -39,22 +39,17 @@ async def stats_about(
 
     view = InviteView()
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="About",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=bot_user.username,
         icon=bot_user.avatar_url or bot_user.default_avatar_url,
     )
     embed.add_field("Version", f"Scripty {scripty.__version__}", inline=True)
-    embed.add_field(
-        "Language", f"Python {platform.python_version()}", inline=True
-    )
+    embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
     embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
-    embed.add_field(
-        "Repository", f"[GitHub]({scripty.__repository__})", inline=True
-    )
+    embed.add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
     embed.add_field(
         "Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True
     )
@@ -75,10 +70,9 @@ async def stats_ping(
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Replies with bot latency"""
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Ping",
         description=f"Pong! `{round(bot.heartbeat_latency * 1000)}ms`",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     await ctx.respond(embed)
 
@@ -102,9 +96,8 @@ async def stats_system(
     uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
     uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="System",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=app_user.username,
@@ -158,9 +151,8 @@ async def info_user(
 
     roles = user.get_roles() if member else [None]
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Info",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_author(
         name=str(user),
@@ -169,14 +161,10 @@ async def info_user(
     embed.add_field("Name", user.username, inline=True)
     embed.add_field("Discriminator", user.discriminator, inline=True)
     embed.add_field("ID", str(user.id), inline=True)
-    embed.add_field(
-        "Created", f"<t:{int(user.created_at.timestamp())}:R>", inline=True
-    )
+    embed.add_field("Created", f"<t:{int(user.created_at.timestamp())}:R>", inline=True)
     embed.add_field(
         "Joined",
-        f"<t:{int(user.joined_at.timestamp())}:R>"
-        if member
-        else "`Not in Guild`",
+        f"<t:{int(user.joined_at.timestamp())}:R>" if member else "`Not in Guild`",
         inline=True,
     )
     embed.add_field(
@@ -197,6 +185,7 @@ async def info_user(
         else "`Not in Guild`",
     )
     embed.set_thumbnail(user.avatar_url or user.default_avatar_url)
+
     await ctx.respond(embed)
 
 
@@ -210,17 +199,15 @@ async def info_server(
     guild = ctx.guild_id
 
     if guild is None:
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Info",
             description="This command was not invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
         )
     else:
         guild = await bot.rest.fetch_guild(guild)
 
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Info",
-            color=scripty.Color.GRAY_EMBED.value,
         )
         embed.add_field("Name", guild.name, inline=True)
         embed.add_field("ID", str(guild.id), inline=True)
@@ -236,9 +223,7 @@ async def info_server(
             f"{guild.approximate_member_count}",
             inline=True,
         )
-        embed.add_field(
-            "Channels", str(len(guild.get_channels())), inline=True
-        )
+        embed.add_field("Channels", str(len(guild.get_channels())), inline=True)
         embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
         embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
         embed.add_field("Region", guild.preferred_locale, inline=True)
@@ -254,9 +239,6 @@ async def info_server(
         embed.set_thumbnail(guild.icon_url)
 
 
-    await ctx.respond(embed)
-
-
 @info.with_command
 @tanchi.as_slash_command("role")
 async def info_role(
@@ -270,15 +252,12 @@ async def info_role(
     role : hikari.Role
         The role to get information about
     """
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Info",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Name", role.name, inline=True)
     embed.add_field("ID", str(role.id), inline=True)
-    embed.add_field(
-        "Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True
-    )
+    embed.add_field("Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True)
     embed.add_field("Color", str(role.color), inline=True)
     embed.add_field("Position", str(role.position), inline=True)
     embed.add_field("Mentionable", str(role.is_mentionable), inline=True)
@@ -310,15 +289,13 @@ async def info_channel(
     channel = channel or ctx.get_channel()
 
     if channel is None:
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Info Error",
             description="This command must be invoked in a guild!",
-            color=scripty.Color.GRAY_EMBED.value,
         )
     else:
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Info",
-            color=scripty.Color.GRAY_EMBED.value,
         )
         embed.add_field("Name", str(channel.name), inline=True)
         embed.add_field("ID", str(channel.id), inline=True)
@@ -328,7 +305,6 @@ async def info_channel(
             inline=True,
         )
         embed.add_field("Type", str(channel.type), inline=True)
-
 
     await ctx.respond(embed)
 
@@ -346,9 +322,8 @@ async def info_invite(
     invite : hikari.Invite
         The invite to get information about
     """
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Info",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.add_field("Code", invite.code, inline=True)
     embed.add_field("Inviter", str(invite.inviter), inline=True)

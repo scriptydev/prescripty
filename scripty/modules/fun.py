@@ -30,9 +30,8 @@ async def cat(
     ) as response:
         data = await response.json()
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Cat",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_image(data[0]["url"])
 
@@ -51,9 +50,8 @@ async def dog(
     ) as response:
         data = await response.json()
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Dog",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_image(data["message"])
 
@@ -65,10 +63,9 @@ async def dog(
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
     """Flip a coin"""
     coin = ["Heads", "Tails"]
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Coin",
         description=random.choice(coin),
-        color=scripty.Color.GRAY_EMBED.value,
     )
     await ctx.respond(embed)
 
@@ -76,7 +73,8 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
 @component.with_command
 @tanchi.as_slash_command()
 async def dice(
-    ctx: tanjun.abc.SlashContext, sides: tanchi.Range[2, ...] = 6
+    ctx: tanjun.abc.SlashContext,
+    sides: typing.Annotated[int, tanchi.Range[2, ...]] = 6,
 ) -> None:
     """Roll a die
 
@@ -85,10 +83,9 @@ async def dice(
     sides : tanchi.Range[int, ...]
         Number of sides on the die
     """
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="Dice",
         description=random.randint(1, sides),
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
     await ctx.respond(embed)
@@ -106,10 +103,10 @@ class MemeView(miru.View):
     #     if self.index == len(self.submissions):
     #         self.index = 0
 
-    #     embed = hikari.Embed(
+    #     embed = scripty.Embed(
     #         title=self.submissions[self.index]["title"],
     #         url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-    #         color=scripty.Color.GRAY_EMBED.value,
+    #
     #     )
     #     embed.set_image(self.submissions[self.index]["url"])
     #     await ctx.edit_response(embed)
@@ -120,10 +117,9 @@ class MemeView(miru.View):
         if self.index == len(self.submissions):
             self.index = 0
 
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title=self.submissions[self.index]["title"],
             url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-            color=scripty.Color.GRAY_EMBED.value,
         )
         embed.set_image(self.submissions[self.index]["url"])
         await ctx.edit_response(embed)
@@ -144,10 +140,9 @@ class MemeView(miru.View):
 
         if ctx.user == self.message.interaction.user:
             return True
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Error",
             description="This command was not invoked by you!",
-            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
         return False
@@ -198,18 +193,16 @@ async def meme(
 
     view = MemeView(submissions, index)
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title=submissions[index]["title"],
         url=f"https://reddit.com{submissions[index]['permalink']}",
-        color=scripty.Color.GRAY_EMBED.value,
     )
     embed.set_image(submissions[index]["url"])
 
-    await ctx.respond(embed, components=view.build())
-
-    message = await ctx.fetch_initial_response()
-    view.start(message)
-    await view.wait()
+    message = await ctx.respond(embed, components=view.build())
+    if message is not None:
+        view.start(message)
+        await view.wait()
 
 
 @component.with_command
@@ -235,14 +228,13 @@ class RPSView(miru.View):
 
         return tuple(k for k, v in self.rps.items() if v == value)[0]
 
-    def generate_embed(self, message: str) -> hikari.Embed:
-        return hikari.Embed(
+    def generate_embed(self, message: str) -> scripty.Embed:
+        return scripty.Embed(
             title="RPS",
             description=message,
-            color=scripty.Color.GRAY_EMBED.value,
         )
 
-    def determine_outcome(self, player_choice: str) -> hikari.Embed:
+    def determine_outcome(self, player_choice: str) -> scripty.Embed:
         player_value = self.get_value(player_choice)
         computer_choice = self.get_key(self._rps)
 
@@ -252,9 +244,7 @@ class RPSView(miru.View):
             )
 
         if player_value == self._rps:
-            return self.generate_embed(
-                f"You tied! Both chose `{player_choice}`"
-            )
+            return self.generate_embed(f"You tied! Both chose `{player_choice}`")
 
         return self.generate_embed(
             f"You won! `{player_choice}` beats `{computer_choice}`"
@@ -272,9 +262,7 @@ class RPSView(miru.View):
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
     async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-        await ctx.edit_response(
-            self.determine_outcome("Scissors"), components=[]
-        )
+        await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
@@ -284,10 +272,9 @@ class RPSView(miru.View):
 
         if ctx.user == self.message.interaction.user:
             return True
-        embed = hikari.Embed(
+        embed = scripty.Embed(
             title="Error",
             description="This command was not invoked by you!",
-            color=scripty.Color.GRAY_EMBED.value,
         )
         await ctx.respond(embed, flags=hikari.MessageFlag.EPHEMERAL)
         return False
@@ -314,17 +301,16 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
     """Play rock paper scissors"""
     view = RPSView()
 
-    embed = hikari.Embed(
+    embed = scripty.Embed(
         title="RPS",
         description="Click on the button options to continue the game!",
-        color=scripty.Color.GRAY_EMBED.value,
     )
 
-    await ctx.respond(embed, components=view.build())
+    message = await ctx.respond(embed, components=view.build())
 
-    message = await ctx.fetch_initial_response()
-    view.start(message)
-    await view.wait()
+    if message is not None:
+        view.start(message)
+        await view.wait()
 
 
 @tanjun.as_loader

@@ -7,6 +7,7 @@ include = ["./scripty"]
 exclude = ["**/node_modules", "**/__pycache__"]
 pythonVersion = "3.10"
 typeCheckingMode = "strict"
+useLibraryCodeForTypes = true
 
 reportUnnecessaryTypeIgnoreComment = "error"
 reportMissingTypeStubs = "none"
@@ -17,6 +18,3 @@ reportIncompatibleVariableOverride = "none"
 reportUnknownMemberType = "warning"
 reportUntypedFunctionDecorator = "warning"
 reportOptionalMemberAccess = "warning"
-
-[tool.black]
-lineLength = 79
