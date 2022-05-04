@@ -46,8 +46,10 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
 
     Returns
     -------
-    parse_duration : datetime.datetime | None
+    parse_duration : datetime.datetime
         The datetime from the input
+    None
+        If the duration is not parsable or is in the past
     """
     loop = asyncio.get_event_loop()
 
@@ -85,9 +87,10 @@ async def parse_to_timedelta_from_now(
 
     Returns
     -------
-    timedelta : pandas.Timedelta | None
+    pandas.Timedelta
         The timedelta from now rounded to the nearest second
     None
+        If the duration is not parsable or is in the past
     """
     datetime_now = datetime.datetime.now(datetime.timezone.utc)
     loop = asyncio.get_event_loop()

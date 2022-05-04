@@ -13,7 +13,7 @@ import scripty
 
 
 class AppBot(hikari.GatewayBot):
-    """A subclassed implementation of `hikari.GatewayBot`"""
+    """A subclassed implementation of ``hikari.GatewayBot``"""
 
     def __init__(self) -> None:
         super().__init__(scripty.DISCORD_TOKEN)
@@ -54,7 +54,7 @@ class AppBot(hikari.GatewayBot):
 
 
 def create_client(bot: AppBot) -> tanjun.Client:
-    """Setup the tanjun client from `hikari.GatewayBot`"""
+    """Setup the tanjun client from ``hikari.GatewayBot``"""
     client = tanjun.Client.from_gateway_bot(
         bot,
         mention_prefix=True,

@@ -16,9 +16,7 @@ async def avatar(
     ctx: tanjun.abc.MenuContext, user: hikari.User | hikari.InteractionMember
 ) -> None:
     """Get user avatar"""
-    embed = scripty.Embed(
-        title="Avatar",
-    )
+    embed = scripty.Embed(title="Avatar")
     embed.set_author(name=str(user), icon=user.avatar_url or user.default_avatar_url)
     embed.set_image(user.avatar_url or user.default_avatar_url)
 
@@ -48,9 +46,7 @@ async def translate_menu(
     )
     translate_lang = await translator.detect(message.content)  # type: ignore
 
-    embed = scripty.Embed(
-        title="Translate",
-    )
+    embed = scripty.Embed(title="Translate")
     embed.set_author(
         name=str(message.author),
         icon=message.author.avatar_url or message.author.default_avatar_url,
@@ -88,9 +84,7 @@ async def translate_slash(
     )
     translate_lang = await translator.detect(text)  # type: ignore
 
-    embed = scripty.Embed(
-        title="Translate",
-    )
+    embed = scripty.Embed(title="Translate")
     embed.set_author(
         name=str(ctx.author),
         icon=ctx.author.avatar_url or ctx.author.default_avatar_url,

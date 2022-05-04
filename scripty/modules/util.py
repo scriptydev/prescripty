@@ -39,9 +39,7 @@ async def stats_about(
 
     view = InviteView()
 
-    embed = scripty.Embed(
-        title="About",
-    )
+    embed = scripty.Embed(title="About")
     embed.set_author(
         name=bot_user.username,
         icon=bot_user.avatar_url or bot_user.default_avatar_url,
@@ -70,11 +68,12 @@ async def stats_ping(
     bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Replies with bot latency"""
-    embed = scripty.Embed(
-        title="Ping",
-        description=f"Pong! `{round(bot.heartbeat_latency * 1000)}ms`",
+    await ctx.respond(
+        scripty.Embed(
+            title="Ping",
+            description=f"Pong! `{round(bot.heartbeat_latency * 1000)}ms`",
+        )
     )
-    await ctx.respond(embed)
 
 
 @stats.with_command
@@ -96,9 +95,7 @@ async def stats_system(
     uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
     uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
 
-    embed = scripty.Embed(
-        title="System",
-    )
+    embed = scripty.Embed(title="System")
     embed.set_author(
         name=app_user.username,
         icon=app_user.avatar_url or app_user.default_avatar_url,
@@ -151,9 +148,7 @@ async def info_user(
 
     roles = user.get_roles() if member else [None]
 
-    embed = scripty.Embed(
-        title="Info",
-    )
+    embed = scripty.Embed(title="Info")
     embed.set_author(
         name=str(user),
         icon=user.avatar_url or user.default_avatar_url,
@@ -197,46 +192,44 @@ async def info_server(
 ) -> None:
     """Get information about server"""
     guild = ctx.guild_id
-
     if guild is None:
-        embed = scripty.Embed(
-            title="Info",
-            description="This command was not invoked in a guild!",
+        await ctx.respond(
+            scripty.Embed(
+                title="Info",
+                description="This command was not invoked in a guild!",
+            )
         )
-    else:
-        guild = await bot.rest.fetch_guild(guild)
+        return
+    guild = await bot.rest.fetch_guild(guild)
 
-        embed = scripty.Embed(
-            title="Info",
-        )
-        embed.add_field("Name", guild.name, inline=True)
-        embed.add_field("ID", str(guild.id), inline=True)
-        embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
-        embed.add_field(
-            "Created",
-            f"<t:{int(guild.created_at.timestamp())}:R>",
-            inline=True,
-        )
-        embed.add_field(
-            "Members",
-            f"{guild.approximate_active_member_count}/"
-            f"{guild.approximate_member_count}",
-            inline=True,
-        )
-        embed.add_field("Channels", str(len(guild.get_channels())), inline=True)
-        embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
-        embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
-        embed.add_field("Region", guild.preferred_locale, inline=True)
-        embed.add_field(
-            "Premium Boosts",
-            str(guild.premium_subscription_count),
-            inline=True,
-        )
-        embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
-        embed.add_field(
-            "Verification Level", str(guild.verification_level), inline=True
-        )
-        embed.set_thumbnail(guild.icon_url)
+    embed = scripty.Embed(title="Info")
+    embed.add_field("Name", guild.name, inline=True)
+    embed.add_field("ID", str(guild.id), inline=True)
+    embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
+    embed.add_field(
+        "Created",
+        f"<t:{int(guild.created_at.timestamp())}:R>",
+        inline=True,
+    )
+    embed.add_field(
+        "Members",
+        f"{guild.approximate_active_member_count}/" f"{guild.approximate_member_count}",
+        inline=True,
+    )
+    embed.add_field("Channels", str(len(guild.get_channels())), inline=True)
+    embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
+    embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
+    embed.add_field("Region", guild.preferred_locale, inline=True)
+    embed.add_field(
+        "Premium Boosts",
+        str(guild.premium_subscription_count),
+        inline=True,
+    )
+    embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
+    embed.add_field("Verification Level", str(guild.verification_level), inline=True)
+    embed.set_thumbnail(guild.icon_url)
+
+    await ctx.respond(embed)
 
 
 @info.with_command
@@ -252,9 +245,7 @@ async def info_role(
     role : hikari.Role
         The role to get information about
     """
-    embed = scripty.Embed(
-        title="Info",
-    )
+    embed = scripty.Embed(title="Info")
     embed.add_field("Name", role.name, inline=True)
     embed.add_field("ID", str(role.id), inline=True)
     embed.add_field("Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True)
@@ -277,7 +268,6 @@ async def info_role(
 async def info_channel(
     ctx: tanjun.abc.SlashContext,
     channel: hikari.GuildChannel | None = None,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
 ) -> None:
     """Get information about channel
 
@@ -289,22 +279,23 @@ async def info_channel(
     channel = channel or ctx.get_channel()
 
     if channel is None:
-        embed = scripty.Embed(
-            title="Info Error",
-            description="This command must be invoked in a guild!",
+        await ctx.respond(
+            scripty.Embed(
+                title="Info Error",
+                description="This command must be invoked in a guild!",
+            )
         )
-    else:
-        embed = scripty.Embed(
-            title="Info",
-        )
-        embed.add_field("Name", str(channel.name), inline=True)
-        embed.add_field("ID", str(channel.id), inline=True)
-        embed.add_field(
-            "Created",
-            f"<t:{int(channel.created_at.timestamp())}:R>",
-            inline=True,
-        )
-        embed.add_field("Type", str(channel.type), inline=True)
+        return
+
+    embed = scripty.Embed(title="Info")
+    embed.add_field("Name", str(channel.name), inline=True)
+    embed.add_field("ID", str(channel.id), inline=True)
+    embed.add_field(
+        "Created",
+        f"<t:{int(channel.created_at.timestamp())}:R>",
+        inline=True,
+    )
+    embed.add_field("Type", str(channel.type), inline=True)
 
     await ctx.respond(embed)
 
@@ -322,9 +313,7 @@ async def info_invite(
     invite : hikari.Invite
         The invite to get information about
     """
-    embed = scripty.Embed(
-        title="Info",
-    )
+    embed = scripty.Embed(title="Info")
     embed.add_field("Code", invite.code, inline=True)
     embed.add_field("Inviter", str(invite.inviter), inline=True)
     embed.add_field("Target", str(invite.target_user), inline=True)

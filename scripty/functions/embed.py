@@ -15,7 +15,7 @@ DEFAULT_COLOR = scripty.Color.GRAY_EMBED.value
 class Embed(hikari.Embed):
     """Represents an embed
 
-    This class is a subclass of `hikari.Embed` with changes to the
+    This class is a subclass of ``hikari.Embed`` with changes to the
     default color values
     """
 

@@ -25,13 +25,12 @@ async def load(
         Module to load
     """
     await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
-
-    embed = scripty.Embed(
-        title="Load",
-        description=f"`{module}` module loaded",
+    await ctx.respond(
+        scripty.Embed(
+            title="Load",
+            description=f"`{module}` module loaded",
+        )
     )
-
-    await ctx.respond(embed)
 
 
 @component.with_command
@@ -51,13 +50,12 @@ async def reload(
         Module to reload
     """
     await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
-
-    embed = scripty.Embed(
-        title="Load",
-        description=f"`{module}` module reloaded",
+    await ctx.respond(
+        scripty.Embed(
+            title="Load",
+            description=f"`{module}` module reloaded",
+        )
     )
-
-    await ctx.respond(embed)
 
 
 @component.with_command
@@ -69,13 +67,12 @@ async def sync(
 ) -> None:
     """Sync global application commands"""
     await client.declare_global_commands()
-
-    embed = scripty.Embed(
-        title="Sync",
-        description="Successfully synced global application commands",
+    await ctx.respond(
+        scripty.Embed(
+            title="Sync",
+            description="Successfully synced global application commands",
+        )
     )
-
-    await ctx.respond(embed)
 
 
 @component.with_command
@@ -95,13 +92,12 @@ async def unload(
         Module to unload
     """
     client.unload_modules(pathlib.Path(f"scripty/modules/{module}.py"))
-
-    embed = scripty.Embed(
-        title="Unload",
-        description=f"`{module}` module unloaded",
+    await ctx.respond(
+        scripty.Embed(
+            title="Unload",
+            description=f"`{module}` module unloaded",
+        )
     )
-
-    await ctx.respond(embed)
 
 
 @tanjun.as_loader

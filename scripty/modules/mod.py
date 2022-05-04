@@ -76,6 +76,13 @@ async def delete(
     amount : tanchi.Range[int, ...]
         Amount to delete
     """
+
+    def generate_embed(message: str) -> scripty.Embed:
+        return scripty.Embed(
+            title="Delete",
+            description=message,
+        )
+
     channel = ctx.channel_id
 
     bulk_delete_limit = datetime.datetime.now(
@@ -95,45 +102,32 @@ async def delete(
         task = asyncio.create_task(bot.rest.delete_messages(channel, messages))
         tasks.append(task)
 
-    def generate_embed(message: str) -> scripty.Embed:
-        return scripty.Embed(
-            title="Delete",
-            description=message,
-        )
-
-    if tasks:
-        await asyncio.wait(tasks)
-
-        if count < amount:
-            if count == 1:
-                await ctx.respond(
-                    generate_embed(
-                        f"`{count} message` deleted\nOlder messages past `14 days` cannot be deleted"
-                    )
-                )
-                return
-
-            await ctx.respond(
-                generate_embed(
-                    f"`{count} messages` deleted\nOlder messages past `14 days` cannot be deleted"
-                )
+    if not tasks:
+        await ctx.respond(
+            scripty.Embed(
+                title="Delete Error",
+                description=(
+                    "Unable to delete messages!\n"
+                    "Messages are older than `14 days` or do not exist"
+                ),
             )
-
-        if count == 1:
-            await ctx.respond(generate_embed(f"`{count} message` deleted"))
-            return
-
-        await ctx.respond(generate_embed(f"`{count} messages` deleted"))
+        )
         return
 
-    embed = scripty.Embed(
-        title="Delete Error",
-        description=(
-            "Unable to delete messages!\n"
-            "Messages are older than `14 days` or do not exist"
-        ),
+    await asyncio.wait(tasks)
+
+    if count < amount:
+        await ctx.respond(
+            generate_embed(
+                f"`{count} messages` deleted\n"
+                f"Older messages past `14 day{'' if count == 1 else 's'}` cannot be deleted"
+            )
+        )
+        return
+
+    await ctx.respond(
+        generate_embed(f"`{count} message{'' if count == 1 else 's'}` deleted")
     )
-    await ctx.respond(embed)
 
 
 @component.with_command
@@ -341,15 +335,6 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
         Member to remove timeout
     """
 
-    async def _remove_timeout() -> None:
-        await member.edit(communication_disabled_until=None)
-        await ctx.respond(
-            scripty.Embed(
-                title="Timeout",
-                description=f"Removed timeout from **{str(member)}**",
-            )
-        )
-
     if member.communication_disabled_until() is None:
         await ctx.respond(
             scripty.Embed(
@@ -357,8 +342,15 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
                 description="Member specified is not already timed out!",
             )
         )
+
     else:
-        await _remove_timeout()
+        await member.edit(communication_disabled_until=None)
+        await ctx.respond(
+            scripty.Embed(
+                title="Timeout",
+                description=f"Removed timeout from **{str(member)}**",
+            )
+        )
 
 
 @functools.lru_cache
@@ -369,12 +361,10 @@ async def unban_user_autocomplete(
 ) -> None:
     """Autocomplete for banned users"""
     guild = ctx.guild_id
-
     if guild is None:
         return
 
     bans = await bot.rest.fetch_bans(guild)
-
     ban_map = {}
 
     for ban in bans:
@@ -406,30 +396,30 @@ async def unban(
     guild = ctx.guild_id
 
     if guild is None:
-        embed = scripty.Embed(
-            title="Unban Error",
-            description="This command must be invoked in a guild!",
-        )
-        await ctx.respond(embed)
-
-    else:
-        try:
-            await bot.rest.unban_user(guild, user)
-
-            embed = scripty.Embed(
-                title="Unban",
-                description=f"Unbanned **{str(fetch_user)}**",
+        await ctx.respond(
+            scripty.Embed(
+                title="Unban Error",
+                description="This command must be invoked in a guild!",
             )
+        )
+        return
 
-            await ctx.respond(embed)
-
-        except hikari.NotFoundError:
-            embed = scripty.Embed(
+    try:
+        await bot.rest.unban_user(guild, user)
+    except hikari.NotFoundError:
+        await ctx.respond(
+            scripty.Embed(
                 title="Unban Error",
                 description="Unable to unban user that is not banned!",
             )
-
-            await ctx.respond(embed)
+        )
+    finally:
+        await ctx.respond(
+            scripty.Embed(
+                title="Unban",
+                description=f"Unbanned **{str(fetch_user)}**",
+            )
+        )
 
 
 @tanjun.as_loader

@@ -30,9 +30,7 @@ async def cat(
     ) as response:
         data = await response.json()
 
-    embed = scripty.Embed(
-        title="Cat",
-    )
+    embed = scripty.Embed(title="Cat")
     embed.set_image(data[0]["url"])
 
     await ctx.respond(embed)
@@ -50,9 +48,7 @@ async def dog(
     ) as response:
         data = await response.json()
 
-    embed = scripty.Embed(
-        title="Dog",
-    )
+    embed = scripty.Embed(title="Dog")
     embed.set_image(data["message"])
 
     await ctx.respond(embed)
@@ -63,11 +59,12 @@ async def dog(
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
     """Flip a coin"""
     coin = ["Heads", "Tails"]
-    embed = scripty.Embed(
-        title="Coin",
-        description=random.choice(coin),
+    await ctx.respond(
+        scripty.Embed(
+            title="Coin",
+            description=random.choice(coin),
+        )
     )
-    await ctx.respond(embed)
 
 
 @component.with_command
@@ -83,12 +80,12 @@ async def dice(
     sides : tanchi.Range[int, ...]
         Number of sides on the die
     """
-    embed = scripty.Embed(
-        title="Dice",
-        description=random.randint(1, sides),
+    await ctx.respond(
+        scripty.Embed(
+            title="Dice",
+            description=random.randint(1, sides),
+        )
     )
-
-    await ctx.respond(embed)
 
 
 class MemeView(miru.View):
@@ -307,7 +304,6 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
     )
 
     message = await ctx.respond(embed, components=view.build())
-
     if message is not None:
         view.start(message)
         await view.wait()
