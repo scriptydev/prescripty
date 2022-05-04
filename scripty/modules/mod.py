@@ -413,7 +413,7 @@ async def unban(
                 description="Unable to unban user that is not banned!",
             )
         )
-    finally:
+    else:
         await ctx.respond(
             scripty.Embed(
                 title="Unban",
