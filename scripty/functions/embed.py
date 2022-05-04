@@ -6,10 +6,8 @@ import typing
 
 import hikari
 
-import scripty
 
-
-DEFAULT_COLOR = scripty.Color.GRAY_EMBED.value
+DEFAULT_COLOR = 0x2F3136
 
 
 class Embed(hikari.Embed):
