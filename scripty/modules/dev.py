@@ -13,7 +13,7 @@ component = tanjun.Component()
 @tanjun.with_argument("module")
 @tanjun.as_message_command("load")
 async def load(
-    ctx: tanjun.abc.SlashContext,
+    ctx: tanjun.abc.MessageContext,
     module: str,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
 ) -> None:
@@ -38,7 +38,7 @@ async def load(
 @tanjun.with_argument("module")
 @tanjun.as_message_command("reload")
 async def reload(
-    ctx: tanjun.abc.SlashContext,
+    ctx: tanjun.abc.MessageContext,
     module: str,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
 ) -> None:
@@ -62,7 +62,7 @@ async def reload(
 @tanjun.with_owner_check(error_message=None)
 @tanjun.as_message_command("sync")
 async def sync(
-    ctx: tanjun.abc.SlashContext,
+    ctx: tanjun.abc.MessageContext,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
 ) -> None:
     """Sync global application commands"""
@@ -80,7 +80,7 @@ async def sync(
 @tanjun.with_argument("module")
 @tanjun.as_message_command("unload")
 async def unload(
-    ctx: tanjun.abc.SlashContext,
+    ctx: tanjun.abc.MessageContext,
     module: str,
     client: tanjun.abc.Client = tanjun.inject(type=tanjun.abc.Client),
 ) -> None:
