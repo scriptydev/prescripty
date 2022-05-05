@@ -1,5 +1,6 @@
 import platform
 
+import alluka
 import hikari
 import miru
 import psutil
@@ -32,7 +33,7 @@ class InviteView(miru.View):
 @tanchi.as_slash_command("about")
 async def stats_about(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """About the Scripty Discord bot"""
     bot_user = bot.get_me() or await bot.rest.fetch_my_user()
@@ -65,7 +66,7 @@ async def stats_about(
 @tanchi.as_slash_command("ping")
 async def stats_ping(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Replies with bot latency"""
     await ctx.respond(
@@ -80,7 +81,7 @@ async def stats_ping(
 @tanchi.as_slash_command("system")
 async def stats_system(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
@@ -188,7 +189,7 @@ async def info_user(
 @tanchi.as_slash_command("server")
 async def info_server(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Get information about server"""
     guild = ctx.guild_id

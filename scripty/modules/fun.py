@@ -1,6 +1,7 @@
 import random
 import typing
 
+import alluka
 import hikari
 import miru
 import tanchi
@@ -21,7 +22,7 @@ animal = component.with_slash_command(
 @tanchi.as_slash_command()
 async def cat(
     ctx: tanjun.abc.Context,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Get a random cat image"""
     async with bot.aiohttp_session.get(
@@ -40,7 +41,7 @@ async def cat(
 @tanchi.as_slash_command()
 async def dog(
     ctx: tanjun.abc.Context,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Get a random dog image"""
     async with bot.aiohttp_session.get(
@@ -164,7 +165,7 @@ class MemeView(miru.View):
 @tanchi.as_slash_command()
 async def meme(
     ctx: tanjun.abc.SlashContext,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """The hottest Reddit r/memes"""
     reddit_url = "https://reddit.com/r/memes/hot.json"

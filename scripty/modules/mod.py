@@ -22,7 +22,7 @@ async def ban(
     user: hikari.User,
     delete_message_days: hikari.UndefinedNoneOr[tanchi.Range[1, 7]] = None,
     reason: hikari.UndefinedNoneOr[str] = None,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Ban user from server
 
@@ -67,7 +67,7 @@ async def ban(
 async def delete(
     ctx: tanjun.abc.SlashContext,
     amount: tanchi.Range[1, ...],
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Purge messages from channel
 
@@ -138,7 +138,7 @@ async def kick(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
     reason: hikari.UndefinedNoneOr[str] = None,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Kick member from server
 
@@ -186,7 +186,7 @@ async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
     duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Enable slowmode for channel
 
@@ -234,7 +234,7 @@ async def slowmode_enable(
 async def slowmode_disable(
     ctx: tanjun.abc.SlashContext,
     channel: hikari.TextableGuildChannel | None = None,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Disable slowmode from channel
 
@@ -357,7 +357,7 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
     user: str,
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Autocomplete for banned users"""
     guild = ctx.guild_id
@@ -383,7 +383,7 @@ async def unban_user_autocomplete(
 async def unban(
     ctx: tanjun.abc.SlashContext,
     user: tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake],
-    bot: scripty.AppBot = tanjun.inject(type=scripty.AppBot),
+    bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Unban user from server
 
