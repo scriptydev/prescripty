@@ -3,6 +3,7 @@ import datetime
 import functools
 import typing
 
+import alluka
 import hikari
 import tanchi
 import tanjun
@@ -22,6 +23,7 @@ async def ban(
     user: hikari.User,
     delete_message_days: hikari.UndefinedNoneOr[tanchi.Range[1, 7]] = None,
     reason: hikari.UndefinedNoneOr[str] = None,
+    *,
     bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Ban user from server
@@ -138,6 +140,7 @@ async def kick(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
     reason: hikari.UndefinedNoneOr[str] = None,
+    *,
     bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Kick member from server
@@ -186,6 +189,7 @@ async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
     duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
+    *,
     bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Enable slowmode for channel
@@ -234,6 +238,7 @@ async def slowmode_enable(
 async def slowmode_disable(
     ctx: tanjun.abc.SlashContext,
     channel: hikari.TextableGuildChannel | None = None,
+    *,
     bot: alluka.Injected[scripty.AppBot],
 ) -> None:
     """Disable slowmode from channel
