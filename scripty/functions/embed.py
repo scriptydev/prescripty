@@ -32,6 +32,6 @@ class Embed(hikari.Embed):
             description=description,
             url=url,
             color=color,
-            colour=colour,
+            colour=None if color else colour,
             timestamp=timestamp,
         )
