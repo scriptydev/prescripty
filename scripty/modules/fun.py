@@ -1,6 +1,7 @@
 import random
 import typing
 
+import aiohttp
 import alluka
 import hikari
 import miru
@@ -22,10 +23,10 @@ animal = component.with_slash_command(
 @tanchi.as_slash_command()
 async def cat(
     ctx: tanjun.abc.Context,
-    bot: alluka.Injected[scripty.AppBot],
+    session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random cat image"""
-    async with bot.aiohttp_session.get(
+    async with session.get(
         "https://api.thecatapi.com/v1/images/search",
         headers={"x-api-key": scripty.THE_CAT_API_KEY},
     ) as response:
@@ -41,10 +42,10 @@ async def cat(
 @tanchi.as_slash_command()
 async def dog(
     ctx: tanjun.abc.Context,
-    bot: alluka.Injected[scripty.AppBot],
+    session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random dog image"""
-    async with bot.aiohttp_session.get(
+    async with session.get(
         "https://dog.ceo/api/breeds/image/random"
     ) as response:
         data = await response.json()
@@ -165,12 +166,12 @@ class MemeView(miru.View):
 @tanchi.as_slash_command()
 async def meme(
     ctx: tanjun.abc.SlashContext,
-    bot: alluka.Injected[scripty.AppBot],
+    session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """The hottest Reddit r/memes"""
     reddit_url = "https://reddit.com/r/memes/hot.json"
 
-    async with bot.aiohttp_session.get(
+    async with session.get(
         reddit_url, headers={"User-Agent": "Scripty"}
     ) as response:
         reddit = await response.json()

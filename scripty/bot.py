@@ -1,10 +1,11 @@
-__all__: list[str] = ["AppBot"]
+__all__: list[str] = ["Attrs", "build_bot"]
 
 
 import datetime
 import pathlib
 
 import aiohttp
+import alluka
 import hikari
 import miru
 import tanjun
@@ -12,55 +13,47 @@ import tanjun
 import scripty
 
 
-class AppBot(hikari.GatewayBot):
-    """A subclassed implementation of ``hikari.GatewayBot``"""
-
+class Attrs:
+    """Attributes for the bot
+    
+    This is setup ``on_starting`` by setting a tanjun client DI type dependency
+    """
     def __init__(self) -> None:
-        super().__init__(scripty.DISCORD_TOKEN)
-        self._aiohttp_session: aiohttp.ClientSession
-        self._uptime: datetime.datetime
-
-    @property
-    def aiohttp_session(self) -> aiohttp.ClientSession:
-        return self._aiohttp_session
+        self._uptime = datetime.datetime.now(datetime.timezone.utc)
 
     @property
     def uptime(self) -> datetime.datetime:
         return self._uptime
 
-    @uptime.deleter
-    def uptime(self) -> None:
-        del self._uptime
 
-    async def on_starting(self, event: hikari.StartingEvent) -> None:
-        self._aiohttp_session = aiohttp.ClientSession()
-        self._uptime = datetime.datetime.now(datetime.timezone.utc)
-
-    async def on_stopping(self, event: hikari.StoppingEvent) -> None:
-        await self.aiohttp_session.close()
-        del self.uptime
-
-    def setup(self) -> None:
-        create_client(self)
-        miru.load(self)
-
-    def run(self) -> None:
-        self.setup()
-
-        self.subscribe(hikari.StartingEvent, self.on_starting)
-        self.subscribe(hikari.StoppingEvent, self.on_stopping)
-
-        super().run()
+async def on_starting(client: alluka.Injected[tanjun.abc.Client]) -> None:
+    client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
+    client.set_type_dependency(Attrs, Attrs())
 
 
-def create_client(bot: AppBot) -> tanjun.Client:
-    """Setup the tanjun client from ``hikari.GatewayBot``"""
-    client = tanjun.Client.from_gateway_bot(
-        bot,
-        mention_prefix=True,
-        declare_global_commands=True,
+async def on_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:
+    if session:
+        await session.close()
+
+
+def create_client(bot: hikari.GatewayBot) -> tanjun.Client:
+    """Setup the tanjun client"""
+    return (
+        tanjun.Client.from_gateway_bot(
+            bot,
+            mention_prefix=True,
+            declare_global_commands=True,
+        )
+        .load_modules(*scripty.get_modules(pathlib.Path("scripty/modules")))
+        .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_starting)
+        .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_closing)
     )
 
-    client.load_modules(*scripty.get_modules(pathlib.Path("scripty/modules")))
 
-    return client
+def build_bot() -> hikari.GatewayBot:
+    bot = hikari.GatewayBot(scripty.DISCORD_TOKEN)
+
+    create_client(bot)
+    miru.load(bot)
+
+    return bot

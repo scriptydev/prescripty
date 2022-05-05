@@ -33,7 +33,7 @@ class InviteView(miru.View):
 @tanchi.as_slash_command("about")
 async def stats_about(
     ctx: tanjun.abc.SlashContext,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """About the Scripty Discord bot"""
     bot_user = bot.get_me() or await bot.rest.fetch_my_user()
@@ -66,7 +66,7 @@ async def stats_about(
 @tanchi.as_slash_command("ping")
 async def stats_ping(
     ctx: tanjun.abc.SlashContext,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Replies with bot latency"""
     await ctx.respond(
@@ -81,7 +81,8 @@ async def stats_ping(
 @tanchi.as_slash_command("system")
 async def stats_system(
     ctx: tanjun.abc.SlashContext,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
+    attrs: alluka.Injected[scripty.Attrs],
 ) -> None:
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
@@ -92,7 +93,7 @@ async def stats_system(
     boot_resolved_full = f"<t:{boot_timestamp}:F>"
     boot_resolved_relative = f"<t:{boot_timestamp}:R>"
 
-    uptime_timestamp = round(bot.uptime.timestamp())
+    uptime_timestamp = round(attrs.uptime.timestamp())
     uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
     uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
 
@@ -189,7 +190,7 @@ async def info_user(
 @tanchi.as_slash_command("server")
 async def info_server(
     ctx: tanjun.abc.SlashContext,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Get information about server"""
     guild = ctx.guild_id

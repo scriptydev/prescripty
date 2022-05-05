@@ -24,7 +24,7 @@ async def ban(
     delete_message_days: hikari.UndefinedNoneOr[tanchi.Range[1, 7]] = None,
     reason: hikari.UndefinedNoneOr[str] = None,
     *,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Ban user from server
 
@@ -69,7 +69,7 @@ async def ban(
 async def delete(
     ctx: tanjun.abc.SlashContext,
     amount: tanchi.Range[1, ...],
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Purge messages from channel
 
@@ -141,7 +141,7 @@ async def kick(
     member: hikari.Member,
     reason: hikari.UndefinedNoneOr[str] = None,
     *,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Kick member from server
 
@@ -190,7 +190,7 @@ async def slowmode_enable(
     duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
     *,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Enable slowmode for channel
 
@@ -239,7 +239,7 @@ async def slowmode_disable(
     ctx: tanjun.abc.SlashContext,
     channel: hikari.TextableGuildChannel | None = None,
     *,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Disable slowmode from channel
 
@@ -362,7 +362,7 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
     user: str,
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Autocomplete for banned users"""
     guild = ctx.guild_id
@@ -388,7 +388,7 @@ async def unban_user_autocomplete(
 async def unban(
     ctx: tanjun.abc.SlashContext,
     user: tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake],
-    bot: alluka.Injected[scripty.AppBot],
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Unban user from server
 

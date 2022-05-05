@@ -16,6 +16,7 @@ component = tanjun.Component()
 async def load(
     ctx: tanjun.abc.MessageContext,
     module: str,
+    *,
     client: alluka.Injected[tanjun.abc.Client],
 ) -> None:
     """Load module
