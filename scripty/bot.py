@@ -27,17 +27,19 @@ class Attrs:
 
 
 async def on_starting(client: alluka.Injected[tanjun.abc.Client]) -> None:
+    """Setup to execute during startup"""
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
     client.set_type_dependency(Attrs, Attrs())
 
 
 async def on_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:
+    """Actions to perform while shutdown"""
     if session:
         await session.close()
 
 
 def create_client(bot: hikari.GatewayBot) -> tanjun.Client:
-    """Setup the tanjun client"""
+    """Create the tanjun client"""
     return (
         tanjun.Client.from_gateway_bot(
             bot,
@@ -51,6 +53,7 @@ def create_client(bot: hikari.GatewayBot) -> tanjun.Client:
 
 
 def build_bot() -> hikari.GatewayBot:
+    """Build the bot"""
     bot = hikari.GatewayBot(scripty.DISCORD_TOKEN)
 
     create_client(bot)
