@@ -198,9 +198,7 @@ async def slowmode_enable(
     ----------
     channel : hikari.TextableGuildChannel
         Channel to enable slowmode
-    duration : tanchi.Converted[
-        datetime.timedelta, scripty.parse_to_timedelta_from_now
-    ]
+    duration : tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now]
         Duration of slowmode
     """
     channel = channel or ctx.get_channel()
