@@ -124,5 +124,5 @@ async def parse_to_timedelta_from_now(
     if duration_parsed < now:
         return None
 
-    duration_seconds = round(parse_duration.total_seconds() - now.total_seconds())
+    duration_seconds = round(duration_parsed.total_seconds() - now.total_seconds())
     return datetime.timedelta(seconds=duration_seconds)

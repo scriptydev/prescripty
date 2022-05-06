@@ -287,7 +287,7 @@ async def timeout_set(
     ----------
     member : hikari.Member
         Member to timeout
-    duration : tanchi.Converted[datetime.datetime, scripty.parse_duration]
+    duration : tanchi.Converted[datetime.datetime, scripty.parse_to_future_datetime]
         Duration of the timeout
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
