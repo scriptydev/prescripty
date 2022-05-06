@@ -1,5 +1,5 @@
 __all__: list[str] = [
-    "datetime_now_utc"
+    "datetime_utcnow_aware"
     "get_modules",
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
@@ -16,7 +16,7 @@ import dateparser
 import pandas
 
 
-def datetime_now_utc() -> datetime.datetime:
+def datetime_utcnow_aware() -> datetime.datetime:
     """Helper shorthand for returning now aware utc datetime
     
     Returns
@@ -80,7 +80,7 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
     if parse_duration is None:
         return None
 
-    if parse_duration < datetime_now_utc():
+    if parse_duration < datetime_utcnow_aware():
         return None
 
     return parse_duration
@@ -103,7 +103,7 @@ async def parse_to_timedelta_from_now(
     None
         If the duration is not parsable or is in the past
     """
-    now = datetime_now_utc()
+    now = datetime_utcnow_aware()
     loop = asyncio.get_event_loop()
     parse_duration = await loop.run_in_executor(
         None,

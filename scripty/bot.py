@@ -21,7 +21,7 @@ class Attr:
 
     def __init__(self, bot: hikari.GatewayBotAware) -> None:
         self._bot: hikari.GatewayBotAware = bot
-        self._start_time: datetime.datetime = scripty.datetime_now_utc()
+        self._start_time: datetime.datetime = scripty.datetime_utcnow_aware()
 
     @property
     def start_time(self) -> datetime.datetime:
