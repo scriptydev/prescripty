@@ -1,4 +1,5 @@
 __all__: list[str] = [
+    "datetime_now_utc"
     "get_modules",
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
@@ -13,6 +14,17 @@ import typing
 
 import dateparser
 import pandas
+
+
+def datetime_now_utc() -> datetime.datetime:
+    """Helper shorthand for returning now aware utc datetime
+    
+    Returns
+    -------
+    datetime.datetime
+        The datetime now returned as utc aware
+    """
+    return datetime.datetime.now(datetime.timezone.utc)
 
 
 def get_modules(
@@ -52,7 +64,6 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
         If the duration is not parsable or is in the past
     """
     loop = asyncio.get_event_loop()
-
     parse_duration = await loop.run_in_executor(
         None,
         functools.partial(
@@ -69,7 +80,7 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
     if parse_duration is None:
         return None
 
-    if parse_duration < datetime.datetime.now(datetime.timezone.utc):
+    if parse_duration < datetime_now_utc():
         return None
 
     return parse_duration
@@ -92,7 +103,7 @@ async def parse_to_timedelta_from_now(
     None
         If the duration is not parsable or is in the past
     """
-    datetime_now = datetime.datetime.now(datetime.timezone.utc)
+    now = datetime_now_utc()
     loop = asyncio.get_event_loop()
     parse_duration = await loop.run_in_executor(
         None,
@@ -110,8 +121,8 @@ async def parse_to_timedelta_from_now(
     if parse_duration is None:
         return None
 
-    if parse_duration < datetime.datetime.now(datetime.timezone.utc):
+    if parse_duration < now:
         return None
 
-    calculate_delta = parse_duration - datetime_now
+    calculate_delta = parse_duration - now
     return pandas.to_timedelta(calculate_delta).round("s")  # type: ignore

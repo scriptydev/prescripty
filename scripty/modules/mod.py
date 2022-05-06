@@ -292,16 +292,14 @@ async def timeout_set(
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
     """
-    timeout_limit = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-        days=28
-    )
+    timeout_limit = scripty.datetime_now_utc() + datetime.timedelta(days=28)
     error = scripty.Embed(title="Timeout Error", color=scripty.Color.GRAY_EMBED.value)
 
     if duration is None:
         error.description = "Unable to parse specified duration; invalid time!"
         await ctx.respond(error)
         return
-    if duration < datetime.datetime.now(datetime.timezone.utc):
+    if duration < scripty.datetime_now_utc():
         error.description = "Duration provided must be in the future!"
         await ctx.respond(error)
         return
