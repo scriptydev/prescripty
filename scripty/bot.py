@@ -1,4 +1,4 @@
-__all__: list[str] = ["Attrs", "build_bot"]
+__all__: list[str] = ["Attr", "build_bot"]
 
 
 import datetime
@@ -13,23 +13,27 @@ import tanjun
 import scripty
 
 
-class Attrs:
+class Attr:
     """Attributes for the bot
-    
-    This is setup ``on_starting`` by setting a tanjun client DI type dependency
+
+    This is setup ``on_starting()`` by setting a tanjun client DI type dependency
     """
-    def __init__(self) -> None:
-        self._uptime = datetime.datetime.now(datetime.timezone.utc)
+
+    def __init__(self, bot: hikari.GatewayBotAware) -> None:
+        self._bot: hikari.GatewayBotAware = bot
+        self._uptime: datetime.datetime = datetime.datetime.now(datetime.timezone.utc)
 
     @property
     def uptime(self) -> datetime.datetime:
         return self._uptime
 
 
-async def on_starting(client: alluka.Injected[tanjun.abc.Client]) -> None:
+async def on_starting(
+    client: alluka.Injected[tanjun.abc.Client], bot: alluka.Injected[hikari.GatewayBot]
+) -> None:
     """Setup to execute during startup"""
+    client.set_type_dependency(Attr, Attr(bot))
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
-    client.set_type_dependency(Attrs, Attrs())
 
 
 async def on_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:

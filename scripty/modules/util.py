@@ -82,7 +82,7 @@ async def stats_ping(
 async def stats_system(
     ctx: tanjun.abc.SlashContext,
     bot: alluka.Injected[hikari.GatewayBot],
-    attrs: alluka.Injected[scripty.Attrs],
+    attr: alluka.Injected[scripty.Attr],
 ) -> None:
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
@@ -93,7 +93,7 @@ async def stats_system(
     boot_resolved_full = f"<t:{boot_timestamp}:F>"
     boot_resolved_relative = f"<t:{boot_timestamp}:R>"
 
-    uptime_timestamp = round(attrs.uptime.timestamp())
+    uptime_timestamp = round(attr.uptime.timestamp())
     uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
     uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
 
