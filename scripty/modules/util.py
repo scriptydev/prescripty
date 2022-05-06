@@ -112,12 +112,12 @@ async def stats_system(
         inline=True,
     )
     embed.add_field(
-        "Boot Time",
+        "Boot",
         f"Booted {boot_resolved_relative}",
         inline=True,
     )
     embed.add_field(
-        "Start Time",
+        "Start",
         f"Online {start_time_resolved_relative}",
         inline=True,
     )
