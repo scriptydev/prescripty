@@ -290,7 +290,6 @@ class RPSView(miru.View):
             )
         )
 
-        assert self.message is not None
         await self.message.edit(components=self.build())
 
 
