@@ -198,10 +198,10 @@ async def meme(
     )
     embed.set_image(submissions[index]["url"])
 
-    message = await ctx.respond(embed, components=view.build())
-    if message is not None:
-        view.start(message)
-        await view.wait()
+    await ctx.respond(embed, components=view.build())
+    response = await ctx.interaction.fetch_initial_response()
+    view.start(response)
+    await view.wait()
 
 
 @component.with_command
@@ -305,10 +305,10 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
         description="Click on the button options to continue the game!",
     )
 
-    message = await ctx.respond(embed, components=view.build())
-    if message is not None:
-        view.start(message)
-        await view.wait()
+    await ctx.respond(embed, components=view.build())
+    response = await ctx.interaction.fetch_initial_response()
+    view.start(response)
+    await view.wait()
 
 
 @tanjun.as_loader
