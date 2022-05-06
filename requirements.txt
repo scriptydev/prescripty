@@ -6,8 +6,6 @@ hikari==2.0.0.dev108
 hikari-miru==1.1.1
 git+https://github.com/thesadru/tanchi.git
 hikari-tanjun==2.5.1a1
-pandas==1.4.2
-pandas-stubs==1.2.0.58
 psutil==5.9.0
 pyright==1.1.244
 toml==0.10.2
