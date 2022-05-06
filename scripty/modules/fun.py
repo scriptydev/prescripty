@@ -196,9 +196,14 @@ async def meme(
     embed.set_image(submissions[index]["url"])
 
     await ctx.respond(embed, components=view.build())
-    response = await ctx.interaction.fetch_initial_response()
-    view.start(response)
-    await view.wait()
+    
+    try:
+        response = await ctx.interaction.fetch_initial_response()
+    except Exception:
+        pass
+    else:
+        view.start(response)
+        await view.wait()
 
 
 @component.with_command
@@ -305,9 +310,14 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
     )
 
     await ctx.respond(embed, components=view.build())
-    response = await ctx.interaction.fetch_initial_response()
-    view.start(response)
-    await view.wait()
+
+    try:
+        response = await ctx.interaction.fetch_initial_response()
+    except Exception:
+        pass
+    else:
+        view.start(response)
+        await view.wait()
 
 
 @tanjun.as_loader
