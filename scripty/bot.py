@@ -21,11 +21,13 @@ class Attr:
 
     def __init__(self, bot: hikari.GatewayBotAware) -> None:
         self._bot: hikari.GatewayBotAware = bot
-        self._uptime: datetime.datetime = datetime.datetime.now(datetime.timezone.utc)
+        self._start_time: datetime.datetime = datetime.datetime.now(
+            datetime.timezone.utc
+        )
 
     @property
-    def uptime(self) -> datetime.datetime:
-        return self._uptime
+    def start_time(self) -> datetime.datetime:
+        return self._start_time
 
 
 async def on_starting(

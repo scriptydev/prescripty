@@ -90,12 +90,10 @@ async def stats_system(
     system = platform.uname()
 
     boot_timestamp = round(psutil.boot_time())
-    boot_resolved_full = f"<t:{boot_timestamp}:F>"
     boot_resolved_relative = f"<t:{boot_timestamp}:R>"
 
-    uptime_timestamp = round(attr.uptime.timestamp())
-    uptime_resolved_full = f"<t:{uptime_timestamp}:F>"
-    uptime_resolved_relative = f"<t:{uptime_timestamp}:R>"
+    start_time_timestamp = round(attr.start_time.timestamp())
+    start_time_resolved_relative = f"<t:{start_time_timestamp}:R>"
 
     embed = scripty.Embed(title="System")
     embed.set_author(
@@ -115,11 +113,13 @@ async def stats_system(
     )
     embed.add_field(
         "Boot Time",
-        f"Started {boot_resolved_relative} {boot_resolved_full}",
+        f"Booted {boot_resolved_relative}",
+        inline=True,
     )
     embed.add_field(
-        "Uptime",
-        f"Online {uptime_resolved_relative} {uptime_resolved_full}",
+        "Start Time",
+        f"Online {start_time_resolved_relative}",
+        inline=True,
     )
 
     await ctx.respond(embed)
