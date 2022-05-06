@@ -17,7 +17,7 @@ import dateparser
 
 def datetime_utcnow_aware() -> datetime.datetime:
     """Helper shorthand for returning now aware utc datetime
-    
+
     Returns
     -------
     datetime.datetime

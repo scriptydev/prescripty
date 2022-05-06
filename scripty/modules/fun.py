@@ -45,9 +45,7 @@ async def dog(
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random dog image"""
-    async with session.get(
-        "https://dog.ceo/api/breeds/image/random"
-    ) as response:
+    async with session.get("https://dog.ceo/api/breeds/image/random") as response:
         data = await response.json()
 
     embed = scripty.Embed(title="Dog")
@@ -134,11 +132,10 @@ class MemeView(miru.View):
 
     async def view_check(self, ctx: miru.Context) -> bool:
         assert self.message is not None
-        if self.message.interaction is None:
-            raise Exception("message interaction is None")
+        if self.message.interaction is not None:
+            if ctx.user == self.message.interaction.user:
+                return True
 
-        if ctx.user == self.message.interaction.user:
-            return True
         embed = scripty.Embed(
             title="Error",
             description="This command was not invoked by you!",
@@ -147,6 +144,9 @@ class MemeView(miru.View):
         return False
 
     async def on_timeout(self) -> None:
+        if self.message is None:
+            return
+
         for item in self.children:
             item.disabled = True
 
@@ -158,7 +158,6 @@ class MemeView(miru.View):
             )
         )
 
-        assert self.message is not None, "Message is None"
         await self.message.edit(components=self.build())
 
 
@@ -171,9 +170,7 @@ async def meme(
     """The hottest Reddit r/memes"""
     reddit_url = "https://reddit.com/r/memes/hot.json"
 
-    async with session.get(
-        reddit_url, headers={"User-Agent": "Scripty"}
-    ) as response:
+    async with session.get(reddit_url, headers={"User-Agent": "Scripty"}) as response:
         reddit = await response.json()
 
     submissions: typing.Any = [
@@ -279,6 +276,9 @@ class RPSView(miru.View):
         return False
 
     async def on_timeout(self) -> None:
+        if self.message is None:
+            return
+
         for item in self.children:
             item.disabled = True
 
@@ -290,7 +290,7 @@ class RPSView(miru.View):
             )
         )
 
-        assert self.message is not None, "Message is None"
+        assert self.message is not None
         await self.message.edit(components=self.build())
 
 

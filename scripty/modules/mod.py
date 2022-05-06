@@ -87,9 +87,7 @@ async def delete(
 
     channel = ctx.channel_id
 
-    bulk_delete_limit = datetime.datetime.now(
-        datetime.timezone.utc
-    ) - datetime.timedelta(days=14)
+    bulk_delete_limit = scripty.datetime_utcnow_aware() - datetime.timedelta(days=14)
 
     iterator = (
         bot.rest.fetch_messages(channel)
@@ -211,10 +209,12 @@ async def slowmode_enable(
         error.description = "This command must be invoked in a guild!"
         await ctx.respond(error)
         return
+
     if duration is None:
         error.description = "Unable to parse specified duration; invalid time!"
         await ctx.respond(error)
         return
+
     if duration > duration_limit:
         error.description = "Duration cannot be greater than `6 hours!`"
         await ctx.respond(error)
@@ -299,10 +299,12 @@ async def timeout_set(
         error.description = "Unable to parse specified duration; invalid time!"
         await ctx.respond(error)
         return
+
     if duration < scripty.datetime_utcnow_aware():
         error.description = "Duration provided must be in the future!"
         await ctx.respond(error)
         return
+
     if duration > timeout_limit:
         error.description = "Duration cannot be longer than `28 days`!"
         await ctx.respond(error)
