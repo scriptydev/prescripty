@@ -193,8 +193,11 @@ async def poll(
 
     for key, value in options.items():
         if value is not None:
-            response = await ctx.interaction.fetch_initial_response()
-            await response.add_reaction(key)
+            try:
+                response = await ctx.interaction.fetch_initial_response()
+                await response.add_reaction(key)
+            except Exception:
+                pass
 
 
 @tanjun.as_loader
