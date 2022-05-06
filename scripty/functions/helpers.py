@@ -85,9 +85,7 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
     return duration_parsed
 
 
-async def parse_to_timedelta_from_now(
-    duration: str,
-) -> datetime.datetime | None:
+async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | None:
     """Parse string duration to timedelta from now
 
     Parameters
@@ -124,5 +122,5 @@ async def parse_to_timedelta_from_now(
     if duration_parsed < now:
         return None
 
-    duration_seconds = round(duration_parsed.total_seconds() - now.total_seconds())
+    duration_seconds = round(duration_parsed.timestamp() - now.timestamp())
     return datetime.timedelta(seconds=duration_seconds)
