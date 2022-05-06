@@ -13,7 +13,6 @@ import pathlib
 import typing
 
 import dateparser
-import pandas
 
 
 def datetime_utcnow_aware() -> datetime.datetime:
@@ -58,13 +57,13 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
 
     Returns
     -------
-    parse_duration : datetime.datetime
+    duration_parsed : datetime.datetime
         The datetime from the input
     None
         If the duration is not parsable or is in the past
     """
     loop = asyncio.get_event_loop()
-    parse_duration = await loop.run_in_executor(
+    duration_parsed = await loop.run_in_executor(
         None,
         functools.partial(
             dateparser.parse,
@@ -77,18 +76,18 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
         ),
     )
 
-    if parse_duration is None:
+    if duration_parsed is None:
         return None
 
-    if parse_duration < datetime_utcnow_aware():
+    if duration_parsed < datetime_utcnow_aware():
         return None
 
-    return parse_duration
+    return duration_parsed
 
 
 async def parse_to_timedelta_from_now(
     duration: str,
-) -> pandas.Timedelta | None:
+) -> datetime.datetime | None:
     """Parse string duration to timedelta from now
 
     Parameters
@@ -98,14 +97,15 @@ async def parse_to_timedelta_from_now(
 
     Returns
     -------
-    pandas.Timedelta
+    datetime.timedelta
         The timedelta from now rounded to the nearest second
     None
         If the duration is not parsable or is in the past
     """
     now = datetime_utcnow_aware()
+
     loop = asyncio.get_event_loop()
-    parse_duration = await loop.run_in_executor(
+    duration_parsed = await loop.run_in_executor(
         None,
         functools.partial(
             dateparser.parse,
@@ -118,11 +118,11 @@ async def parse_to_timedelta_from_now(
         ),
     )
 
-    if parse_duration is None:
+    if duration_parsed is None:
         return None
 
-    if parse_duration < now:
+    if duration_parsed < now:
         return None
 
-    calculate_delta = parse_duration - now
-    return pandas.to_timedelta(calculate_delta).round("s")  # type: ignore
+    duration_seconds = round(parse_duration.total_seconds() - now.total_seconds())
+    return datetime.timedelta(seconds=duration_seconds)
