@@ -11,7 +11,7 @@ useLibraryCodeForTypes = true
 
 reportUnnecessaryTypeIgnoreComment = "error"
 reportMissingTypeStubs = "none"
-reportImportCycles = "none"
+reportImportCycles = "warning"
 reportIncompatibleMethodOverride = "none"
 reportOverlappingOverload = "none"
 reportIncompatibleVariableOverride = "none"

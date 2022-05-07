@@ -10,9 +10,7 @@ import tanjun
 
 import scripty
 
-
 component = tanjun.Component()
-
 
 animal = component.with_slash_command(
     tanjun.slash_command_group("animal", "Fun things related to animals")

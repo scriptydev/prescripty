@@ -5,7 +5,6 @@ __all__: list[str] = [
     "parse_to_timedelta_from_now",
 ]
 
-
 import asyncio
 import datetime
 import functools

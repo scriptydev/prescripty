@@ -9,9 +9,7 @@ import tanjun
 
 import scripty
 
-
 component = tanjun.Component()
-
 
 stats = component.with_slash_command(
     tanjun.slash_command_group("stats", "Statistics related to Scripty")
@@ -82,7 +80,7 @@ async def stats_ping(
 async def stats_system(
     ctx: tanjun.abc.SlashContext,
     bot: alluka.Injected[hikari.GatewayBot],
-    attr: alluka.Injected[scripty.Attr],
+    datastore: alluka.Injected[scripty.DataStore],
 ) -> None:
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
@@ -92,7 +90,7 @@ async def stats_system(
     boot_timestamp = round(psutil.boot_time())
     boot_resolved_relative = f"<t:{boot_timestamp}:R>"
 
-    start_time_timestamp = round(attr.start_time.timestamp())
+    start_time_timestamp = round(datastore.start_time.timestamp())
     start_time_resolved_relative = f"<t:{start_time_timestamp}:R>"
 
     embed = scripty.Embed(title="System")

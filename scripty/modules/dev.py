@@ -5,7 +5,6 @@ import tanjun
 
 import scripty
 
-
 component = tanjun.Component()
 
 
@@ -17,7 +16,7 @@ async def load(
     ctx: tanjun.abc.MessageContext,
     module: str,
     *,
-    client: alluka.Injected[tanjun.abc.Client],
+    client: alluka.Injected[tanjun.Client],
 ) -> None:
     """Load module
 
@@ -42,7 +41,7 @@ async def load(
 async def reload(
     ctx: tanjun.abc.MessageContext,
     module: str,
-    client: alluka.Injected[tanjun.abc.Client],
+    client: alluka.Injected[tanjun.Client],
 ) -> None:
     """Reload module
 
@@ -65,7 +64,7 @@ async def reload(
 @tanjun.as_message_command("sync")
 async def sync(
     ctx: tanjun.abc.MessageContext,
-    client: alluka.Injected[tanjun.abc.Client],
+    client: alluka.Injected[tanjun.Client],
 ) -> None:
     """Sync global application commands"""
     await client.declare_global_commands()
@@ -84,7 +83,7 @@ async def sync(
 async def unload(
     ctx: tanjun.abc.MessageContext,
     module: str,
-    client: alluka.Injected[tanjun.abc.Client],
+    client: alluka.Injected[tanjun.Client],
 ) -> None:
     """Unload module
 

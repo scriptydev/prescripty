@@ -10,7 +10,6 @@ import tanjun
 
 import scripty
 
-
 component = tanjun.Component()
 
 

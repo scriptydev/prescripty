@@ -1,11 +1,9 @@
 __all__: list[str] = ["Embed"]
 
-
 import datetime
 import typing
 
 import hikari
-
 
 DEFAULT_COLOR = 0x2F3136
 

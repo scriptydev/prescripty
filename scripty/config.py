@@ -1,8 +1,3 @@
-import typing
-
-import toml
-
-
 __all__: list[str] = [
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",
@@ -10,6 +5,10 @@ __all__: list[str] = [
     "INVITE_URL",
     "THE_CAT_API_KEY",
 ]
+
+import typing
+
+import toml
 
 config = toml.load("config.toml")
 

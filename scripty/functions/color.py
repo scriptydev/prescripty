@@ -1,6 +1,5 @@
 __all__: list[str] = ["Color"]
 
-
 import enum
 
 

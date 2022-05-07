@@ -6,7 +6,6 @@ from gpytranslate import Translator
 
 import scripty
 
-
 component = tanjun.Component()
 
 
