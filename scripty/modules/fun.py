@@ -176,9 +176,7 @@ async def meme(
         for submission in range(len(reddit["data"]["children"]))
         if not reddit["data"]["children"][submission]["data"]["over_18"]
         and not reddit["data"]["children"][submission]["data"]["is_video"]
-        and reddit["data"]["children"][submission]["data"]["url"].startswith(
-            "https://i.redd.it"
-        )
+        and reddit["data"]["children"][submission]["data"]["post_hint"] == "image"
     ]
 
     random.shuffle(submissions)
@@ -194,7 +192,7 @@ async def meme(
     embed.set_image(submissions[index]["url"])
 
     await ctx.respond(embed, components=view.build())
-    
+
     try:
         response = await ctx.interaction.fetch_initial_response()
     except Exception:
