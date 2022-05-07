@@ -102,7 +102,7 @@ async def stats_system(
     embed.add_field("Release", system.version, inline=True)
     embed.add_field("Machine", system.machine, inline=True)
     embed.add_field("Processor", system.processor, inline=True)
-    embed.add_field("CPU", f"{psutil.cpu_percent()}%", inline=True)
+    embed.add_field("CPU", f"{psutil.cpu_percent(interval=None)}%", inline=True)
     embed.add_field(
         "Memory",
         f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/"  # type: ignore
