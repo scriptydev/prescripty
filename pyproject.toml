@@ -1,20 +1,76 @@
 [build-system]
-requires = ["setuptools >= 40.6.0", "wheel"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools >= 40.6.0", "wheel"]
+
+[project]
+authors = [
+  {name = "Erich Nguyen", email = "erich.nguyen@outlook.com"},
+  {name = "Johan Joseph", email = "johanjoseph100@gmail.com"},
+  {name = "Hrishikesh Kondiboyina", email = "vkhrishikesh@gmail.com"},
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Natural Language :: English",
+  "Programming Language :: Python",
+  "Typing :: Typed",
+]
+description = "Imagine a Bot"
+keywords = [
+  "dependency-injection",
+  "discord",
+  "discord-api",
+  "discord-bot",
+  "hikari",
+  "hikari-miru",
+  "hikari-tanchi",
+  "hikari-tanjun",
+  "python",
+  "scripty",
+]
+license = {file = "LICENSE"}
+maintainers = [
+  {name = "Erich Nguyen", email = "erich.nguyen@outlook.com"},
+]
+name = "Scripty"
+readme = "README.md"
+requires-python = ">=3.10"
+version = "1.0.0a6"
+
+dependencies = [
+  "aiohttp==3.8.1",
+  "alluka==0.1.1",
+  "dateparser==1.1.1",
+  "gpytranslate==1.4.0",
+  "hikari==2.0.0.dev108",
+  "hikari-miru==1.1.1",
+  "git+https://github.com/thesadru/tanchi.git",
+  "hikari-tanjun==2.5.1a1",
+  "psutil==5.9.0",
+  "pyright==1.1.244",
+  "toml==0.10.2",
+  "uvloop==0.16.0; sys_platform != 'win32'",
+]
+
+[project.urls]
+changelog = "" # TODO: Add changelog
+documentation = "" # TODO: Add documentation
+homepage = "https://scriptybot.web.app" 
+repository = "https://github.com/scriptydev/scripty-v1a6" 
 
 [tool.pyright]
-include = ["./scripty"]
 exclude = ["**/node_modules", "**/__pycache__"]
+include = ["./scripty"]
 pythonVersion = "3.10"
 typeCheckingMode = "strict"
 useLibraryCodeForTypes = true
 
-reportUnnecessaryTypeIgnoreComment = "error"
-reportMissingTypeStubs = "none"
 reportImportCycles = "warning"
 reportIncompatibleMethodOverride = "none"
-reportOverlappingOverload = "none"
 reportIncompatibleVariableOverride = "none"
-reportUnknownMemberType = "warning"
-reportUntypedFunctionDecorator = "warning"
+reportMissingTypeStubs = "none"
 reportOptionalMemberAccess = "warning"
+reportOverlappingOverload = "none"
+reportUnknownMemberType = "warning"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportUntypedFunctionDecorator = "warning"
