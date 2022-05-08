@@ -1,3 +1,5 @@
+__all__: list[str] = ["load_component", "unload_component"]
+
 import platform
 
 import alluka

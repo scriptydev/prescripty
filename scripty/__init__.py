@@ -7,6 +7,9 @@ Imagine a bot...
 moderation and utilities. A bot that does everything you want, intuitively.
 """
 
+from .bot import *
+from .config import *
+from .functions import *
 
 __author__ = ["Erich Nguyen", "Johan Joseph", "Hrishikesh Kondiboyina"]
 __github__ = ["GoogleGenius", "johan53", "HrishiK100"]
@@ -18,8 +21,3 @@ __version__ = "1.0.0a6"
 __maintainer__ = "Erich Nguyen"
 __email__ = "erich.nguyen@outlook.com"
 __status__ = "Development"
-
-
-from .bot import *
-from .config import *
-from .functions import *
