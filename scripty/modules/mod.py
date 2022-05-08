@@ -21,11 +21,10 @@ component = tanjun.Component()
 @tanchi.as_slash_command()
 async def ban(
     ctx: tanjun.abc.SlashContext,
+    bot: alluka.Injected[hikari.GatewayBot],
     user: hikari.User,
     delete_message_days: hikari.UndefinedNoneOr[tanchi.Range[1, 7]] = None,
     reason: hikari.UndefinedNoneOr[str] = None,
-    *,
-    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Ban user from server
 
@@ -137,10 +136,9 @@ async def delete(
 @tanchi.as_slash_command()
 async def kick(
     ctx: tanjun.abc.SlashContext,
+    bot: alluka.Injected[hikari.GatewayBot],
     member: hikari.Member,
     reason: hikari.UndefinedNoneOr[str] = None,
-    *,
-    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Kick member from server
 
@@ -186,10 +184,9 @@ slowmode = component.with_slash_command(
 @tanchi.as_slash_command("enable")
 async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
+    bot: alluka.Injected[hikari.GatewayBot],
     duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
-    *,
-    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Enable slowmode for channel
 
@@ -236,9 +233,8 @@ async def slowmode_enable(
 @tanchi.as_slash_command("disable")
 async def slowmode_disable(
     ctx: tanjun.abc.SlashContext,
-    channel: hikari.TextableGuildChannel | None = None,
-    *,
     bot: alluka.Injected[hikari.GatewayBot],
+    channel: hikari.TextableGuildChannel | None = None,
 ) -> None:
     """Disable slowmode from channel
 
