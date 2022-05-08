@@ -22,6 +22,7 @@ def create_client(bot: hikari.GatewayBot) -> tanjun.Client:
         )
         .load_modules(*scripty.functions.get_modules(pathlib.Path("scripty/modules")))
         .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_starting)
+        .add_client_callback(tanjun.ClientCallbackNames.STARTED, on_started)
         .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_closing)
         .set_type_dependency(scripty.functions.DataStore, scripty.functions.DataStore())
     )
@@ -37,12 +38,13 @@ def build_bot() -> hikari.GatewayBot:
     return bot
 
 
-async def on_starting(
-    client: alluka.Injected[tanjun.Client],
-    datastore: alluka.Injected[scripty.functions.DataStore],
-) -> None:
+async def on_starting(client: alluka.Injected[tanjun.Client]) -> None:
     """Setup to execute during startup"""
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
+
+
+async def on_started(datastore: alluka.Injected[scripty.functions.DataStore]) -> None:
+    """Called after bot is fully started"""
     datastore.start_time = scripty.functions.datetime_utcnow_aware()
 
 
