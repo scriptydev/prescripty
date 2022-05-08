@@ -1,6 +1,6 @@
 import os
 
-from scripty import build_bot
+import scripty
 
 
 if __name__ == "__main__":
@@ -9,5 +9,4 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-    bot, client = build_bot()
-    bot.run()
+    scripty.start_app()

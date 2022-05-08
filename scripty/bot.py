@@ -1,4 +1,4 @@
-__all__: list[str] = ["build_bot"]
+__all__: list[str] = ["start_app"]
 
 import pathlib
 
@@ -35,10 +35,16 @@ def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     bot.subscribe(hikari.StartedEvent, on_started)
 
     client = create_client(bot)
-    
+
     miru.load(bot)
 
     return bot, client
+
+
+def start_app() -> None:
+    """Start the application"""
+    bot, _ = build_bot()
+    bot.run()
 
 
 async def on_starting(client: alluka.Injected[tanjun.Client]) -> None:
