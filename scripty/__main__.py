@@ -9,4 +9,5 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-    build_bot().run()
+    bot, client = build_bot()
+    bot.run()

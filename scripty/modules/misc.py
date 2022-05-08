@@ -196,7 +196,7 @@ async def poll(
         if value is not None:
             try:
                 response = await ctx.interaction.fetch_initial_response()
-            except Exception:
+            except hikari.NotFoundError:
                 pass
             else:
                 await response.add_reaction(key)

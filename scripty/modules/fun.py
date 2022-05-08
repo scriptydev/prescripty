@@ -197,7 +197,7 @@ async def meme(
 
     try:
         response = await ctx.interaction.fetch_initial_response()
-    except Exception:
+    except hikari.NotFoundError:
         pass
     else:
         view.start(response)
@@ -311,7 +311,7 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
 
     try:
         response = await ctx.interaction.fetch_initial_response()
-    except Exception:
+    except hikari.NotFoundError:
         pass
     else:
         view.start(response)
