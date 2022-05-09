@@ -11,7 +11,7 @@ class TestHelpers(unittest.TestCase):
     def test_datetime_utcnow_aware(self) -> None:
         self.assertIsInstance(scripty.datetime_utcnow_aware(), datetime.datetime)
 
-        self.assertEqual(
+        self.assertAlmostEqual(
             scripty.datetime_utcnow_aware(),
             datetime.datetime.now(datetime.timezone.utc),
         )
