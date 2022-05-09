@@ -4,17 +4,16 @@
 ...that creates a fun place to talk and hang out. With advanced server
 moderation and utilities. A bot that does everything you want, intuitively.
 
+[Add to Server](https://scriptybot.web.app){ .md-button .md-button--primary }
+
 ## Features
 
 - Advanced moderation
-- Utilities
 - Fun commands
 - Leveling system
 - Social notifications
 - Firecoin economy
-- Custom embeds
-- Button roles
-- More!
+- Various utilities
 
 ## Getting started
 
