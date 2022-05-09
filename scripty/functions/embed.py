@@ -1,7 +1,8 @@
 __all__: list[str] = ["Embed"]
 
 import datetime
-import typing
+
+from typing import Any
 
 import hikari
 
@@ -18,8 +19,8 @@ class Embed(hikari.Embed):
     def __init__(
         self,
         *,
-        title: typing.Any = None,
-        description: typing.Any = None,
+        title: Any = None,
+        description: Any = None,
         url: str | None = None,
         color: hikari.Colorish | None = DEFAULT_COLOR,
         colour: hikari.Colorish | None = DEFAULT_COLOR,

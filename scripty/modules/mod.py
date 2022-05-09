@@ -3,7 +3,8 @@ __all__: list[str] = ["load_component", "unload_component"]
 import asyncio
 import datetime
 import functools
-import typing
+
+from typing import Any
 
 import alluka
 import hikari
@@ -96,7 +97,7 @@ async def delete(
     )
 
     count = 0
-    tasks: typing.Any | None = []
+    tasks: Any | None = []
     async for messages in iterator.chunk(100):
         count += len(messages)
         task = asyncio.create_task(bot.rest.delete_messages(channel, messages))

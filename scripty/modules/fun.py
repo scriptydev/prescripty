@@ -1,7 +1,8 @@
 __all__: list[str] = ["load_component", "unload_component"]
 
 import random
-import typing
+
+from typing import Any
 
 import aiohttp
 import alluka
@@ -71,7 +72,7 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
 @tanchi.as_slash_command()
 async def dice(
     ctx: tanjun.abc.SlashContext,
-    sides: typing.Annotated[int, tanchi.Range[2, ...]] = 6,
+    sides: tanchi.Range[2, ...] = 6,
 ) -> None:
     """Roll a die
 
@@ -89,7 +90,7 @@ async def dice(
 
 
 class MemeView(miru.View):
-    def __init__(self, submissions: typing.Any, index: int) -> None:
+    def __init__(self, submissions: Any, index: int) -> None:
         super().__init__(timeout=30.0)
         self.submissions = submissions
         self.index = index
@@ -173,7 +174,7 @@ async def meme(
     async with session.get(reddit_url, headers={"User-Agent": "Scripty"}) as response:
         reddit = await response.json()
 
-    submissions: typing.Any = [
+    submissions: Any = [
         reddit["data"]["children"][submission]["data"]
         for submission in range(len(reddit["data"]["children"]))
         if not reddit["data"]["children"][submission]["data"]["over_18"]

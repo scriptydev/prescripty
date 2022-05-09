@@ -9,10 +9,10 @@ from __future__ import annotations
 
 __all__ = ["DataStore"]
 
-import typing
+from typing import Any
 
 
-class DataStore(dict[str, typing.Any]):
+class DataStore(dict[str, Any]):
     """
     Data storage class allowing setting, retrieval and unsetting of custom
     attributes. This class subclasses dict so the data can be accessed the same
@@ -22,10 +22,10 @@ class DataStore(dict[str, typing.Any]):
     def __repr__(self) -> str:
         return "DataStore(" + ", ".join(f"{k}={v!r}" for k, v in self.items()) + ")"
 
-    def __getattr__(self, item: str) -> typing.Any:
+    def __getattr__(self, item: str) -> Any:
         return self.get(item)
 
-    def __setattr__(self, key: str, value: typing.Any) -> None:
+    def __setattr__(self, key: str, value: Any) -> None:
         self[key] = value
 
     def __delattr__(self, item: str) -> None:

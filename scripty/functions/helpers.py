@@ -9,7 +9,8 @@ import asyncio
 import datetime
 import functools
 import pathlib
-import typing
+
+from typing import Generator
 
 import dateparser
 
@@ -27,7 +28,7 @@ def datetime_utcnow_aware() -> datetime.datetime:
 
 def get_modules(
     path: str | pathlib.Path,
-) -> typing.Generator[pathlib.Path, None, None]:
+) -> Generator[pathlib.Path, None, None]:
     """Get the modules from a specified path
 
     Parameters
