@@ -1,6 +1,7 @@
-# scripty-hikari
+# scripty-v1a6
 
-Yet another rewrite of the Scripty Discord bot with [Hikari](https://hikari-py.dev) in Python.
+Yet another rewrite of the Scripty Discord bot with [Hikari](https://hikari-py.dev) in Python.  
+This uses Hikari bundled with the Tanjun framework as well as Miru for handling components. 
 
 | Scripty Developers                              |
 | ----------------------------------------------- |
