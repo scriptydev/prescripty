@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools >= 40.6.0", "wheel"]
+requires = ["setuptools >= 62.1.0", "wheel"]
 
 [project]
 authors = [
@@ -53,8 +53,8 @@ dependencies = [
 ]
 
 [project.urls]
-changelog = "" # TODO: Add changelog
-documentation = "" # TODO: Add documentation
+changelog = "https://scriptybot.web.app" # TODO: Add changelog
+documentation = "https://scriptybot.web.app" # TODO: Add documentation
 homepage = "https://scriptybot.web.app" 
 repository = "https://github.com/scriptydev/scripty-v1a6" 
 
