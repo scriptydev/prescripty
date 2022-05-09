@@ -1,0 +1,32 @@
+site_name: Scripty Docs
+theme:
+  name: material
+  features:
+    - navigation.top
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - toc.integrate
+    - search.suggest
+    - search.share
+  palette:
+    - media: "(prefers-color-scheme: light)" 
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)" 
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+plugins:
+  - search
+copyright: Copyright &copy; 2022-Present Scripty Developers
+repo_url: https://github.com/scriptydev/scripty-v1a6
+repo_name: scriptydev/scripty-v1a6
+markdown_extensions:
+  - toc:
+      permalink: true
+  - attr_list
+  - pymdownx.tilde
