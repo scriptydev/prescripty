@@ -15,7 +15,7 @@ moderation and utilities. A bot that does everything you want, intuitively.
 - Firecoin economy
 - Various utilities
 
-## Getting started
+## Getting Started
 
 Refer to the [getting started guide](getting-started.md) for more information.
 
