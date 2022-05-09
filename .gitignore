@@ -137,4 +137,4 @@ dmypy.json
 replit.nix
 
 # Scripty
-config.toml
+_config.toml
