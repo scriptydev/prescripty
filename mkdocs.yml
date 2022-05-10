@@ -10,6 +10,8 @@ theme:
   features:
     - navigation.expand
     - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
     - navigation.top
     - search.suggest
     - search.share
