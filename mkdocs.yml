@@ -1,4 +1,4 @@
-site_name: Scripty Docs
+site_name: Scripty
 
 copyright: Copyright &copy; 2022-Present Scripty Development
 
@@ -43,14 +43,15 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Home:
-      - index.md
-      - Developers: developers.md
-      - License: license.md
-  - Getting Started: getting_started.md
+  - Welcome:
+    - index.md
+    - Getting Started: getting_started.md
+    - Developers: developers.md
   - Commands: 
     - commands/index.md
     - Fun: commands/fun.md
     - Misc: commands/fun.md
     - Mod: commands/mod.md
     - Util: commands/util.md
+  - About:
+    - License: license.md
