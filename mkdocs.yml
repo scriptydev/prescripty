@@ -50,4 +50,9 @@ nav:
       - Developers: developers.md
       - License: license.md
   - Getting Started: getting_started.md
-  - Commands: commands.md
+  - Commands: 
+    - commands/commands.md
+    - Fun: commands/fun.md
+    - Misc: commands/fun.md
+    - Mod: commands/mod.md
+    - Util: commands/util.md
