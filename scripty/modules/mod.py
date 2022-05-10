@@ -367,13 +367,14 @@ async def unban_user_autocomplete(
     if guild is None:
         return
 
+    bans = await bot.rest.fetch_bans(guild)
     ban_map: dict[str, str] = {}
 
-    for ban in await bot.rest.fetch_bans(guild):
+    for ban_entry in bans:
         if len(ban_map) == 10:
             break
-        if user.lower() in str(ban.user).lower():
-            ban_map[str(ban.user)] = str(ban.user.id)
+        if user.lower() in str(ban_entry.user).lower():
+            ban_map[str(ban_entry.user)] = str(ban_entry.user.id)
 
     await ctx.set_choices(ban_map)
 
