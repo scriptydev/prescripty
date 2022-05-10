@@ -213,7 +213,8 @@ class RPSView(miru.View):
 
         return tuple(k for k, v in self.rps.items() if v == value)[0]
 
-    def generate_embed(self, message: str) -> scripty.Embed:
+    @staticmethod
+    def generate_embed(message: str) -> scripty.Embed:
         return scripty.Embed(
             title="RPS",
             description=message,
