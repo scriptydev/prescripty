@@ -367,10 +367,9 @@ async def unban_user_autocomplete(
     if guild is None:
         return
 
-    bans = await bot.rest.fetch_bans(guild)
     ban_map: dict[str, str] = {}
 
-    for ban in bans:
+    for ban in await bot.rest.fetch_bans(guild):
         if len(ban_map) == 10:
             break
         if user.lower() in str(ban.user).lower():
