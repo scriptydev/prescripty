@@ -1,5 +1,6 @@
 __all__: list[str] = ["start_app"]
 
+import functools
 import pathlib
 
 import aiohttp
@@ -32,9 +33,10 @@ def create_client(
 def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     """Build the bot"""
     datastore = scripty.functions.DataStore()
+    on_started_as_partial = functools.partial(on_started, datastore=datastore)
 
     bot = hikari.GatewayBot(scripty.config.DISCORD_TOKEN)
-    bot.subscribe(hikari.StartedEvent, on_started(_, datastore))
+    bot.subscribe(hikari.StartedEvent, on_started_as_partial)
 
     client = create_client(bot, datastore)
 

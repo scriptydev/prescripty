@@ -54,7 +54,7 @@ async def translate_menu(
     )
     embed.add_field(
         f"Original <- {translate_lang.upper()}",  # type: ignore
-        f"```{translate.orig}```"  # type: ignore
+        f"```{translate.orig}```",  # type: ignore
     )
     embed.add_field("Translated -> EN", f"```{translate.text}```")  # type: ignore
 
@@ -69,7 +69,7 @@ async def translate_slash(
     source: str = "auto",
     target: str = "en",
 ) -> None:
-    """Translate message to a specified language
+    """Translate message to specified language
 
     Parameters
     ----------
@@ -93,7 +93,7 @@ async def translate_slash(
     )
     embed.add_field(
         f"Original <- {translate_lang.upper()}",  # type: ignore
-        f"```{translate.orig}```"  # type: ignore
+        f"```{translate.orig}```",  # type: ignore
     )
     embed.add_field(
         f"Translated -> {target.upper()}", f"```{translate.text}```"  # type: ignore

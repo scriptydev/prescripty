@@ -60,7 +60,7 @@ async def ban(
             title="Ban",
             description=(
                 f"Banned **{str(user)}**\n",
-                f"Reason: `{reason or 'No reason provided'}`"
+                f"Reason: `{reason or 'No reason provided'}`",
             ),
         )
     )
@@ -196,10 +196,10 @@ async def slowmode_enable(
 
     Parameters
     ----------
-    channel : hikari.TextableGuildChannel
-        Channel to enable slowmode
     duration : tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now]
         Duration of slowmode
+    channel : hikari.TextableGuildChannel
+        Channel to enable slowmode
     """
     channel = channel or ctx.get_channel()
     duration_limit = datetime.timedelta(hours=6)
@@ -240,7 +240,7 @@ async def slowmode_disable(
     bot: alluka.Injected[hikari.GatewayBot],
     channel: hikari.TextableGuildChannel | None = None,
 ) -> None:
-    """Disable slowmode from channel
+    """Disable slowmode for channel
 
     Parameters
     ----------
@@ -289,7 +289,7 @@ async def timeout_set(
     member : hikari.Member
         Member to timeout
     duration : tanchi.Converted[datetime.datetime, scripty.parse_to_future_datetime]
-        Duration of the timeout
+        Duration of timeout
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
     """

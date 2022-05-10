@@ -8,12 +8,11 @@ repo_name: scriptydev/scripty-v1a6
 theme:
   name: material
   features:
-    - navigation.top
-    - navigation.tabs
-    - navigation.sections
     - navigation.expand
-    - search.suggest
+    - navigation.tabs
+    - navigation.top
     - search.share
+    - search.suggest
     - toc.integrate
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -34,9 +33,11 @@ extra_css:
   - stylesheets/extra.css
 
 markdown_extensions:
+  - admonition
   - attr_list
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
@@ -45,14 +46,10 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Home:
+  - Index:
       - index.md
       - Developers: developers.md
       - License: license.md
   - Getting Started: getting_started.md
-  - Commands: 
-    - commands/commands.md
-    - Fun: commands/fun.md
-    - Misc: commands/fun.md
-    - Mod: commands/mod.md
-    - Util: commands/util.md
+  - Reference: 
+    - reference/index.md

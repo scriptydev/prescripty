@@ -4,6 +4,9 @@
 
 Self-hosting an instance of Scripty is unrecommended. Please [invite our hosted version](https://discord.com/api/oauth2/authorize?client_id=883496337616822302&permissions=8&scope=bot%20applications.commands) instead.
 
+!!! note
+    There is an exception to this statement explained below.
+
 ## **Contributing**
 
 Please check the [GitHub repository](https://github.com/scriptydev/scripty-v1a6) for guidelines.
