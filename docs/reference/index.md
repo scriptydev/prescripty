@@ -7,7 +7,7 @@
     Do not literally type out `[]` or `()`!
 
 !!! tip
-    Parameters in a correctly formed command might look like `/command [[option] value]` in the user interface.
+    Parameters in a correctly formed command might look similar to `/command [[option] value]` in the user interface.
 
 ## **Fun**
 
