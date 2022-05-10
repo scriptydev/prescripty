@@ -117,7 +117,8 @@ class MemeView(miru.View):
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
-        assert self.message is not None
+        if self.message is None:
+            raise AssertionError
         if self.message.interaction is not None:
             if ctx.user == self.message.interaction.user:
                 return True
@@ -252,7 +253,8 @@ class RPSView(miru.View):
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
-        assert self.message is not None
+        if self.message is None:
+            raise AssertionError
         if self.message.interaction is None:
             raise Exception("message interaction is None")
 
