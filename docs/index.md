@@ -1,12 +1,10 @@
 # Scripty
 
-**Imagine a bot...**  
-...that creates a fun place to talk and hang out. With advanced server
-moderation and utilities. A bot that does everything you want, intuitively.
+## **Imagine a bot...**
 
 [Add to Server](https://scriptybot.web.app){ .md-button .md-button--primary }
 
-## Features
+## **Features**
 
 - Advanced moderation
 - Fun commands
@@ -15,24 +13,10 @@ moderation and utilities. A bot that does everything you want, intuitively.
 - Firecoin economy
 - Various utilities
 
-## Getting Started
+## **Getting Started**
 
-Refer to the [getting started guide](getting-started.md) for more information.
+Refer to the [getting started](getting_started.md) guide.
 
-## Support
+## **Support**
 
-[Join the support server](https://discord.gg){ .md-button }
-
-## Installation
-
-Self-hosting an instance of Scripty is unrecommended. Please [invite our hosted version](https://discord.com/api/oauth2/authorize?client_id=883496337616822302&permissions=8&scope=bot%20applications.commands) instead.
-
-## Contributing
-
-Check the [GitHub repository](https://github.com/scriptydev/scripty-v1a6) for guidelines.
-
-## About
-
-Scripty was created by the [Scripty Developers](https://github.com/scriptydev). Licensed under the [Apache 2.0 license](../LICENSE).
-
-Scripty x OSS
+[Join support server](https://discord.gg){ .md-button }
