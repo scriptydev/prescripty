@@ -59,11 +59,10 @@ async def dog(
 @tanchi.as_slash_command()
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
     """Flip a coin"""
-    coin = ["Heads", "Tails"]
     await ctx.respond(
         scripty.Embed(
             title="Coin",
-            description=random.choice(coin),
+            description=random.choice(["Heads", "Tails"]),
         )
     )
 
@@ -95,20 +94,6 @@ class MemeView(miru.View):
         self.submissions = submissions
         self.index = index
 
-    # @miru.button(label="Prev", style=hikari.ButtonStyle.PRIMARY)
-    # async def prev(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-    #     self.index -= 1
-    #     if self.index == len(self.submissions):
-    #         self.index = 0
-
-    #     embed = scripty.Embed(
-    #         title=self.submissions[self.index]["title"],
-    #         url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-    #
-    #     )
-    #     embed.set_image(self.submissions[self.index]["url"])
-    #     await ctx.edit_response(embed)
-
     @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
     async def next(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         self.index += 1
@@ -132,7 +117,9 @@ class MemeView(miru.View):
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
-        assert self.message is not None
+        if self.message is None:
+            raise AssertionError
+
         if (
             self.message.interaction is not None
             and ctx.user == self.message.interaction.user
@@ -230,7 +217,8 @@ class RPSView(miru.View):
 
         return tuple(k for k, v in self.rps.items() if v == value)[0]
 
-    def generate_embed(self, message: str) -> scripty.Embed:
+    @staticmethod
+    def generate_embed(message: str) -> scripty.Embed:
         return scripty.Embed(
             title="RPS",
             description=message,
@@ -268,7 +256,8 @@ class RPSView(miru.View):
         self.stop()
 
     async def view_check(self, ctx: miru.Context) -> bool:
-        assert self.message is not None
+        if self.message is None:
+            raise AssertionError
         if self.message.interaction is None:
             raise Exception("message interaction is None")
 
