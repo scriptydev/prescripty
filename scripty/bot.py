@@ -54,9 +54,12 @@ async def on_starting(client: alluka.Injected[tanjun.Client]) -> None:
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
 
 
-async def on_started(_: hikari.StartingEvent, datastore: scripty.functions.DataStore) -> None:
+async def on_started(
+    _: hikari.StartingEvent, datastore: scripty.functions.DataStore | None = None
+) -> None:
     """Called after bot is fully started"""
-    datastore.start_time = scripty.functions.datetime_utcnow_aware()
+    if datastore is not None:
+        datastore.start_time = scripty.functions.datetime_utcnow_aware()
 
 
 async def on_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:
