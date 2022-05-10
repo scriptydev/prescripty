@@ -58,7 +58,10 @@ async def ban(
     await ctx.respond(
         scripty.Embed(
             title="Ban",
-            description=f"Banned **{str(user)}**\nReason: `{reason or 'No reason provided'}`",
+            description=(
+                f"Banned **{str(user)}**\n",
+                f"Reason: `{reason or 'No reason provided'}`"
+            ),
         )
     )
 
@@ -120,8 +123,8 @@ async def delete(
     if count < amount:
         await ctx.respond(
             generate_embed(
-                f"`{count} messages` deleted\n"
-                f"Older messages past `14 day{'' if count == 1 else 's'}` cannot be deleted"
+                f"`{count} messages` deleted\nOlder messages past "
+                f"`14 day{'' if count == 1 else 's'}` cannot be deleted"
             )
         )
         return
