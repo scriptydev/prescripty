@@ -95,15 +95,6 @@ class MemeView(miru.View):
         self.submissions = submissions
         self.index = index
 
-
-    #     embed = scripty.Embed(
-    #         title=self.submissions[self.index]["title"],
-    #         url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-    #
-    #     )
-    #     embed.set_image(self.submissions[self.index]["url"])
-    #     await ctx.edit_response(embed)
-
     @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
     async def next(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         self.index += 1
