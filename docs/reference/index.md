@@ -1,10 +1,13 @@
 # Commands
 
-!!! note
+!!! info
     Required parameters are surrounded by `[]`. Optional arguments are wrapped using `()`.
 
-!!! warning
+!!! danger
     Do not literally type out `[]` or `()`!
+
+!!! tip
+    Parameters in a correctly formed command might look like `/command [[option] value]` in the user interface.
 
 ## **Fun**
 
