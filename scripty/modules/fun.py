@@ -59,11 +59,10 @@ async def dog(
 @tanchi.as_slash_command()
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
     """Flip a coin"""
-    coin = ["Heads", "Tails"]
     await ctx.respond(
         scripty.Embed(
             title="Coin",
-            description=random.choice(coin),
+            description=random.choice(["Heads", "Tails"]),
         )
     )
 
