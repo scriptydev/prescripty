@@ -34,7 +34,7 @@ def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     datastore = scripty.functions.DataStore()
 
     bot = hikari.GatewayBot(scripty.config.DISCORD_TOKEN)
-    bot.subscribe(hikari.StartedEvent, on_started(datastore=datastore))
+    bot.subscribe(hikari.StartedEvent, on_started(_, datastore))
 
     client = create_client(bot, datastore)
 
@@ -55,11 +55,10 @@ async def on_starting(client: alluka.Injected[tanjun.Client]) -> None:
 
 
 async def on_started(
-    _: hikari.StartingEvent, datastore: scripty.functions.DataStore | None = None
+    _: hikari.StartingEvent, datastore: scripty.functions.DataStore
 ) -> None:
     """Called after bot is fully started"""
-    if datastore is not None:
-        datastore.start_time = scripty.functions.datetime_utcnow_aware()
+    datastore.start_time = scripty.functions.datetime_utcnow_aware()
 
 
 async def on_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:
