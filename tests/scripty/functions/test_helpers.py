@@ -4,7 +4,7 @@ import unittest
 
 from typing import Generator
 
-# import dateparser
+import dateparser
 
 import scripty
 
@@ -29,19 +29,18 @@ class TestHelpersAsync(unittest.IsolatedAsyncioTestCase):
             await scripty.parse_to_future_datetime("1 week"), datetime.datetime
         )
 
-        # TODO: Fix this test case
-        # scripty_parse = await scripty.parse_to_future_datetime("22 hrs")
-        # dateparser_parse = dateparser.parse(
-        #     "22 hrs",
-        #     settings={
-        #         "RETURN_AS_TIMEZONE_AWARE": True,
-        #         "PREFER_DATES_FROM": "future",
-        #         "STRICT_PARSING": True,
-        #     },
-        # )
+        scripty_parse = await scripty.parse_to_future_datetime("22 hrs")
+        dateparser_parse = dateparser.parse(
+            "22 hrs",
+            settings={
+                "RETURN_AS_TIMEZONE_AWARE": True,
+                "PREFER_DATES_FROM": "future",
+                "STRICT_PARSING": True,
+            },
+        )
 
-        # assert scripty_parse and dateparser_parse is not None
-        # self.assertAlmostEqual(scripty_parse, dateparser_parse)
+        assert scripty_parse and dateparser_parse is not None
+        self.assertAlmostEqual(first=scripty_parse, second=dateparser_parse)
 
         self.assertIsNone(await scripty.parse_to_future_datetime("1 day ago"))
         self.assertIsNone(
