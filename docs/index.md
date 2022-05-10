@@ -15,7 +15,7 @@
 
 ## **Getting Started**
 
-Refer to the [getting started](getting_started.md) guide.
+Refer to the [guide](./getting_started.md)
 
 ## **Support**
 
