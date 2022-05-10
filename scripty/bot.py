@@ -30,8 +30,6 @@ def create_client(bot: hikari.GatewayBot) -> tanjun.Client:
 def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     """Build the bot"""
     bot = hikari.GatewayBot(scripty.config.DISCORD_TOKEN)
-    bot.subscribe(hikari.StartedEvent, on_started)
-
     client = create_client(bot)
 
     miru.load(bot)
