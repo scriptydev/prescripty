@@ -95,7 +95,7 @@ class MemeView(miru.View):
         self.index = index
 
     @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
-    async def next(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def next(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         self.index += 1
         if self.index == len(self.submissions):
             self.index = 0
@@ -108,7 +108,7 @@ class MemeView(miru.View):
         await ctx.edit_response(embed)
 
     @miru.button(label="Stop", style=hikari.ButtonStyle.DANGER)
-    async def stop_(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def stop_(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         for item in self.children:
             item.disabled = True
 
@@ -119,7 +119,6 @@ class MemeView(miru.View):
     async def view_check(self, ctx: miru.Context) -> bool:
         if self.message is None:
             raise AssertionError
-
         if (
             self.message.interaction is not None
             and ctx.user == self.message.interaction.user
@@ -241,17 +240,17 @@ class RPSView(miru.View):
         )
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
-    async def rock(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def rock(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         await ctx.edit_response(self.determine_outcome("Rock"), components=[])
         self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
-    async def paper(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def paper(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         await ctx.edit_response(self.determine_outcome("Paper"), components=[])
         self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
-    async def scissors(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def scissors(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
         await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
@@ -259,10 +258,10 @@ class RPSView(miru.View):
         if self.message is None:
             raise AssertionError
         if self.message.interaction is None:
-            raise Exception("message interaction is None")
-
+            raise AssertionError("message interaction is None")
         if ctx.user == self.message.interaction.user:
             return True
+
         embed = scripty.Embed(
             title="Error",
             description="This command was not invoked by you!",
