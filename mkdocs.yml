@@ -51,7 +51,7 @@ nav:
       - License: license.md
   - Getting Started: getting_started.md
   - Commands: 
-    - commands/index.md
+    - commands/commands.md
     - Fun: commands/fun.md
     - Misc: commands/fun.md
     - Mod: commands/mod.md
