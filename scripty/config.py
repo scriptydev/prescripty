@@ -11,7 +11,7 @@ from typing import Final
 import toml
 
 # Try to load the private config file and catch FileNotFoundError
-# to instead load a sample file. This avoids the error when running 
+# to instead load a sample file. This avoids the error when running
 # unittest continuous integration checks.
 try:
     config = toml.load("_config.toml")
