@@ -14,8 +14,9 @@ class TestHelpers(unittest.TestCase):
         self.assertIsInstance(scripty.datetime_utcnow_aware(), datetime.datetime)
 
         self.assertAlmostEqual(
-            first=scripty.datetime_utcnow_aware(),
-            second=datetime.datetime.now(datetime.timezone.utc),
+            scripty.datetime_utcnow_aware(),
+            datetime.datetime.now(datetime.timezone.utc),
+            delta=datetime.timedelta(seconds=1),
         )
 
     def test_get_modules(self) -> None:
@@ -40,7 +41,9 @@ class TestHelpersAsync(unittest.IsolatedAsyncioTestCase):
         )
 
         assert scripty_parse and dateparser_parse is not None
-        self.assertAlmostEqual(first=scripty_parse, second=dateparser_parse)
+        self.assertAlmostEqual(
+            scripty_parse, dateparser_parse, delta=datetime.timedelta(seconds=1)
+        )
 
         self.assertIsNone(await scripty.parse_to_future_datetime("1 day ago"))
         self.assertIsNone(
