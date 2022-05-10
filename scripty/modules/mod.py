@@ -335,7 +335,6 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
     member : hikari.Member
         Member to remove timeout
     """
-
     if member.communication_disabled_until() is None:
         await ctx.respond(
             scripty.Embed(
