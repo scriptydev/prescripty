@@ -8,13 +8,13 @@ repo_name: scriptydev/scripty-v1a6
 theme:
   name: material
   features:
-    - navigation.top
-    - navigation.tabs
-    - navigation.sections
     - navigation.expand
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
     - search.suggest
     - search.share
-    - toc.integrate
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
