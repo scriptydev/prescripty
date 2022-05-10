@@ -95,11 +95,6 @@ class MemeView(miru.View):
         self.submissions = submissions
         self.index = index
 
-    # @miru.button(label="Prev", style=hikari.ButtonStyle.PRIMARY)
-    # async def prev(self, button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
-    #     self.index -= 1
-    #     if self.index == len(self.submissions):
-    #         self.index = 0
 
     #     embed = scripty.Embed(
     #         title=self.submissions[self.index]["title"],
