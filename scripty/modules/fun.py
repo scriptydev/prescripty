@@ -95,7 +95,9 @@ class MemeView(miru.View):
         self.index = index
 
     @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
-    async def next(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def next(
+        self, _button: miru.Button, ctx: miru.Context  # type: ignore
+    ) -> None:
         self.index += 1
         if self.index == len(self.submissions):
             self.index = 0
@@ -108,7 +110,9 @@ class MemeView(miru.View):
         await ctx.edit_response(embed)
 
     @miru.button(label="Stop", style=hikari.ButtonStyle.DANGER)
-    async def stop_(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def stop_(
+        self, _button: miru.Button, ctx: miru.Context  # type: ignore
+    ) -> None:
         for item in self.children:
             item.disabled = True
 
@@ -240,17 +244,23 @@ class RPSView(miru.View):
         )
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
-    async def rock(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def rock(
+        self, _button: miru.Button, ctx: miru.Context  # type: ignore
+    ) -> None:
         await ctx.edit_response(self.determine_outcome("Rock"), components=[])
         self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
-    async def paper(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def paper(
+        self, _button: miru.Button, ctx: miru.Context  # type: ignore
+    ) -> None:
         await ctx.edit_response(self.determine_outcome("Paper"), components=[])
         self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
-    async def scissors(self, _button: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def scissors(
+        self, _button: miru.Button, ctx: miru.Context  # type: ignore
+    ) -> None:
         await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
