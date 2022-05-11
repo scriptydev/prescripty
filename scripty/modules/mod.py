@@ -373,7 +373,9 @@ async def unban_user_autocomplete(
     for ban_entry in bans:
         if len(ban_map) == 10:
             break
-        if user.lower() in str(ban_entry.user).lower():
+        if user.lower() in (
+            str(ban_entry.user).lower() or str(ban_entry.user.id).lower()
+        ):
             ban_map[str(ban_entry.user)] = str(ban_entry.user.id)
 
     await ctx.set_choices(ban_map)
@@ -385,7 +387,7 @@ async def unban_user_autocomplete(
 @tanchi.as_slash_command()
 async def unban(
     ctx: tanjun.abc.SlashContext,
-    user: tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake],
+    user: tanchi.Autocompleted[unban_user_autocomplete, hikari.User],
     bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Unban user from server
@@ -395,7 +397,7 @@ async def unban(
     user : tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake]
         User to unban
     """
-    fetch_user = await bot.rest.fetch_user(user)
+    user = bot.cache.get_user(user) or await bot.rest.fetch_user(user)
     guild = ctx.guild_id
 
     if guild is None:
@@ -420,7 +422,7 @@ async def unban(
         await ctx.respond(
             scripty.Embed(
                 title="Unban",
-                description=f"Unbanned **{str(fetch_user)}**",
+                description=f"Unbanned **{str(user)}**",
             )
         )
 
