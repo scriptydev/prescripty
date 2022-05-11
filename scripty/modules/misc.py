@@ -192,16 +192,11 @@ async def poll(
         icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
     )
 
-    await ctx.respond(embed)
+    response = await ctx.respond(embed, ensure_result=True)
 
     for key, value in options.items():
         if value is not None:
-            try:
-                response = await ctx.interaction.fetch_initial_response()
-            except hikari.NotFoundError:
-                pass
-            else:
-                await response.add_reaction(key)
+            await response.add_reaction(key)
 
 
 @tanjun.as_loader

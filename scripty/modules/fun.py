@@ -182,15 +182,10 @@ async def meme(
     )
     embed.set_image(submissions[index]["url"])
 
-    await ctx.respond(embed, components=view.build())
+    response = await ctx.respond(embed, ensure_result=True, components=view.build())
 
-    try:
-        response = await ctx.interaction.fetch_initial_response()
-    except hikari.NotFoundError:
-        pass
-    else:
-        view.start(response)
-        await view.wait()
+    view.start(response)
+    await view.wait()
 
 
 @component.with_command
@@ -298,15 +293,10 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
         description="Click on the button options to continue the game!",
     )
 
-    await ctx.respond(embed, components=view.build())
+    response = await ctx.respond(embed, ensure_result=True, components=view.build())
 
-    try:
-        response = await ctx.interaction.fetch_initial_response()
-    except hikari.NotFoundError:
-        pass
-    else:
-        view.start(response)
-        await view.wait()
+    view.start(response)
+    await view.wait()
 
 
 @tanjun.as_loader
