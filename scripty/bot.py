@@ -24,8 +24,8 @@ def create_client(
             declare_global_commands=True,
         )
         .load_modules(*scripty.functions.get_modules(pathlib.Path("scripty/modules")))
-        .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_starting)
-        .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_closing)
+        .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_client_starting)
+        .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_client_closing)
         .set_type_dependency(scripty.functions.DataStore, datastore)
     )
 
