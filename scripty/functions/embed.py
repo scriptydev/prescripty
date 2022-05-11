@@ -6,7 +6,9 @@ from typing import Any
 
 import hikari
 
-DEFAULT_COLOR = 0x2F3136
+import scripty.functions
+
+DEFAULT_COLOR = scripty.functions.Color.GRAY_EMBED.value
 
 
 class Embed(hikari.Embed):

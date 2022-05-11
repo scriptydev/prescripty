@@ -33,10 +33,10 @@ def create_client(
 def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     """Build the bot"""
     datastore = scripty.functions.DataStore()
-    on_started_as_partial = functools.partial(on_started, datastore=datastore)
+    on_bot_started_as_partial = functools.partial(on_bot_started, datastore=datastore)
 
     bot = hikari.GatewayBot(scripty.config.DISCORD_TOKEN)
-    bot.subscribe(hikari.StartedEvent, on_started_as_partial)
+    bot.subscribe(hikari.StartedEvent, on_bot_started_as_partial)
 
     client = create_client(bot, datastore)
 
@@ -51,19 +51,19 @@ def start_app() -> None:
     bot.run()
 
 
-async def on_starting(client: alluka.Injected[tanjun.Client]) -> None:
+async def on_client_starting(client: alluka.Injected[tanjun.Client]) -> None:
     """Setup to execute during client startup"""
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
 
 
-async def on_started(
+async def on_client_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:
+    """Actions to perform while client shutdown"""
+    if session:
+        await session.close()
+
+
+async def on_bot_started(
     _: hikari.StartingEvent, datastore: scripty.functions.DataStore
 ) -> None:
     """Called after bot is fully started"""
     datastore.start_time = scripty.functions.datetime_utcnow_aware()
-
-
-async def on_closing(session: alluka.Injected[aiohttp.ClientSession | None]) -> None:
-    """Actions to perform while client shutdown"""
-    if session:
-        await session.close()
