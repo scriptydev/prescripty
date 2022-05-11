@@ -40,8 +40,9 @@ class TestHelpersAsync(unittest.IsolatedAsyncioTestCase):
             },
         )
 
-        if not (scripty_parse and dateparser_parse is not None):
+        if scripty_parse is None and dateparser_parse is None:
             raise AssertionError
+
         self.assertAlmostEqual(
             scripty_parse, dateparser_parse, delta=datetime.timedelta(seconds=1)
         )

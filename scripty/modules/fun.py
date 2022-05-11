@@ -252,9 +252,10 @@ class RPSView(miru.View):
     async def view_check(self, ctx: miru.Context) -> bool:
         if self.message is None:
             raise AssertionError
-        if self.message.interaction is None:
-            raise AssertionError("message interaction is None")
-        if ctx.user == self.message.interaction.user:
+        if (
+            self.message.interaction is not None
+            and ctx.user == self.message.interaction.user
+        ):
             return True
 
         embed = scripty.Embed(
