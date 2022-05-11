@@ -89,8 +89,11 @@ async def dice(
 
 
 class MemeView(miru.View):
-    def __init__(self, submissions: Any, index: int) -> None:
+    def __init__(
+        self, tanjun_ctx: tanjun.abc.Context, submissions: Any, index: int
+    ) -> None:
         super().__init__(timeout=30.0)
+        self.tanjun_ctx = tanjun_ctx
         self.submissions = submissions
         self.index = index
 
@@ -119,10 +122,8 @@ class MemeView(miru.View):
     async def view_check(self, ctx: miru.Context) -> bool:
         if self.message is None:
             raise AssertionError
-        if (
-            self.message.interaction is not None
-            and ctx.user == self.message.interaction.user
-        ):
+
+        if ctx.user == self.tanjun_ctx.author:
             return True
 
         embed = scripty.Embed(
@@ -174,7 +175,7 @@ async def meme(
 
     index = 0
 
-    view = MemeView(submissions, index)
+    view = MemeView(ctx, submissions, index)
 
     embed = scripty.Embed(
         title=submissions[index]["title"],
@@ -198,9 +199,10 @@ async def rickroll(ctx: tanjun.abc.SlashContext) -> None:
 class RPSView(miru.View):
     rps: dict[str, int] = {"Rock": 0, "Paper": 1, "Scissors": 2}
 
-    def __init__(self):
+    def __init__(self, tanjun_ctx: tanjun.abc.Context) -> None:
         super().__init__(timeout=30.0)
         self._rps = random.choice((0, 1, 2))
+        self.tanjun_ctx = tanjun_ctx
 
     def get_value(self, key: str) -> int:
         return self.rps[key]
@@ -252,10 +254,8 @@ class RPSView(miru.View):
     async def view_check(self, ctx: miru.Context) -> bool:
         if self.message is None:
             raise AssertionError
-        if (
-            self.message.interaction is not None
-            and ctx.user == self.message.interaction.user
-        ):
+
+        if ctx.user == self.tanjun_ctx.author:
             return True
 
         embed = scripty.Embed(
@@ -287,7 +287,7 @@ class RPSView(miru.View):
 @tanchi.as_slash_command()
 async def rps(ctx: tanjun.abc.SlashContext) -> None:
     """Play rock paper scissors"""
-    view = RPSView()
+    view = RPSView(ctx)
 
     embed = scripty.Embed(
         title="RPS",
