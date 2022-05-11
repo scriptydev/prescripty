@@ -373,8 +373,9 @@ async def unban_user_autocomplete(
     for ban_entry in bans:
         if len(ban_map) == 10:
             break
-        if user.lower() in (
-            str(ban_entry.user).lower() or str(ban_entry.user.id).lower()
+        if (
+            user.lower() in str(ban_entry.user).lower()
+            or user.lower() in str(ban_entry.user.id).lower()
         ):
             ban_map[str(ban_entry.user)] = str(ban_entry.user.id)
 
