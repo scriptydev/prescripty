@@ -6,9 +6,9 @@ from typing import Any
 
 import hikari
 
-import scripty.functions
+from .color import Color
 
-DEFAULT_COLOR = scripty.functions.Color.GRAY_EMBED.value
+DEFAULT_COLOR = Color.GRAY_EMBED.value
 
 
 class Embed(hikari.Embed):
