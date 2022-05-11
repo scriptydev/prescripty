@@ -196,7 +196,10 @@ async def poll(
 
     for key, value in options.items():
         if value is not None:
-            await response.add_reaction(key)
+            try:
+                await response.add_reaction(key)
+            except hikari.NotFoundError:
+                pass
 
 
 @tanjun.as_loader
