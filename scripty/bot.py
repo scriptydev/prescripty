@@ -57,7 +57,7 @@ async def on_client_starting(client: alluka.Injected[tanjun.Client]) -> None:
 
 
 async def on_client_closing(
-    session: alluka.Injected[aiohttp.ClientSession | None]
+    session: alluka.Injected[aiohttp.ClientSession | None],
 ) -> None:
     """Actions to perform while client shutdown"""
     if session:
