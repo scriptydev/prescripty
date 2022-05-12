@@ -86,6 +86,14 @@ The hottest Reddit rmemes
 
 Play rock paper scissors
 
+## **Help**
+
+### `help`
+
+`Slash Command`
+
+Display the help interface
+
 ## **Misc**
 
 ### `Avatar`
