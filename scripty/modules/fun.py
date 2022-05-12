@@ -15,6 +15,77 @@ import scripty
 
 component = tanjun.Component()
 
+ACTIVITIES = {
+    "Watch Together": "880218394199220334",
+    "Poker Night": "755827207812677713",
+    "Betrayal.io": "773336526917861400",
+    "Fishington.io": "814288819477020702",
+    "Chess In The Park": "832012774040141894",
+    "Sketchy Artist": "879864070101172255",
+    "Awkword": "879863881349087252",
+    "Doodle Crew": "878067389634314250",
+    "Sketch Heads": "902271654783242291",
+    "Letter League": "879863686565621790",
+    "Word Snacks": "879863976006127627",
+    "SpellCast": "852509694341283871",
+    "Checkers In The Park": "832013003968348200",
+    "Blazing 8s": "832025144389533716",
+    "Putt Party": "945737671223947305",
+    "Land-io": "903769130790969345",
+}
+
+
+class ActivityView(miru.View):
+    def __init__(self, invite: str, activity: str) -> None:
+        super().__init__()
+        self.add_item(
+            miru.Button(
+                label=f"Launch {activity}",
+                url=invite,
+            )
+        )
+
+
+async def activity_autocomplete(
+    ctx: tanjun.abc.AutocompleteContext,
+    activity: str,
+) -> None:
+    """Autocomplete for Discord Activities"""
+    activity_map: dict[str, str] = {}
+
+    for k, v in ACTIVITIES.items():
+        if len(activity_map) == 10:
+            break
+        if activity.lower() in k.lower() or activity.lower() in v.lower():
+            activity_map[k] = v
+
+    await ctx.set_choices(activity_map)
+
+
+@component.with_command
+@tanchi.as_slash_command()
+async def activity(
+    ctx: tanjun.abc.SlashContext,
+    activity: tanchi.Autocompleted[activity_autocomplete],
+    channel: hikari.GuildVoiceChannel,
+    bot: alluka.Injected[hikari.GatewayBot],
+) -> None:
+    """Start a Discord Activity"""
+    invite = await bot.rest.create_invite(
+        channel,
+        target_type=hikari.TargetType.EMBEDDED_APPLICATION,
+        target_application=int(activity),
+    )
+
+    for k, v in ACTIVITIES.items():
+        if v == activity:
+            activity = k
+
+    view = ActivityView(str(invite), activity)
+
+    await ctx.respond(components=view.build())
+
+
 animal = component.with_slash_command(
     tanjun.slash_command_group("animal", "Fun things related to animals")
 )
