@@ -48,7 +48,7 @@ def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
 def start_app() -> None:
     """Start the application"""
     bot, _ = build_bot()
-    bot.run(activity=hikari.Activity(name="/help", type=hikari.ActivityType.LISTENING))
+    bot.run()
 
 
 async def on_client_starting(client: alluka.Injected[tanjun.Client]) -> None:
