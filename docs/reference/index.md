@@ -11,6 +11,19 @@
 
 ## **Fun**
 
+### `activity`
+
+`Slash Command`
+
+Start a Discord Activity
+
+**Parameters**  
+`[activity]` Activity to start  
+`[channel]` Channel for activity
+
+!!! note
+    The `[activity]` option returns an autocomplete interaction interface. From the panel pop up, you can select and search the Activity to start or enter a valid Discord Activity Application ID.
+
 ### `animal cat`
 
 `Slash Command`
@@ -183,6 +196,9 @@ Unban user from server
 
 **Parameters**
 `[user]` User to unban
+
+!!! note
+    The `[user]` option returns an autocomplete interaction interface. You can select the user you want to unban or search by username as well as ID.
 
 ## **Util**
 

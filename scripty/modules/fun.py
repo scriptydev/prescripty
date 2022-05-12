@@ -71,7 +71,7 @@ async def activity(
     bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Start a Discord Activity
-    
+
     Parameters
     ----------
     activity : str
