@@ -19,10 +19,32 @@ Start a Discord Activity
 
 **Parameters**  
 `[activity]` Activity to start  
+
+```python
+ACTIVITIES = {
+    "Watch Together": "880218394199220334",
+    "Poker Night": "755827207812677713",
+    "Betrayal.io": "773336526917861400",
+    "Fishington.io": "814288819477020702",
+    "Chess In The Park": "832012774040141894",
+    "Sketchy Artist": "879864070101172255",
+    "Awkword": "879863881349087252",
+    "Doodle Crew": "878067389634314250",
+    "Sketch Heads": "902271654783242291",
+    "Letter League": "879863686565621790",
+    "Word Snacks": "879863976006127627",
+    "SpellCast": "852509694341283871",
+    "Checkers In The Park": "832013003968348200",
+    "Blazing 8s": "832025144389533716",
+    "Putt Party": "945737671223947305",
+    "Land-io": "903769130790969345",
+}  
+```  
+
 `[channel]` Channel for activity
 
 !!! note
-    The `[activity]` option returns an autocomplete interaction interface. From the panel pop up, you can select and search the Activity to start or enter a valid Discord Activity Application ID.
+    The `[activity]` option returns an autocomplete interaction interface. From the panel pop up, you can select and search the Activity to start or enter a valid Discord Activity Application ID. **==By default, only ^^10 activity choices^^ are shown at once! Please type to search for the activity if it does not appear by default.==**
 
 ### `animal cat`
 
