@@ -70,7 +70,15 @@ async def activity(
     channel: hikari.GuildVoiceChannel,
     bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
-    """Start a Discord Activity"""
+    """Start a Discord Activity
+    
+    Parameters
+    ----------
+    activity : str
+        Activity to start
+    channel : hikari.GuildVoiceChannel
+        Channel for activity
+    """
     if activity not in ACTIVITIES.values():
         await ctx.respond(
             scripty.Embed(
