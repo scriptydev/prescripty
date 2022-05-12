@@ -14,25 +14,25 @@ class HelpView(miru.View):
         super().__init__()
         self.add_item(
             miru.Button(
-                label=f"Website",
+                label="Website",
                 url="https://scriptybot.web.app/",
             )
         )
         self.add_item(
             miru.Button(
-                label=f"Docs",
+                label="Docs",
                 url="https://scriptydev.github.io/scripty-v1a6/",
             )
         )
         self.add_item(
             miru.Button(
-                label=f"Commands",
+                label="Commands",
                 url="https://scriptydev.github.io/scripty-v1a6/reference/",
             )
         )
         self.add_item(
             miru.Button(
-                label=f"Invite",
+                label="Invite",
                 url=scripty.INVITE_URL,
             )
         )
