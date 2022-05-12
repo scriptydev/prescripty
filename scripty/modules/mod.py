@@ -388,7 +388,7 @@ async def unban_user_autocomplete(
 @tanchi.as_slash_command()
 async def unban(
     ctx: tanjun.abc.SlashContext,
-    user: tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake],
+    user: tanchi.Autocompleted[unban_user_autocomplete, tanjun.to_user],
     bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Unban user from server
@@ -398,7 +398,6 @@ async def unban(
     user : tanchi.Autocompleted[unban_user_autocomplete, hikari.Snowflake]
         User to unban
     """
-    _user = bot.cache.get_user(user) or await bot.rest.fetch_user(user)
     guild = ctx.guild_id
 
     if guild is None:
@@ -411,7 +410,7 @@ async def unban(
         return
 
     try:
-        await bot.rest.unban_user(guild, _user)
+        await bot.rest.unban_user(guild, user)
     except hikari.NotFoundError:
         await ctx.respond(
             scripty.Embed(
@@ -423,7 +422,7 @@ async def unban(
         await ctx.respond(
             scripty.Embed(
                 title="Unban",
-                description=f"Unbanned **{str(_user)}**",
+                description=f"Unbanned **{str(user)}**",
             )
         )
 
