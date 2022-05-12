@@ -71,6 +71,15 @@ async def activity(
     bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Start a Discord Activity"""
+    if activity not in ACTIVITIES:
+        await ctx.respond(
+            scripty.Embed(
+                title="Activity Error",
+                description="Unable to find activity from autocomplete options",
+            )
+        )
+        return
+
     invite = await bot.rest.create_invite(
         channel,
         target_type=hikari.TargetType.EMBEDDED_APPLICATION,
