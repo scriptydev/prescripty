@@ -39,8 +39,8 @@ class HelpView(miru.View):
 
 
 @component.with_command
-@tanchi.as_slash_command()
-async def help(ctx: tanjun.abc.SlashContext) -> None:
+@tanchi.as_slash_command("help")
+async def help_(ctx: tanjun.abc.SlashContext) -> None:
     """Display the help interface"""
     view = HelpView()
     await ctx.respond(components=view.build())

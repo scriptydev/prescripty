@@ -62,8 +62,8 @@ async def activity_autocomplete(
 
 
 @component.with_command
-@tanchi.as_slash_command()
-async def activity(
+@tanchi.as_slash_command("activity")
+async def activity_(
     ctx: tanjun.abc.SlashContext,
     activity: tanchi.Autocompleted[activity_autocomplete],
     channel: hikari.GuildVoiceChannel,

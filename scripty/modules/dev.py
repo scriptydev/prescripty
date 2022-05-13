@@ -93,6 +93,15 @@ async def unload(
     module : str
         Module to unload
     """
+    if "dev" in module:
+        await ctx.respond(
+            scripty.Embed(
+                title="Unload Error",
+                description=f"`{module}` cannot be unloaded!",
+            )
+        )
+        return
+
     client.unload_modules(pathlib.Path(f"scripty/modules/{module}.py"))
     await ctx.respond(
         scripty.Embed(
@@ -105,3 +114,8 @@ async def unload(
 @tanjun.as_loader
 def load_component(client: tanjun.abc.Client) -> None:
     client.add_component(component.copy())
+
+
+@tanjun.as_unloader
+def unload_component(client: tanjun.Client) -> None:
+    client.remove_component_by_name(component.name)
