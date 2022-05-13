@@ -265,7 +265,9 @@ async def meme(
     view = MemeView(ctx, submissions, index)
 
     embed = scripty.Embed(
-        title=submissions[index]["title"],
+        title=submissions[index]["title"][:255] + "\U00002026"
+        if len(submissions[index]["title"]) > 256
+        else submissions[index]["title"],
         url=f"https://reddit.com{submissions[index]['permalink']}",
     )
     embed.set_image(submissions[index]["url"])
