@@ -21,13 +21,13 @@ class HelpView(miru.View):
         self.add_item(
             miru.Button(
                 label="Docs",
-                url="https://scriptydev.github.io/scripty-v1a6/",
+                url="https://scriptydev.github.io/prescripty/",
             )
         )
         self.add_item(
             miru.Button(
                 label="Commands",
-                url="https://scriptydev.github.io/scripty-v1a6/reference/",
+                url="https://scriptydev.github.io/prescripty/reference/",
             )
         )
         self.add_item(

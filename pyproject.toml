@@ -56,7 +56,7 @@ dependencies = [
 changelog = "https://scriptybot.web.app" # TODO: Add changelog
 documentation = "https://scriptybot.web.app" # TODO: Add documentation
 homepage = "https://scriptybot.web.app" 
-repository = "https://github.com/scriptydev/scripty-v1a6" 
+repository = "https://github.com/scriptydev/prescripty" 
 
 [tool.pyright]
 exclude = ["**/node_modules", "**/__pycache__"]

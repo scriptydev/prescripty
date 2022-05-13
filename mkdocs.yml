@@ -2,8 +2,8 @@ site_name: Scripty Docs
 
 copyright: Copyright &copy; 2022-Present Scripty Development
 
-repo_url: https://github.com/scriptydev/scripty-v1a6
-repo_name: scriptydev/scripty-v1a6
+repo_url: https://github.com/scriptydev/prescripty
+repo_name: scriptydev/prescripty
 
 theme:
   name: material
