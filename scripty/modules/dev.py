@@ -105,8 +105,3 @@ async def unload(
 @tanjun.as_loader
 def load_component(client: tanjun.abc.Client) -> None:
     client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
