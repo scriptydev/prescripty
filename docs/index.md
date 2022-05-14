@@ -1,6 +1,6 @@
 # Scripty
 
-## **Imagine a bot...**
+## **Envision a bot...**
 
 [Add to Server](https://scriptybot.web.app){ .md-button .md-button--primary }
 
