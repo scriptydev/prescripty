@@ -101,7 +101,7 @@ async def stats_system(
             icon=app_user.avatar_url or app_user.default_avatar_url,
         )
         .add_field("System", platform.system(), inline=True)
-        .add_field("Platform", platform.platform(terse=True), inline=True)
+        .add_field("Platform", platform.platform(aliased=True, terse=True), inline=True)
         .add_field("Machine", platform.machine(), inline=True)
         .add_field("Processor", platform.processor(), inline=True)
         .add_field("CPU", f"{psutil.cpu_percent(interval=None)}%", inline=True)
