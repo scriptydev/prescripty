@@ -208,7 +208,9 @@ async def slowmode_enable(
     )
 
     if channel is None:
-        error.description = "This command must be invoked in a guild!"
+        error.description = (
+            "This command must be invoked in a valid textable guild channel!"
+        )
         await ctx.respond(error)
         return
 

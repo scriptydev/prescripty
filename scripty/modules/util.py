@@ -284,7 +284,9 @@ async def info_channel(
         await ctx.respond(
             scripty.Embed(
                 title="Info Error",
-                description="This command must be invoked in a guild!",
+                description=(
+                    "This command must be invoked in a valid textable guild channel!"
+                ),
             )
         )
         return
