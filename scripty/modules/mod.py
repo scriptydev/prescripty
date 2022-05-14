@@ -72,8 +72,8 @@ async def ban(
 @tanchi.as_slash_command(default_to_ephemeral=True)
 async def delete(
     ctx: tanjun.abc.SlashContext,
-    amount: tanchi.Range[1, ...],
     bot: alluka.Injected[hikari.GatewayBot],
+    amount: tanchi.Range[1, ...],
 ) -> None:
     """Purge messages from channel
 
@@ -112,7 +112,7 @@ async def delete(
                 title="Delete Error",
                 description=(
                     "Unable to delete messages!\n"
-                    "Messages are older than `14 days` or do not exist"
+                    "Messages are older than `14 days` or nonexistent"
                 ),
             )
         )
@@ -123,8 +123,8 @@ async def delete(
     if count < amount:
         await ctx.respond(
             generate_embed(
-                f"`{count} messages` deleted\nOlder messages past "
-                f"`14 day{'' if count == 1 else 's'}` cannot be deleted"
+                f"`{count} message{'' if count == 1 else 's'}` deleted\n"
+                f"Cannot delete past `14 days` or nonexistent"
             )
         )
         return
