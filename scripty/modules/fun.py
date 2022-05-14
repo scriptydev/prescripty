@@ -65,9 +65,9 @@ async def activity_autocomplete(
 @tanchi.as_slash_command("activity")
 async def activity_(
     ctx: tanjun.abc.SlashContext,
+    bot: alluka.Injected[hikari.GatewayBot],
     activity: tanchi.Autocompleted[activity_autocomplete],
     channel: hikari.GuildVoiceChannel,
-    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Start a Discord Activity
 

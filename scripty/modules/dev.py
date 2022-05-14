@@ -41,8 +41,8 @@ async def load(
 @tanjun.as_message_command("reload")
 async def reload(
     ctx: tanjun.abc.MessageContext,
-    module: str,
     client: alluka.Injected[tanjun.Client],
+    module: str,
 ) -> None:
     """Reload module
 
@@ -83,8 +83,8 @@ async def sync(
 @tanjun.as_message_command("unload")
 async def unload(
     ctx: tanjun.abc.MessageContext,
-    module: str,
     client: alluka.Injected[tanjun.Client],
+    module: str,
 ) -> None:
     """Unload module
 
