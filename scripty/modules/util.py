@@ -88,8 +88,6 @@ async def stats_system(
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
 
-    system = platform.uname()
-
     boot_timestamp = round(psutil.boot_time())
     boot_resolved_relative = f"<t:{boot_timestamp}:R>"
 
@@ -102,10 +100,10 @@ async def stats_system(
             name=app_user.username,
             icon=app_user.avatar_url or app_user.default_avatar_url,
         )
-        .add_field("System", system.system, inline=True)
-        .add_field("Release", system.version, inline=True)
-        .add_field("Machine", system.machine, inline=True)
-        .add_field("Processor", system.processor, inline=True)
+        .add_field("System", platform.system(), inline=True)
+        .add_field("Platform", platform.platform(terse=True), inline=True)
+        .add_field("Machine", platform.machine(), inline=True)
+        .add_field("Processor", platform.processor(), inline=True)
         .add_field("CPU", f"{psutil.cpu_percent(interval=None)}%", inline=True)
         .add_field(
             "Memory",
@@ -176,7 +174,7 @@ async def info_user(
         )
         .add_field(
             "Roles",
-            " ".join(role.mention for role in roles if role) if member else error,
+            " ".join(role.mention for role in roles) if member else error,
         )
         .add_field(
             "Permissions",
