@@ -296,7 +296,7 @@ async def timeout_set(
         Reason for timeout
     """
     timeout_limit = scripty.datetime_utcnow_aware() + datetime.timedelta(days=28)
-    error = scripty.Embed(title="Timeout Error", color=scripty.Color.GRAY_EMBED.value)
+    error = scripty.Embed(title="Timeout Error")
 
     if duration is None:
         error.description = "Unable to parse specified duration; invalid time!"

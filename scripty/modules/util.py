@@ -1,6 +1,7 @@
 __all__: list[str] = ["load_component", "unload_component"]
 
 import platform
+from typing import Sequence
 
 import alluka
 import hikari
@@ -40,24 +41,24 @@ async def stats_about(
 
     view = InviteView()
 
-    embed = scripty.Embed(title="About")
-    embed.set_author(
-        name=bot_user.username,
-        icon=bot_user.avatar_url or bot_user.default_avatar_url,
+    embed = (
+        scripty.Embed(title="About")
+        .set_author(
+            name=bot_user.username,
+            icon=bot_user.avatar_url or bot_user.default_avatar_url,
+        )
+        .add_field("Version", f"Scripty {scripty.__version__}", inline=True)
+        .add_field("Language", f"Python {platform.python_version()}", inline=True)
+        .add_field("Library", f"Hikari {hikari.__version__}", inline=True)
+        .add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
+        .add_field("Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True)
+        .add_field(
+            "Developers",
+            " ".join(f"`{dev}`" for dev in scripty.__discord__),
+            inline=True,
+        )
+        .set_footer("#StandWithUkraine")
     )
-    embed.add_field("Version", f"Scripty {scripty.__version__}", inline=True)
-    embed.add_field("Language", f"Python {platform.python_version()}", inline=True)
-    embed.add_field("Library", f"Hikari {hikari.__version__}", inline=True)
-    embed.add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
-    embed.add_field(
-        "Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True
-    )
-    embed.add_field(
-        "Developers",
-        " ".join(f"`{dev}`" for dev in scripty.__discord__),
-        inline=True,
-    )
-    embed.set_footer("#StandWithUkraine")
 
     await ctx.respond(embed, components=view.build())
 
@@ -95,31 +96,33 @@ async def stats_system(
     start_time_timestamp = round(datastore.start_time.timestamp())
     start_time_resolved_relative = f"<t:{start_time_timestamp}:R>"
 
-    embed = scripty.Embed(title="System")
-    embed.set_author(
-        name=app_user.username,
-        icon=app_user.avatar_url or app_user.default_avatar_url,
-    )
-    embed.add_field("System", system.system, inline=True)
-    embed.add_field("Release", system.version, inline=True)
-    embed.add_field("Machine", system.machine, inline=True)
-    embed.add_field("Processor", system.processor, inline=True)
-    embed.add_field("CPU", f"{psutil.cpu_percent(interval=None)}%", inline=True)
-    embed.add_field(
-        "Memory",
-        f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/"  # type: ignore
-        f"{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",  # type: ignore
-        inline=True,
-    )
-    embed.add_field(
-        "Boot",
-        f"Booted {boot_resolved_relative}",
-        inline=True,
-    )
-    embed.add_field(
-        "Start",
-        f"Online {start_time_resolved_relative}",
-        inline=True,
+    embed = (
+        scripty.Embed(title="System")
+        .set_author(
+            name=app_user.username,
+            icon=app_user.avatar_url or app_user.default_avatar_url,
+        )
+        .add_field("System", system.system, inline=True)
+        .add_field("Release", system.version, inline=True)
+        .add_field("Machine", system.machine, inline=True)
+        .add_field("Processor", system.processor, inline=True)
+        .add_field("CPU", f"{psutil.cpu_percent(interval=None)}%", inline=True)
+        .add_field(
+            "Memory",
+            f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/"  # type: ignore
+            f"{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",  # type: ignore
+            inline=True,
+        )
+        .add_field(
+            "Host",
+            f"Booted {boot_resolved_relative}",
+            inline=True,
+        )
+        .add_field(
+            "Process",
+            f"Online {start_time_resolved_relative}",
+            inline=True,
+        )
     )
 
     await ctx.respond(embed)
@@ -146,42 +149,43 @@ async def info_user(
     if not user:
         user = ctx.member or ctx.author
 
-    member = isinstance(user, hikari.Member)
+    member: bool = isinstance(user, hikari.InteractionMember)
+    roles: Sequence[hikari.Role] = user.get_roles() if member else []
 
-    roles = user.get_roles() if member else [None]
+    error = "`Not in Guild`"
 
-    embed = scripty.Embed(title="Info")
-    embed.set_author(
-        name=str(user),
-        icon=user.avatar_url or user.default_avatar_url,
+    embed = (
+        scripty.Embed(title="Info")
+        .set_author(
+            name=str(user),
+            icon=user.avatar_url or user.default_avatar_url,
+        )
+        .add_field("Name", user.username, inline=True)
+        .add_field("Discriminator", user.discriminator, inline=True)
+        .add_field("ID", str(user.id), inline=True)
+        .add_field("Created", f"<t:{int(user.created_at.timestamp())}:R>", inline=True)
+        .add_field(
+            "Joined",
+            f"<t:{int(user.joined_at.timestamp())}:R>" if member else error,
+            inline=True,
+        )
+        .add_field(
+            "Nickname",
+            str(user.nickname) if member else error,
+            inline=True,
+        )
+        .add_field(
+            "Roles",
+            " ".join(role.mention for role in roles if role) if member else error,
+        )
+        .add_field(
+            "Permissions",
+            " ".join(f"`{permission}`" for permission in user.permissions)
+            if member
+            else error,
+        )
+        .set_thumbnail(user.avatar_url or user.default_avatar_url)
     )
-    embed.add_field("Name", user.username, inline=True)
-    embed.add_field("Discriminator", user.discriminator, inline=True)
-    embed.add_field("ID", str(user.id), inline=True)
-    embed.add_field("Created", f"<t:{int(user.created_at.timestamp())}:R>", inline=True)
-    embed.add_field(
-        "Joined",
-        f"<t:{int(user.joined_at.timestamp())}:R>" if member else "`Not in Guild`",
-        inline=True,
-    )
-    embed.add_field(
-        "Nickname",
-        str(user.nickname) if member else "`Not in Guild`",
-        inline=True,
-    )
-    embed.add_field(
-        "Roles",
-        " ".join(role.mention for role in roles if role)
-        if member
-        else "`Not in Guild`",
-    )
-    embed.add_field(
-        "Permissions",
-        " ".join(f"`{permission}`" for permission in user.permissions)  # type: ignore
-        if isinstance(user, hikari.Member)
-        else "`Not in Guild`",
-    )
-    embed.set_thumbnail(user.avatar_url or user.default_avatar_url)
 
     await ctx.respond(embed)
 
@@ -194,6 +198,7 @@ async def info_server(
 ) -> None:
     """Get information about server"""
     guild = ctx.guild_id
+
     if guild is None:
         await ctx.respond(
             scripty.Embed(
@@ -202,34 +207,38 @@ async def info_server(
             )
         )
         return
+
     guild = await bot.rest.fetch_guild(guild)
 
-    embed = scripty.Embed(title="Info")
-    embed.add_field("Name", guild.name, inline=True)
-    embed.add_field("ID", str(guild.id), inline=True)
-    embed.add_field("Owner", str(await guild.fetch_owner()), inline=True)
-    embed.add_field(
-        "Created",
-        f"<t:{int(guild.created_at.timestamp())}:R>",
-        inline=True,
+    embed = (
+        scripty.Embed(title="Info")
+        .add_field("Name", guild.name, inline=True)
+        .add_field("ID", str(guild.id), inline=True)
+        .add_field("Owner", str(await guild.fetch_owner()), inline=True)
+        .add_field(
+            "Created",
+            f"<t:{int(guild.created_at.timestamp())}:R>",
+            inline=True,
+        )
+        .add_field(
+            "Members",
+            f"{guild.approximate_active_member_count}/"
+            f"{guild.approximate_member_count}",
+            inline=True,
+        )
+        .add_field("Channels", str(len(guild.get_channels())), inline=True)
+        .add_field("Roles", str(len(guild.get_roles())), inline=True)
+        .add_field("Emoji", str(len(guild.emojis)), inline=True)
+        .add_field("Region", guild.preferred_locale, inline=True)
+        .add_field(
+            "Premium Boosts",
+            str(guild.premium_subscription_count),
+            inline=True,
+        )
+        .add_field("Premium Tier", str(guild.premium_tier), inline=True)
+        .add_field("Verification Level", str(guild.verification_level), inline=True)
+        .set_thumbnail(guild.icon_url)
     )
-    embed.add_field(
-        "Members",
-        f"{guild.approximate_active_member_count}/" f"{guild.approximate_member_count}",
-        inline=True,
-    )
-    embed.add_field("Channels", str(len(guild.get_channels())), inline=True)
-    embed.add_field("Roles", str(len(guild.get_roles())), inline=True)
-    embed.add_field("Emoji", str(len(guild.emojis)), inline=True)
-    embed.add_field("Region", guild.preferred_locale, inline=True)
-    embed.add_field(
-        "Premium Boosts",
-        str(guild.premium_subscription_count),
-        inline=True,
-    )
-    embed.add_field("Premium Tier", str(guild.premium_tier), inline=True)
-    embed.add_field("Verification Level", str(guild.verification_level), inline=True)
-    embed.set_thumbnail(guild.icon_url)
 
     await ctx.respond(embed)
 
@@ -247,20 +256,22 @@ async def info_role(
     role : hikari.Role
         The role to get information about
     """
-    embed = scripty.Embed(title="Info")
-    embed.add_field("Name", role.name, inline=True)
-    embed.add_field("ID", str(role.id), inline=True)
-    embed.add_field("Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True)
-    embed.add_field("Color", str(role.color), inline=True)
-    embed.add_field("Position", str(role.position), inline=True)
-    embed.add_field("Mentionable", str(role.is_mentionable), inline=True)
-    embed.add_field("Hoisted", str(role.is_hoisted), inline=True)
-    embed.add_field("Managed", str(role.is_managed), inline=True)
-    embed.add_field(
-        "Permissions",
-        " ".join(f"`{permission}`" for permission in role.permissions),
+    embed = (
+        scripty.Embed(title="Info")
+        .add_field("Name", role.name, inline=True)
+        .add_field("ID", str(role.id), inline=True)
+        .add_field("Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True)
+        .add_field("Color", str(role.color), inline=True)
+        .add_field("Position", str(role.position), inline=True)
+        .add_field("Mentionable", str(role.is_mentionable), inline=True)
+        .add_field("Hoisted", str(role.is_hoisted), inline=True)
+        .add_field("Managed", str(role.is_managed), inline=True)
+        .add_field(
+            "Permissions",
+            " ".join(f"`{permission}`" for permission in role.permissions),
+        )
+        .set_thumbnail(role.icon_url)
     )
-    embed.set_thumbnail(role.icon_url)
 
     await ctx.respond(embed)
 
@@ -291,15 +302,17 @@ async def info_channel(
         )
         return
 
-    embed = scripty.Embed(title="Info")
-    embed.add_field("Name", str(channel.name), inline=True)
-    embed.add_field("ID", str(channel.id), inline=True)
-    embed.add_field(
-        "Created",
-        f"<t:{int(channel.created_at.timestamp())}:R>",
-        inline=True,
+    embed = (
+        scripty.Embed(title="Info")
+        .add_field("Name", str(channel.name), inline=True)
+        .add_field("ID", str(channel.id), inline=True)
+        .add_field(
+            "Created",
+            f"<t:{int(channel.created_at.timestamp())}:R>",
+            inline=True,
+        )
+        .add_field("Type", str(channel.type), inline=True)
     )
-    embed.add_field("Type", str(channel.type), inline=True)
 
     await ctx.respond(embed)
 
@@ -317,18 +330,20 @@ async def info_invite(
     invite : hikari.Invite
         The invite to get information about
     """
-    embed = scripty.Embed(title="Info")
-    embed.add_field("Code", invite.code, inline=True)
-    embed.add_field("Inviter", str(invite.inviter), inline=True)
-    embed.add_field("Target", str(invite.target_user), inline=True)
-    embed.add_field("Guild", str(invite.guild), inline=True)
-    embed.add_field("Channel", str(invite.channel), inline=True)
-    embed.add_field(
-        "Expire",
-        f"<t:{int(invite.expires_at.timestamp())}:R>"
-        if invite.expires_at
-        else str(invite.expires_at),
-        inline=True,
+    embed = (
+        scripty.Embed(title="Info")
+        .add_field("Code", invite.code, inline=True)
+        .add_field("Inviter", str(invite.inviter), inline=True)
+        .add_field("Target", str(invite.target_user), inline=True)
+        .add_field("Guild", str(invite.guild), inline=True)
+        .add_field("Channel", str(invite.channel), inline=True)
+        .add_field(
+            "Expire",
+            f"<t:{int(invite.expires_at.timestamp())}:R>"
+            if invite.expires_at
+            else str(invite.expires_at),
+            inline=True,
+        )
     )
 
     await ctx.respond(embed)

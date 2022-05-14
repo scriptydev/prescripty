@@ -120,8 +120,7 @@ async def cat(
     ) as response:
         data = await response.json()
 
-    embed = scripty.Embed(title="Cat")
-    embed.set_image(data[0]["url"])
+    embed = scripty.Embed(title="Cat").set_image(data[0]["url"])
 
     await ctx.respond(embed)
 
@@ -136,8 +135,7 @@ async def dog(
     async with session.get("https://dog.ceo/api/breeds/image/random") as response:
         data = await response.json()
 
-    embed = scripty.Embed(title="Dog")
-    embed.set_image(data["message"])
+    embed = scripty.Embed(title="Dog").set_image(data["message"])
 
     await ctx.respond(embed)
 
@@ -193,8 +191,8 @@ class MemeView(miru.View):
         embed = scripty.Embed(
             title=self.submissions[self.index]["title"],
             url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
-        )
-        embed.set_image(self.submissions[self.index]["url"])
+        ).set_image(self.submissions[self.index]["url"])
+
         await ctx.edit_response(embed)
 
     @miru.button(label="Stop", style=hikari.ButtonStyle.DANGER)
@@ -269,8 +267,7 @@ async def meme(
         if len(submissions[index]["title"]) > 256
         else submissions[index]["title"],
         url=f"https://reddit.com{submissions[index]['permalink']}",
-    )
-    embed.set_image(submissions[index]["url"])
+    ).set_image(submissions[index]["url"])
 
     response = await ctx.respond(embed, ensure_result=True, components=view.build())
 
