@@ -3,12 +3,15 @@ __all__: list[str] = [
     "get_modules",
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
+    "validate_and_encode_url",
 ]
 
 import asyncio
 import datetime
 import functools
 import pathlib
+import re
+import urllib.parse
 
 from typing import Generator
 
@@ -76,10 +79,7 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
         ),
     )
 
-    if duration_parsed is None:
-        return None
-
-    if duration_parsed < datetime_utcnow_aware():
+    if duration_parsed is None or duration_parsed < datetime_utcnow_aware():
         return None
 
     return duration_parsed
@@ -116,11 +116,39 @@ async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | Non
         ),
     )
 
-    if duration_parsed is None:
-        return None
-
-    if duration_parsed < now:
+    if duration_parsed is None or duration_parsed < now:
         return None
 
     duration_seconds = round(duration_parsed.timestamp() - now.timestamp())
     return datetime.timedelta(seconds=duration_seconds)
+
+
+def validate_and_encode_url(url: str) -> str | None:
+    """Validate and encode a specifed url
+
+    Parameters
+    ----------
+    url : str
+        The url to validate and/or encode
+
+    Returns
+    -------
+    str | None
+        Returns the encoded url if valid, otherwise None
+    """
+    url_regex = re.compile(
+        r"^(?:http|ftp)s?://"
+        r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|"
+        r"localhost|"
+        r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        r"(?::\d+)?"
+        r"(?:/?|[/?]\S+)$",
+        re.IGNORECASE,
+    )
+
+    url_match = re.match(url_regex, url)
+
+    if url_match is None:
+        return None
+
+    return urllib.parse.quote_plus(url)
