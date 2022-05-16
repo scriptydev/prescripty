@@ -9,11 +9,11 @@ import scripty
 component = tanjun.Component()
 
 safety = component.with_slash_command(
-    tanjun.slash_command_group("Safety", "Scripty Magyk auto moderation"),
+    tanjun.slash_command_group("magyk", "Scripty Magyk moderation"),
 )
 
 analyze = safety.with_command(
-    tanjun.slash_command_group("analyze", "Analysis for Magyk moderation"),
+    tanjun.slash_command_group("analyze", "Analysis for Magyk mod"),
 )
 
 
@@ -41,7 +41,9 @@ async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
 async def analyze_url(
     ctx: tanjun.abc.Context, session: alluka.Injected[aiohttp.ClientSession], url: str
 ) -> None:
-    """Analyze URL input with Magyk
+    """
+    Analyze URL input with Magyk
+    This is primary focused on Discord scams through the Aero API
 
     Parameters
     ----------
