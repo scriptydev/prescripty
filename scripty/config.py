@@ -20,7 +20,7 @@ except FileNotFoundError:
     config = toml.load("config.toml")
 
 AERO_API_KEY: Final[str] = config["AERO_API_KEY"]
-CLIENT_ID: Final[str] = config["CLIENT_ID"]
+CLIENT_ID: Final[int] = config["CLIENT_ID"]
 DISCORD_TOKEN: Final[str] = config["DISCORD_TOKEN"]
 GUILD_ID_PRIMARY: Final[int] = config["GUILD_ID_PRIMARY"]
 GUILD_ID_SECONDARY: Final[int] = config["GUILD_ID_SECONDARY"]
