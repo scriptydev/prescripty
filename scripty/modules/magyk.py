@@ -2,6 +2,7 @@ __all__: list[str] = ["load_component", "unload_component"]
 
 import aiohttp
 import alluka
+import hikari
 import tanchi
 import tanjun
 
@@ -10,18 +11,18 @@ import scripty
 component = tanjun.Component()
 
 safety = component.with_slash_command(
-    tanjun.slash_command_group("magyk", "Scripty Magyk moderation"),
+    tanjun.slash_command_group("magykmod", "Scripty MagykMod"),
 )
 
 analyze = safety.with_command(
-    tanjun.slash_command_group("analyze", "Analysis for Magyk mod"),
+    tanjun.slash_command_group("analyze", "Analysis for MagykMod"),
 )
 
 
 @safety.with_command
 @tanchi.as_slash_command("activate")
 async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
-    """Activate Scripty Magyk"""
+    """Activate MagykMod"""
     # TODO: Some database system here probably to store the activation status along
     # with the guild ID. Then a on_message event listener somewhere to listen for
     # messages, check the content for links, and run them through Aero.
@@ -31,7 +32,7 @@ async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
 @safety.with_command
 @tanchi.as_slash_command("deactivate")
 async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
-    """Deactivate Scripty Magyk"""
+    """Deactivate MagykMod"""
     # TODO: Let's see how lazy I am and wait until Johan actually decides to implement
     # audit logging and then add automod.
     await ctx.respond("Not implemented error")
@@ -43,8 +44,7 @@ async def analyze_url(
     ctx: tanjun.abc.Context, session: alluka.Injected[aiohttp.ClientSession], url: str
 ) -> None:
     """
-    Analyze URL input with Magyk
-    This is primary focused on Discord scams through the Aero API
+    Analyze URL input for scams
 
     Parameters
     ----------
@@ -92,6 +92,46 @@ async def analyze_url(
             .add_field("Fraudulent", data["isFraudulent"], inline=True)
             .add_field("Information", data["message"], inline=True)
         )
+
+        await ctx.respond(embed)
+
+
+@analyze.with_command
+@tanchi.as_slash_command("user")
+async def analyze_user(
+    ctx: tanjun.abc.Context,
+    session: alluka.Injected[aiohttp.ClientSession],
+    user: hikari.User,
+) -> None:
+    """
+    Analyze user input for scams
+
+    Parameters
+    ----------
+    user : str
+        User to analyze
+    """
+    async with session.get(
+        f"https://ravy.org/api/v1/users/{user.id}/bans",
+        headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
+    ) as response:
+        data = await response.json()
+
+        if not response.ok:
+            await ctx.respond(
+                scripty.Embed(
+                    title="Analyze Error",
+                    description="An error occurred while analyzing the user",
+                )
+            )
+
+            raise scripty.HTTPError(
+                f"The Aero Ravy API returned a mentally unok {response.status} status"
+                f" with the following data: {data}"
+            )
+
+        # TODO: The rest of this:
+        embed = scripty.Embed(description=f"```json\n{data}\n```")
 
         await ctx.respond(embed)
 
