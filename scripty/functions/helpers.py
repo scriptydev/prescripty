@@ -9,7 +9,6 @@ __all__: list[str] = [
 
 import asyncio
 import datetime
-import enum
 import functools
 import hikari
 import pathlib
