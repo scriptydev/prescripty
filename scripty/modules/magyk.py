@@ -4,6 +4,7 @@ import aiohttp
 import alluka
 import tanchi
 import tanjun
+
 import scripty
 
 component = tanjun.Component()
@@ -57,8 +58,7 @@ async def analyze_url(
             scripty.Embed(
                 title="Analyze Error",
                 description=(
-                    "Provided URL is invalid!\n"
-                    "Please check if it includes `http(s)://` and complies with [DNS]"
+                    "Provided URL is malformed!\nPlease check if complies with [DNS]"
                     "(https://en.wikipedia.org/wiki/Domain_Name_System) structure"
                 ),
             )
