@@ -8,9 +8,27 @@ import scripty
 
 component = tanjun.Component()
 
-analyze = component.with_slash_command(
-    tanjun.slash_command_group("analyze", "Safety analysis for moderation")
+shield = component.with_slash_command(
+    tanjun.slash_command_group("shield", "Scripty Shield auto moderation"),
 )
+
+analyze = shield.with_command(
+    tanjun.slash_command_group("analyze", "Analysis for safety moderation"),
+)
+
+
+@shield.with_command
+@tanchi.as_slash_command("activate")
+async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
+    """Activate Scripty Shield"""
+    await ctx.respond("Not implemented error")
+
+
+@shield.with_command
+@tanchi.as_slash_command("deactivate")
+async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
+    """Deactivate Scripty Shield"""
+    await ctx.respond("Not implemented error")
 
 
 @analyze.with_command
@@ -50,7 +68,7 @@ async def analyze_url(
             await ctx.respond(
                 scripty.Embed(
                     title="Analyze Error",
-                    description=f"An error occurred while analyzing the URL",
+                    description="An error occurred while analyzing the URL",
                 )
             )
 
