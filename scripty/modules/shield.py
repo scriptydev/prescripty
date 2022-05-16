@@ -51,8 +51,8 @@ async def analyze_url(
                 title="Analyze Error",
                 description=(
                     "Provided URL is invalid!\n"
-                    "Please check if it includes `http(s)://` and complies with the "
-                    "[DNS](https://en.wikipedia.org/wiki/Domain_Name_System) structure"
+                    "Please check if it includes `http(s)://` and complies with [DNS]"
+                    "(https://en.wikipedia.org/wiki/Domain_Name_System) structure"
                 ),
             )
         )
