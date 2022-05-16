@@ -1,5 +1,6 @@
 __all__: list[str] = [
     "datetime_utcnow_aware",
+    "generate_oauth",
     "get_modules",
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
@@ -8,12 +9,14 @@ __all__: list[str] = [
 
 import asyncio
 import datetime
+import enum
 import functools
+import hikari
 import pathlib
 import re
 import urllib.parse
 
-from typing import Generator
+from typing import Generator, Iterable
 
 import dateparser
 
@@ -27,6 +30,57 @@ def datetime_utcnow_aware() -> datetime.datetime:
         The datetime now returned as utc aware
     """
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+# Adapted from discord.py utils for hikari
+def generate_oauth(
+    client_id: int | str,
+    *,
+    permissions: hikari.UndefinedOr[hikari.Snowflake] = hikari.UNDEFINED,
+    guild: hikari.UndefinedOr[hikari.Snowflake] = hikari.UNDEFINED,
+    redirect_uri: hikari.UndefinedOr[str] = hikari.UNDEFINED,
+    scopes: hikari.UndefinedOr[Iterable[str]] = hikari.UNDEFINED,
+    disable_guild_select: hikari.UndefinedOr[bool] = hikari.UNDEFINED,
+) -> str:
+    """A helper function that returns the OAuth2 URL for inviting the bot
+    into guilds
+
+    Parameters
+    -----------
+    client_id: int | str
+        The client ID for your bot
+    permissions: hikari.UndefinedOr[hikari.Snowflake]
+        Optional permissions to invite the bot with
+    guild: hikari.UndefinedOr[hikari.Snowflake]
+        The guild to pre-select in the authorization screen, if available
+    redirect_uri: hikari.UndefinedOr[str]
+        An optional valid redirect URI
+    scopes: hikari.UndefinedOr[Iterable[str]]
+        An optional valid list of scopes. Defaults to ``('bot', 'applications.commands')``
+    disable_guild_select: hikari.UndefinedOr[bool]
+        Whether to disallow the user from changing the guild dropdown
+
+    Returns
+    --------
+    str
+        The OAuth2 URL for inviting the bot into guilds
+    """
+    url = f'https://discord.com/oauth2/authorize?client_id={client_id}'
+    url += '&scope=' + '+'.join(scopes or ('bot', 'applications.commands'))
+
+    if permissions is not hikari.UNDEFINED:
+        url += f"&permissions={permissions.value}"
+
+    if guild is not hikari.UNDEFINED:
+        url += f"&guild_id={guild.id}"
+
+    if redirect_uri is not hikari.UNDEFINED:
+        url += "&response_type=code&" + urllib.parse.urlencode({"redirect_uri": redirect_uri})
+
+    if disable_guild_select is not hikari.UNDEFINED:
+        url += "&disable_guild_select=true"
+
+    return url
 
 
 def get_modules(
