@@ -8,29 +8,29 @@ import scripty
 
 component = tanjun.Component()
 
-shield = component.with_slash_command(
-    tanjun.slash_command_group("shield", "Scripty Shield auto moderation"),
+safety = component.with_slash_command(
+    tanjun.slash_command_group("Safety", "Scripty Magyk auto moderation"),
 )
 
-analyze = shield.with_command(
-    tanjun.slash_command_group("analyze", "Analysis for safety moderation"),
+analyze = safety.with_command(
+    tanjun.slash_command_group("analyze", "Analysis for Magyk moderation"),
 )
 
 
-@shield.with_command
+@safety.with_command
 @tanchi.as_slash_command("activate")
 async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
-    """Activate Scripty Shield"""
+    """Activate Scripty Magyk"""
     # TODO: Some database system here probably to store the activation status along
     # with the guild ID. Then a on_message event listener somewhere to listen for
     # messages, check the content for links, and run them through Aero.
     await ctx.respond("Not implemented error")
 
 
-@shield.with_command
+@safety.with_command
 @tanchi.as_slash_command("deactivate")
 async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
-    """Deactivate Scripty Shield"""
+    """Deactivate Scripty Magyk"""
     # TODO: Let's see how lazy I am and wait until Johan actually decides to implement
     # audit logging and then add automod.
     await ctx.respond("Not implemented error")
@@ -41,7 +41,7 @@ async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
 async def analyze_url(
     ctx: tanjun.abc.Context, session: alluka.Injected[aiohttp.ClientSession], url: str
 ) -> None:
-    """Analyze URL safety
+    """Analyze URL input with Magyk
 
     Parameters
     ----------
