@@ -21,6 +21,9 @@ analyze = shield.with_command(
 @tanchi.as_slash_command("activate")
 async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
     """Activate Scripty Shield"""
+    # TODO: Some database system here probably to store the activation status along
+    # with the guild ID. Then a on_message event listener somewhere to listen for
+    # messages, check the content for links, and run them through Aero.
     await ctx.respond("Not implemented error")
 
 
@@ -28,6 +31,8 @@ async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
 @tanchi.as_slash_command("deactivate")
 async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
     """Deactivate Scripty Shield"""
+    # TODO: Let's see how lazy I am and wait until Johan actually decides to implement
+    # audit logging and then add automod.
     await ctx.respond("Not implemented error")
 
 
@@ -59,7 +64,7 @@ async def analyze_url(
         return
 
     async with session.get(
-        f"https://ravy.org/api/v1/urls/{url_parsed}",
+        f"https://ravy.org/api/v1/urls/{url_parsed[1]}",
         headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
     ) as response:
         data = await response.json()
@@ -80,7 +85,7 @@ async def analyze_url(
         embed = (
             scripty.Embed(
                 title="Analyze",
-                description=url,
+                description=url_parsed[0],
             )
             .add_field("Fraudulent", data["isFraudulent"], inline=True)
             .add_field("Information", data["message"], inline=True)

@@ -123,7 +123,7 @@ async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | Non
     return datetime.timedelta(seconds=duration_seconds)
 
 
-def validate_and_encode_url(url: str) -> str | None:
+def validate_and_encode_url(url: str) -> tuple[str, str] | None:
     """Validate and encode a specifed url
 
     Parameters
@@ -136,8 +136,7 @@ def validate_and_encode_url(url: str) -> str | None:
     str | None
         Returns the encoded url if valid, otherwise None
     """
-    url_regex = re.compile(
-        r"^(?:http|ftp)s?://"
+    url_primary_regex = re.compile(
         r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|"
         r"localhost|"
         r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
@@ -146,9 +145,15 @@ def validate_and_encode_url(url: str) -> str | None:
         re.IGNORECASE,
     )
 
-    url_match = re.match(url_regex, url)
+    url_primary_search = re.search(url_primary_regex, url)
 
-    if url_match is None:
+    if url_primary_search is None:
         return None
 
-    return urllib.parse.quote_plus(url)
+    url_http_regex = re.compile(r"^(?:http|ftp)s?://")
+    url_http_match = re.match(url_http_regex, url)
+
+    if url_http_match is None:
+        url = f"https://{url}"
+
+    return url, urllib.parse.quote_plus(url)
