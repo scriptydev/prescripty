@@ -1,6 +1,6 @@
 __all__: list[str] = [
     "AERO_API_KEY",
-    "CLIENT_ID"
+    "CLIENT_ID",
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",
     "GUILD_ID_SECONDARY",
