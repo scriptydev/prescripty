@@ -127,6 +127,24 @@ async def cat(
 
 @animal.with_command
 @tanchi.as_slash_command()
+async def httpcat(
+    ctx: tanjun.abc.Context,
+    status_code: int,
+) -> None:
+    """Cats for HTTP status codes
+    
+    Parameters
+    ----------
+    status_code : int
+        HTTP status code
+    """
+    await ctx.respond(
+        scripty.Embed(title="HTTPCat").set_image(f"https://http.cat/{status_code}")
+    )
+
+
+@animal.with_command
+@tanchi.as_slash_command()
 async def dog(
     ctx: tanjun.abc.Context,
     session: alluka.Injected[aiohttp.ClientSession],
@@ -171,6 +189,43 @@ async def dice(
             description=random.randint(1, sides),
         )
     )
+
+
+image = component.with_slash_command(
+    tanjun.slash_command_group("image", "Fun things related to images")
+)
+
+
+@image.with_command
+@tanchi.as_slash_command()
+async def magik(
+    ctx: tanjun.abc.SlashContext,
+    session: alluka.Injected[aiohttp.ClientSession],
+    user: hikari.User,
+) -> None:
+    """Magikify a user avatar
+
+    Parameters
+    ----------
+    user : hikari.User
+        User to magikify
+    """
+    async with session.get(
+        f"https://nekobot.xyz/api/imagegen?type=magik&image="
+        f"{user.avatar_url or user.default_avatar_url}"
+    ) as response:
+        data = await response.json()
+
+        if not response.ok:
+            await ctx.respond(
+                scripty.Embed(
+                    title="Magik Error",
+                    description="An error occurred while trying to magikify the avatar",
+                )
+            )
+            return
+
+        await ctx.respond(scripty.Embed(title="Magik").set_image(data["message"]))
 
 
 class MemeView(miru.View):
@@ -384,6 +439,25 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
 
     view.start(response)
     await view.wait()
+
+
+@component.with_command
+@tanchi.as_slash_command()
+async def quote(
+    ctx: tanjun.abc.SlashContext, session: alluka.Injected[aiohttp.ClientSession]
+) -> None:
+    """Responds with a random quote"""
+    async with session.get(
+        "https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en"
+    ) as response:
+        data = await response.json()
+
+        embed = scripty.Embed(
+            title="Quote",
+            description=data["quoteText"],
+        ).set_author(name=data["quoteAuthor"])
+
+        await ctx.respond(embed)
 
 
 @tanjun.as_loader
