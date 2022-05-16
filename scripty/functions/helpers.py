@@ -36,7 +36,7 @@ def datetime_utcnow_aware() -> datetime.datetime:
 def generate_oauth(
     client_id: int | str,
     *,
-    permissions: hikari.UndefinedOr[hikari.Snowflake] = hikari.UNDEFINED,
+    permissions: hikari.UndefinedOr[hikari.Permissions] = hikari.UNDEFINED,
     guild: hikari.UndefinedOr[hikari.Snowflake] = hikari.UNDEFINED,
     redirect_uri: hikari.UndefinedOr[str] = hikari.UNDEFINED,
     scopes: hikari.UndefinedOr[Iterable[str]] = hikari.UNDEFINED,
@@ -72,7 +72,7 @@ def generate_oauth(
         url += f"&permissions={permissions.value}"
 
     if guild is not hikari.UNDEFINED:
-        url += f"&guild_id={guild.id}"
+        url += f"&guild_id={guild}"
 
     if redirect_uri is not hikari.UNDEFINED:
         url += "&response_type=code&" + urllib.parse.urlencode({"redirect_uri": redirect_uri})
