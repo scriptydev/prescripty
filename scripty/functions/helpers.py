@@ -64,8 +64,8 @@ def generate_oauth(
     str
         The OAuth2 URL for inviting the bot into guilds
     """
-    url = f'https://discord.com/oauth2/authorize?client_id={client_id}'
-    url += '&scope=' + '+'.join(scopes or ('bot', 'applications.commands'))
+    url = f"https://discord.com/oauth2/authorize?client_id={client_id}"
+    url += "&scope=" + "+".join(scopes or ("bot", "applications.commands"))
 
     if permissions is not hikari.UNDEFINED:
         url += f"&permissions={permissions.value}"
@@ -74,7 +74,9 @@ def generate_oauth(
         url += f"&guild_id={guild}"
 
     if redirect_uri is not hikari.UNDEFINED:
-        url += "&response_type=code&" + urllib.parse.urlencode({"redirect_uri": redirect_uri})
+        url += "&response_type=code&" + urllib.parse.urlencode(
+            {"redirect_uri": redirect_uri}
+        )
 
     if disable_guild_select is not hikari.UNDEFINED:
         url += "&disable_guild_select=true"

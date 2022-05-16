@@ -132,7 +132,7 @@ async def httpcat(
     status_code: int,
 ) -> None:
     """Cats for HTTP status codes
-    
+
     Parameters
     ----------
     status_code : int
