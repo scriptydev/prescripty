@@ -41,18 +41,19 @@ async def analyze_url(
         return
 
     async with session.get(
-        f"https://ravy.org/api/v1/urls/{url_parsed}",
-        headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
-    ) as response:
+            f"https://ravy.org/api/v1/urls/{url_parsed}",
+            headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
+        ) as response:
         data = await response.json()
 
         if not response.ok:
             await ctx.respond(
                 scripty.Embed(
                     title="Analyze Error",
-                    description=f"An error occurred while analyzing the URL",
+                    description="An error occurred while analyzing the URL",
                 )
             )
+
 
             raise scripty.HTTPError(
                 f"The Aero Ravy API returned a mentally unok {response.status} status"
