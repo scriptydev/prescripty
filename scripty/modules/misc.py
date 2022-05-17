@@ -66,7 +66,7 @@ async def translate_menu(
 @component.with_command
 @tanchi.as_slash_command("translate")
 async def translate_slash(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     text: str,
     source: str = "auto",
     target: str = "en",

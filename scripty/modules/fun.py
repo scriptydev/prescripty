@@ -15,6 +15,22 @@ import scripty
 
 component = tanjun.Component()
 
+
+@component.with_command
+@tanjun.as_user_menu("birthday")
+async def birthday(
+    ctx: tanjun.abc.MenuContext,
+    user: hikari.User | hikari.InteractionMember,
+) -> None:
+    """Wish user a happy birthday"""
+    await user.send(
+        scripty.Embed(
+            title="Birthday",
+            description=f"{ctx.author} wished you a happy birthday, {user}!",
+        )
+    )
+
+
 ACTIVITIES = {
     "Poker Night": "755827207812677713",
     "Chess In The Park": "832012774040141894",
@@ -110,7 +126,7 @@ animal = component.with_slash_command(
 @animal.with_command
 @tanchi.as_slash_command()
 async def cat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random cat image"""
@@ -128,7 +144,7 @@ async def cat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def httpcat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     status_code: int,
 ) -> None:
     """Cats for HTTP status codes
@@ -146,7 +162,7 @@ async def httpcat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def dog(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random dog image"""
