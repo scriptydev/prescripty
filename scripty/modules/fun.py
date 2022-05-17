@@ -110,7 +110,7 @@ animal = component.with_slash_command(
 @animal.with_command
 @tanchi.as_slash_command()
 async def cat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random cat image"""
@@ -128,7 +128,7 @@ async def cat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def httpcat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     status_code: int,
 ) -> None:
     """Cats for HTTP status codes
@@ -146,7 +146,7 @@ async def httpcat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def dog(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random dog image"""

@@ -45,7 +45,7 @@ async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
 @analyze.with_command
 @tanchi.as_slash_command("url")
 async def analyze_url(
-    ctx: tanjun.abc.Context, session: alluka.Injected[aiohttp.ClientSession], url: str
+    ctx: tanjun.abc.SlashContext, session: alluka.Injected[aiohttp.ClientSession], url: str
 ) -> None:
     """
     Analyze URL input for scams
@@ -103,7 +103,7 @@ async def analyze_url(
 @analyze.with_command
 @tanchi.as_slash_command("user")
 async def analyze_user(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
     user: hikari.User,
 ) -> None:
