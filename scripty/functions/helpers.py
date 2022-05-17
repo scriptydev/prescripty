@@ -1,5 +1,6 @@
 __all__: list[str] = [
     "datetime_utcnow_aware",
+    "discord_timestamp",
     "generate_oauth",
     "get_modules",
     "parse_to_future_datetime",
@@ -10,13 +11,13 @@ __all__: list[str] = [
 import asyncio
 import datetime
 import functools
-import hikari
 import pathlib
 import re
 import urllib.parse
 
-from typing import Generator, Iterable
+from typing import Generator, Iterable, Literal
 
+import hikari
 import dateparser
 
 
@@ -29,6 +30,32 @@ def datetime_utcnow_aware() -> datetime.datetime:
         The datetime now returned as utc aware
     """
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+TimestampStyle = Literal["t", "T", "d", "D", "f", "F", "R"]
+
+
+# Adapted from discord.py utils for hikari
+def discord_timestamp(
+    timestamp: datetime.datetime,
+    /,
+    style: TimestampStyle = "f",
+) -> str:
+    """Convert a datetime to a Discord timestamp
+
+    Parameters
+    ----------
+    datetime : datetime.datetime
+        The timestamp or datetime to convert
+    style : TimestampStyle
+        The style of the timestamp, defaults to Literal["f"]
+
+    Returns
+    -------
+    str
+        The Discord timestamp representation
+    """
+    return f"<t:{timestamp}:{style}>"
 
 
 # Adapted from discord.py utils for hikari
