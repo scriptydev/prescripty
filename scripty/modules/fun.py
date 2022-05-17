@@ -15,6 +15,22 @@ import scripty
 
 component = tanjun.Component()
 
+
+@component.with_command
+@tanjun.as_user_menu("birthday")
+async def birthday(
+    ctx: tanjun.abc.MenuContext,
+    user: hikari.User | hikari.InteractionMember,
+) -> None:
+    """Wish user a happy birthday"""
+    await user.send(
+        scripty.Embed(
+            title="Birthday",
+            description=f"{ctx.author} wished you a happy birthday, {user}!",
+        )
+    )
+
+
 ACTIVITIES = {
     "Poker Night": "755827207812677713",
     "Chess In The Park": "832012774040141894",
