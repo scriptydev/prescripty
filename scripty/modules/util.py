@@ -1,6 +1,7 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["component"]
 
 import platform
+
 from typing import Sequence
 
 import alluka
@@ -14,9 +15,8 @@ import scripty
 
 component = tanjun.Component()
 
-stats = component.with_slash_command(
-    tanjun.slash_command_group("stats", "Statistics related to Scripty")
-)
+stats = tanjun.slash_command_group("stats", "Statistics related to Scripty")
+info = tanjun.slash_command_group("info", "Get information")
 
 
 class InviteView(miru.View):
@@ -124,11 +124,6 @@ async def stats_system(
     )
 
     await ctx.respond(embed)
-
-
-info = component.with_slash_command(
-    tanjun.slash_command_group("info", "Get information")
-)
 
 
 @info.with_command
@@ -347,11 +342,4 @@ async def info_invite(
     await ctx.respond(embed)
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()

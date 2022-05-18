@@ -1,4 +1,4 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["component"]
 
 import asyncio
 import datetime
@@ -15,8 +15,10 @@ import scripty
 
 component = tanjun.Component()
 
+slowmode = tanjun.slash_command_group("slowmode", "Slowmode channel")
+timeout = tanjun.slash_command_group("timeout", "Timeout member")
 
-@component.with_command
+
 @tanjun.with_own_permission_check(hikari.Permissions.BAN_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.BAN_MEMBERS)
 @tanchi.as_slash_command()
@@ -66,7 +68,6 @@ async def ban(
     )
 
 
-@component.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.MANAGE_MESSAGES)
 @tanjun.with_author_permission_check(hikari.Permissions.MANAGE_MESSAGES)
 @tanchi.as_slash_command(default_to_ephemeral=True)
@@ -134,7 +135,6 @@ async def delete(
     )
 
 
-@component.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.KICK_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.KICK_MEMBERS)
 @tanchi.as_slash_command()
@@ -175,11 +175,6 @@ async def kick(
             ),
         )
     )
-
-
-slowmode = component.with_slash_command(
-    tanjun.slash_command_group("slowmode", "Slowmode channel")
-)
 
 
 @slowmode.with_command
@@ -267,11 +262,6 @@ async def slowmode_disable(
             description=f"Removed slowmode from **{str(channel)}**",
         )
     )
-
-
-timeout = component.with_slash_command(
-    tanjun.slash_command_group("timeout", "Timeout member")
-)
 
 
 @timeout.with_command
@@ -384,7 +374,6 @@ async def unban_user_autocomplete(
     await ctx.set_choices(ban_map)
 
 
-@component.with_command
 @tanjun.with_own_permission_check(hikari.Permissions.BAN_MEMBERS)
 @tanjun.with_author_permission_check(hikari.Permissions.BAN_MEMBERS)
 @tanchi.as_slash_command()
@@ -429,11 +418,4 @@ async def unban(
         )
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()

@@ -1,4 +1,4 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["component"]
 
 import pathlib
 
@@ -10,7 +10,6 @@ import scripty
 component = tanjun.Component()
 
 
-@component.with_command
 @tanjun.with_owner_check(error_message=None)
 @tanjun.with_argument("module")
 @tanjun.as_message_command("load")
@@ -35,7 +34,6 @@ async def load(
     )
 
 
-@component.with_command
 @tanjun.with_owner_check(error_message=None)
 @tanjun.with_argument("module")
 @tanjun.as_message_command("reload")
@@ -60,7 +58,6 @@ async def reload(
     )
 
 
-@component.with_command
 @tanjun.with_owner_check(error_message=None)
 @tanjun.as_message_command("sync")
 async def sync(
@@ -77,7 +74,6 @@ async def sync(
     )
 
 
-@component.with_command
 @tanjun.with_owner_check(error_message=None)
 @tanjun.with_argument("module")
 @tanjun.as_message_command("unload")
@@ -111,11 +107,4 @@ async def unload(
     )
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()

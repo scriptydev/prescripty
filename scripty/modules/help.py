@@ -1,4 +1,4 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["component"]
 
 import miru
 import tanchi
@@ -38,7 +38,6 @@ class HelpView(miru.View):
         )
 
 
-@component.with_command
 @tanchi.as_slash_command("help")
 async def help_(ctx: tanjun.abc.SlashContext) -> None:
     """Display the help interface"""
@@ -46,11 +45,4 @@ async def help_(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.respond(components=view.build())
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()

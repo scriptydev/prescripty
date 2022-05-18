@@ -1,4 +1,4 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["component"]
 
 import random
 
@@ -15,8 +15,10 @@ import scripty
 
 component = tanjun.Component()
 
+animal = tanjun.slash_command_group("animal", "Fun things related to animals")
+image = tanjun.slash_command_group("image", "Fun things related to images")
 
-@component.with_command
+
 @tanjun.as_user_menu("birthday")
 async def birthday(
     ctx: tanjun.abc.MenuContext,
@@ -77,7 +79,6 @@ async def activity_autocomplete(
     await ctx.set_choices(activity_map)
 
 
-@component.with_command
 @tanchi.as_slash_command("activity")
 async def activity_(
     ctx: tanjun.abc.SlashContext,
@@ -116,11 +117,6 @@ async def activity_(
     view = ActivityView(str(invite), activity)
 
     await ctx.respond(components=view.build())
-
-
-animal = component.with_slash_command(
-    tanjun.slash_command_group("animal", "Fun things related to animals")
-)
 
 
 @animal.with_command
@@ -174,7 +170,6 @@ async def dog(
     await ctx.respond(embed)
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
     """Flip a coin"""
@@ -186,7 +181,6 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
     )
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def dice(
     ctx: tanjun.abc.SlashContext,
@@ -205,11 +199,6 @@ async def dice(
             description=random.randint(1, sides),
         )
     )
-
-
-image = component.with_slash_command(
-    tanjun.slash_command_group("image", "Fun things related to images")
-)
 
 
 @image.with_command
@@ -307,7 +296,6 @@ class MemeView(miru.View):
         await self.message.edit(components=self.build())
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def meme(
     ctx: tanjun.abc.SlashContext,
@@ -346,7 +334,6 @@ async def meme(
     await view.wait()
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def rickroll(ctx: tanjun.abc.SlashContext) -> None:
     """;)"""
@@ -440,7 +427,6 @@ class RPSView(miru.View):
         await self.message.edit(components=self.build())
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def rps(ctx: tanjun.abc.SlashContext) -> None:
     """Play rock paper scissors"""
@@ -457,7 +443,6 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
     await view.wait()
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def quote(
     ctx: tanjun.abc.SlashContext, session: alluka.Injected[aiohttp.ClientSession]
@@ -476,11 +461,4 @@ async def quote(
         await ctx.respond(embed)
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()
