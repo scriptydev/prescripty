@@ -10,16 +10,14 @@ import scripty
 
 component = tanjun.Component()
 
-magykmod = component.with_slash_command(
-    tanjun.slash_command_group("magykmod", "Scripty MagykMod moderation"),
-)
+magykmod = tanjun.slash_command_group("magykmod", "Scripty MagykMod moderation")
 
 analyze = magykmod.with_command(
-    tanjun.slash_command_group("analyze", "Analysis subcomponents for MagykMod"),
+    tanjun.slash_command_group("analyze", "Analysis subcomponents for MagykMod")
 )
 
 wizard = magykmod.with_command(
-    tanjun.slash_command_group("wizard", "Automation of MagykMod moderation"),
+    tanjun.slash_command_group("wizard", "Automation of MagykMod moderation")
 )
 
 
@@ -140,11 +138,4 @@ async def analyze_user(
         await ctx.respond(embed)
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()
