@@ -1,4 +1,4 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["component"]
 
 import hikari
 import tanchi
@@ -11,7 +11,6 @@ import scripty
 component = tanjun.Component()
 
 
-@component.with_command
 @tanjun.as_user_menu("Avatar")
 async def avatar(
     ctx: tanjun.abc.MenuContext, user: hikari.User | hikari.InteractionMember
@@ -24,7 +23,6 @@ async def avatar(
     )
 
 
-@component.with_command
 @tanjun.as_message_menu("Translate to English")
 async def translate_menu(
     ctx: tanjun.abc.MenuContext,
@@ -63,7 +61,6 @@ async def translate_menu(
     await ctx.respond(embed)
 
 
-@component.with_command
 @tanchi.as_slash_command("translate")
 async def translate_slash(
     ctx: tanjun.abc.SlashContext,
@@ -106,7 +103,6 @@ async def translate_slash(
     await ctx.respond(embed)
 
 
-@component.with_command
 @tanjun.with_author_permission_check(hikari.Permissions.MANAGE_MESSAGES)
 @tanchi.as_slash_command()
 async def echo(ctx: tanjun.abc.SlashContext, text: str) -> None:
@@ -125,7 +121,6 @@ async def echo(ctx: tanjun.abc.SlashContext, text: str) -> None:
     await ctx.respond(embed)
 
 
-@component.with_command
 @tanchi.as_slash_command()
 async def poll(
     ctx: tanjun.abc.SlashContext,
@@ -201,11 +196,4 @@ async def poll(
                 pass
 
 
-@tanjun.as_loader
-def load_component(client: tanjun.abc.Client) -> None:
-    client.add_component(component.copy())
-
-
-@tanjun.as_unloader
-def unload_component(client: tanjun.Client) -> None:
-    client.remove_component_by_name(component.name)
+component.load_from_scope().make_loader()
