@@ -1,4 +1,4 @@
-__all__: list[str] = ["load_component", "unload_component"]
+__all__: list[str] = ["components"]
 
 import aiohttp
 import alluka
