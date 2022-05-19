@@ -6,14 +6,8 @@ authors:
   - given-names: Erich
     family-names: Nguyen
     email: erich.nguyen@outlook.com
-  - given-names: Johan
-    family-names: Joseph
-    email: johanjoseph100@gmail.com
-  - given-names: Hrishikesh
-    family-names: Kondiboyina
-    email: vkhrishikesh@gmail.com
-repository-code: 'https://github.com/GoogleGenius/scripty-hikari'
-url: 'https://scriptybotdev.web.app'
+repository-code: 'https://github.com/scriptydev/prescripty'
+url: 'https://scriptybot.web.app'
 keywords:
   - bot
   - dependency-injection
