@@ -1,4 +1,4 @@
-__all__: list[str] = ["component"]
+__all__: list[str] = ["loader_mod"]
 
 import asyncio
 import datetime
@@ -12,8 +12,6 @@ import tanchi
 import tanjun
 
 import scripty
-
-component = tanjun.Component()
 
 slowmode = tanjun.slash_command_group("slowmode", "Slowmode channel")
 timeout = tanjun.slash_command_group("timeout", "Timeout member")
@@ -417,4 +415,4 @@ async def unban(
         )
 
 
-component.load_from_scope().make_loader()
+loader_mod = tanjun.Component(name="mod").load_from_scope().make_loader()

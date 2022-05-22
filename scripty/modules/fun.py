@@ -1,4 +1,4 @@
-__all__: list[str] = ["component"]
+__all__: list[str] = ["loader_fun"]
 
 import random
 
@@ -13,10 +13,8 @@ import tanjun
 
 import scripty
 
-component = tanjun.Component()
-
 animal = tanjun.slash_command_group("animal", "Fun things related to animals")
-image = tanjun.slash_command_group("image", "Fun things related to images")
+image = tanjun.slash_command_group("image", "Image manipulation")
 
 
 @tanjun.as_user_menu("birthday")
@@ -461,4 +459,4 @@ async def quote(
         await ctx.respond(embed)
 
 
-component.load_from_scope().make_loader()
+loader_fun = tanjun.Component(name="fun").load_from_scope().make_loader()

@@ -1,12 +1,10 @@
-__all__: list[str] = ["component"]
+__all__: list[str] = ["loader_help"]
 
 import miru
 import tanchi
 import tanjun
 
 import scripty
-
-component = tanjun.Component()
 
 
 class HelpView(miru.View):
@@ -45,4 +43,4 @@ async def help_(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.respond(components=view.build())
 
 
-component.load_from_scope().make_loader()
+loader_help = tanjun.Component(name="help").load_from_scope().make_loader()
