@@ -142,7 +142,11 @@ def validate_time(
     ...
 
 
-def validate_time(time: datetime.datetime | datetime.timedelta | None, /, limit: datetime.timedelta | None = None) -> Embed | None:
+def validate_time(
+    time: datetime.datetime | datetime.timedelta | None,
+    /,
+    limit: datetime.timedelta | None = None,
+) -> Embed | None:
     """Validate datetime or timedelta"""
     error = Embed(title="Error")
 
@@ -151,13 +155,11 @@ def validate_time(time: datetime.datetime | datetime.timedelta | None, /, limit:
         return error
 
     if isinstance(time, datetime.datetime) and isinstance(limit, datetime.datetime):
-        if limit is not None:
-            limit_datetime = datetime_utcnow_aware() + datetime.timedelta(days=28)
-            if time > limit_datetime:
-                error.description = (
-                    f"The duration is restricted to the limit of `{limit}`!"
-                )
-                return error
+        if limit is not None and time > datetime_utcnow_aware() + limit:
+            error.description = (
+                f"The duration is restricted to the limit of `{limit}`!"
+            )
+            return error
 
     if isinstance(time, datetime.timedelta) and isinstance(limit, datetime.timedelta):
         if limit is not None and time > limit:
