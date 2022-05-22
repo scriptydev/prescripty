@@ -1,4 +1,4 @@
-__all__: list[str] = ["component"]
+__all__: list[str] = ["loader_magyk"]
 
 import aiohttp
 import alluka
@@ -7,8 +7,6 @@ import tanchi
 import tanjun
 
 import scripty
-
-component = tanjun.Component()
 
 magykmod = tanjun.slash_command_group("magykmod", "Scripty MagykMod moderation")
 
@@ -43,7 +41,9 @@ async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
 @analyze.with_command
 @tanchi.as_slash_command("url")
 async def analyze_url(
-    ctx: tanjun.abc.SlashContext, session: alluka.Injected[aiohttp.ClientSession], url: str
+    ctx: tanjun.abc.SlashContext,
+    session: alluka.Injected[aiohttp.ClientSession],
+    url: str,
 ) -> None:
     """
     Analyze URL input for scams
@@ -68,7 +68,7 @@ async def analyze_url(
         return
 
     async with session.get(
-        f"https://ravy.org/api/v1/urls/{url_parsed[1]}",
+        f"{scripty.AERO_API}/urls/{url_parsed[1]}",
         headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
     ) as response:
         data = await response.json()
@@ -138,4 +138,4 @@ async def analyze_user(
         await ctx.respond(embed)
 
 
-component.load_from_scope().make_loader()
+loader_magyk = tanjun.Component(name="magyk").load_from_scope().make_loader()
