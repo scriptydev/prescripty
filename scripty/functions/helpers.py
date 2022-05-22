@@ -3,6 +3,7 @@ __all__: list[str] = [
     "get_modules",
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
+    "validate_time",
 ]
 
 import asyncio
@@ -10,7 +11,8 @@ import datetime
 import functools
 import pathlib
 
-from typing import Generator, overload
+from types import NoneType
+from typing import Generator
 
 import dateparser
 
@@ -128,40 +130,51 @@ async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | Non
     return datetime.timedelta(seconds=duration_seconds)
 
 
-@overload
-def validate_time(
-    time: datetime.datetime | None, /, limit: datetime.timedelta | None = None
-) -> Embed | None:
-    ...
-
-
-@overload
-def validate_time(
-    time: datetime.timedelta | None, /, limit: datetime.timedelta | None = None
-) -> Embed | None:
-    ...
-
-
 def validate_time(
     time: datetime.datetime | datetime.timedelta | None,
     /,
     limit: datetime.timedelta | None = None,
 ) -> Embed | None:
-    """Validate datetime or timedelta"""
+    """Validate datetime or timedelta
+
+    Parameters
+    ----------
+    time : datetime.datetime | datetime.timedelta | None
+        The time to validate
+    limit : datetime.timedelta | None
+        The limit to validate against, if any
+
+    Returns
+    -------
+    Embed
+        The hikari error embed to send if the time is invalid
+    None
+        If the time is valid
+    """
+    if not isinstance(time, (datetime.datetime, datetime.timedelta, NoneType)):
+        raise TypeError(
+            f"expected time of datetime.datetime, datetime.timedelta, or None; "
+            f"recieved {type(time)}"
+        )
+
+    if not isinstance(limit, (datetime.timedelta, NoneType)):
+        raise TypeError(f"expected limit of datetime.timedelta; recieved {type(limit)}")
+
     error = Embed(title="Error")
+    error_limit = f"The duration is restricted to the limit of `{limit}`!"
 
     if time is None:
         error.description = "An exception occurred while parsing specified duration!"
         return error
 
-    if isinstance(time, datetime.datetime) and isinstance(limit, datetime.datetime):
+    if isinstance(time, datetime.datetime):
         if limit is not None and time > datetime_utcnow_aware() + limit:
-            error.description = (
-                f"The duration is restricted to the limit of `{limit}`!"
-            )
+            error.description = error_limit
             return error
 
-    if isinstance(time, datetime.timedelta) and isinstance(limit, datetime.timedelta):
+    if isinstance(time, datetime.timedelta):
         if limit is not None and time > limit:
-            error.description = f"The duration is restricted to the limit of `{limit}`!"
+            error.description = error_limit
             return error
+
+    return None
