@@ -68,8 +68,7 @@ async def analyze_url(
         return
 
     async with session.get(
-        f"{scripty.AERO_API}/urls/{url_parsed[1]}",
-        headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
+        f"{scripty.AERO_API}/urls/{url_parsed[1]}", headers=scripty.AERO_HEADERS
     ) as response:
         data = await response.json()
 
@@ -106,16 +105,15 @@ async def analyze_user(
     user: hikari.User,
 ) -> None:
     """
-    Analyze user input for scams
+    Analyze a user for fraudulency
 
     Parameters
     ----------
-    user : str
+    user : hikari.User
         User to analyze
     """
     async with session.get(
-        f"https://ravy.org/api/v1/users/{user.id}/bans",
-        headers={"Authorization": f"Ravy {scripty.AERO_API_KEY}"},
+        f"{scripty.AERO_API}/users/{user.id}/bans", headers=scripty.AERO_HEADERS
     ) as response:
         data = await response.json()
 
