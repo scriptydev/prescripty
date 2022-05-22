@@ -23,7 +23,7 @@ class InviteView(miru.View):
         super().__init__()
         self.add_item(
             miru.Button(
-                label="Add Scripty to Server",
+                label="Add to Server",
                 url=scripty.INVITE_URL,
             )
         )
