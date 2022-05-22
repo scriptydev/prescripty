@@ -52,6 +52,9 @@ async def stats_about(
         .add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
         .add_field("Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True)
         .add_field("Developer", scripty.__discord__, inline=True)
+        .add_field(
+            "Created", scripty.discord_timestamp(bot_user.created_at, "F"), inline=True
+        )
         .set_footer("#StandWithUkraine")
     )
 

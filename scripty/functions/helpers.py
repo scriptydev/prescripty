@@ -55,7 +55,7 @@ def discord_timestamp(
     str
         The Discord timestamp representation
     """
-    return f"<t:{timestamp}:{style}>"
+    return f"<t:{int(timestamp.timestamp())}:{style}>"
 
 
 # Adapted from discord.py utils for hikari
