@@ -10,9 +10,11 @@ import datetime
 import functools
 import pathlib
 
-from typing import Generator
+from typing import Generator, overload
 
 import dateparser
+
+from .embed import Embed
 
 
 def datetime_utcnow_aware() -> datetime.datetime:
@@ -124,3 +126,40 @@ async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | Non
 
     duration_seconds = round(duration_parsed.timestamp() - now.timestamp())
     return datetime.timedelta(seconds=duration_seconds)
+
+
+@overload
+def validate_time(
+    time: datetime.datetime | None, /, limit: datetime.timedelta | None = None
+) -> Embed | None:
+    ...
+
+
+@overload
+def validate_time(
+    time: datetime.timedelta | None, /, limit: datetime.timedelta | None = None
+) -> Embed | None:
+    ...
+
+
+def validate_time(time: datetime.datetime | datetime.timedelta | None, /, limit: datetime.timedelta | None = None) -> Embed | None:
+    """Validate datetime or timedelta"""
+    error = Embed(title="Error")
+
+    if time is None:
+        error.description = "An exception occurred while parsing specified duration!"
+        return error
+
+    if isinstance(time, datetime.datetime) and isinstance(limit, datetime.datetime):
+        if limit is not None:
+            limit_datetime = datetime_utcnow_aware() + datetime.timedelta(days=28)
+            if time > limit_datetime:
+                error.description = (
+                    f"The duration is restricted to the limit of `{limit}`!"
+                )
+                return error
+
+    if isinstance(time, datetime.timedelta) and isinstance(limit, datetime.timedelta):
+        if limit is not None and time > limit:
+            error.description = f"The duration is restricted to the limit of `{limit}`!"
+            return error
