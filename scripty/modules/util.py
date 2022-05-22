@@ -51,11 +51,7 @@ async def stats_about(
         .add_field("Library", f"Hikari {hikari.__version__}", inline=True)
         .add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
         .add_field("Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True)
-        .add_field(
-            "Developers",
-            " ".join(f"`{dev}`" for dev in scripty.__discord__),
-            inline=True,
-        )
+        .add_field("Developer", scripty.__discord__, inline=True)
         .set_footer("#StandWithUkraine")
     )
 
