@@ -1,4 +1,4 @@
-__all__: list[str] = ["component"]
+__all__: list[str] = ["loader_misc"]
 
 import hikari
 import tanchi
@@ -7,8 +7,6 @@ import tanjun
 from gpytranslate import Translator
 
 import scripty
-
-component = tanjun.Component()
 
 
 @tanjun.as_user_menu("Avatar")
@@ -196,4 +194,4 @@ async def poll(
                 pass
 
 
-component.load_from_scope().make_loader()
+loader_misc = tanjun.Component(name="misc").load_from_scope().make_loader()

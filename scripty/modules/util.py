@@ -1,4 +1,4 @@
-__all__: list[str] = ["component"]
+__all__: list[str] = ["loader_util"]
 
 import platform
 
@@ -12,8 +12,6 @@ import tanchi
 import tanjun
 
 import scripty
-
-component = tanjun.Component()
 
 stats = tanjun.slash_command_group("stats", "Statistics related to Scripty")
 info = tanjun.slash_command_group("info", "Get information")
@@ -342,4 +340,4 @@ async def info_invite(
     await ctx.respond(embed)
 
 
-component.load_from_scope().make_loader()
+loader_util = tanjun.Component(name="util").load_from_scope().make_loader()
