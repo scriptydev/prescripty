@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: Sequence[str] = ("start_app",)
+__all__: tuple[str, ...] = ("start_app",)
 
 import functools
 

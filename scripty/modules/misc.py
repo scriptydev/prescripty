@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: Sequence[str] = ("loader_misc",)
+__all__: tuple[str, ...] = ("loader_misc",)
 
 from typing import Sequence
 

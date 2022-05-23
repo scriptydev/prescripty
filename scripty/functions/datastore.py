@@ -7,7 +7,7 @@
 # Repository source from https://github.com/tandemdude/hikari-lightbulb.
 from __future__ import annotations
 
-__all__: Sequence[str] = ("DataStore",)
+__all__: tuple[str, ...] = ("DataStore",)
 
 from typing import Any
 

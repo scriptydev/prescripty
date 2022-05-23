@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: Sequence[str] = ("Color",)
+__all__: tuple[str, ...] = ("Color",)
 
 import enum
 

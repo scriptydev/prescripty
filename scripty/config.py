@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: Sequence[str] = (
+__all__: tuple[str, ...] = (
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",
     "GUILD_ID_SECONDARY",
