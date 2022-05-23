@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__: list[str] = ["start_app"]
 
 import functools

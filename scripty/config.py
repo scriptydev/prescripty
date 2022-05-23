@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__: list[str] = [
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",

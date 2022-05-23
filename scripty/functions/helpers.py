@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__: list[str] = [
     "datetime_utcnow_aware",
     "get_modules",

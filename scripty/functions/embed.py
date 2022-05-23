@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__: list[str] = ["Embed"]
 
 import datetime
@@ -8,7 +10,7 @@ import hikari
 
 from .color import Color
 
-DEFAULT_COLOR = Color.GRAY_EMBED.value
+INVISIBLE = Color.INVISIBLE.value
 
 
 class Embed(hikari.Embed):
@@ -24,8 +26,8 @@ class Embed(hikari.Embed):
         title: Any = None,
         description: Any = None,
         url: str | None = None,
-        color: hikari.Colorish | None = DEFAULT_COLOR,
-        colour: hikari.Colorish | None = DEFAULT_COLOR,
+        color: hikari.Colorish | None = INVISIBLE,
+        colour: hikari.Colorish | None = INVISIBLE,
         timestamp: datetime.datetime | None = None,
     ) -> None:
         super().__init__(
