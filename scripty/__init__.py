@@ -16,8 +16,8 @@ from .functions import *
 
 __author__: Final[str] = "Erich Nguyen"
 __github__: Final[str] = "GoogleGenius"
-__repository__: Final[str] = "https://github.com/scriptydev/prescripty"
 __discord__: Final[str] = "GoogleGenius#7777"
+__repository__: Final[str] = "https://github.com/scriptydev/prescripty"
 __copyright__: Final[str] = "Copyright 2022-Present Scripty Development"
 __license__: Final[str] = "Apache License Version 2.0"
 __version__: Final[str] = "1.0.0a6"
