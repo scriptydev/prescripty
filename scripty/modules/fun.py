@@ -4,7 +4,7 @@ __all__: tuple[str, ...] = ("loader_fun",)
 
 import random
 
-from typing import Any, Sequence
+from typing import Any
 
 import aiohttp
 import alluka

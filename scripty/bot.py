@@ -4,8 +4,6 @@ __all__: tuple[str, ...] = ("start_app",)
 
 import functools
 
-from typing import Sequence
-
 import aiohttp
 import alluka
 import hikari

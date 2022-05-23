@@ -8,7 +8,7 @@ __all__: tuple[str, ...] = (
     "THE_CAT_API_KEY",
 )
 
-from typing import Final, Sequence
+from typing import Final
 
 import toml
 

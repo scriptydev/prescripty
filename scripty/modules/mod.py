@@ -2,8 +2,6 @@ from __future__ import annotations
 
 __all__: tuple[str, ...] = ("loader_mod",)
 
-from typing import Sequence
-
 import asyncio
 import datetime
 

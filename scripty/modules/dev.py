@@ -4,8 +4,6 @@ __all__: tuple[str, ...] = ("loader_dev",)
 
 import pathlib
 
-from typing import Sequence
-
 import alluka
 import tanjun
 

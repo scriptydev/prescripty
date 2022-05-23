@@ -2,8 +2,6 @@ from __future__ import annotations
 
 __all__: tuple[str, ...] = ("loader_misc",)
 
-from typing import Sequence
-
 import hikari
 import tanchi
 import tanjun
