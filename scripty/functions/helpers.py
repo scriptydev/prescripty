@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-__all__: list[str] = [
+__all__: tuple[str, ...] = (
     "datetime_utcnow_aware",
     "get_modules",
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
-]
+)
 
 import asyncio
 import datetime

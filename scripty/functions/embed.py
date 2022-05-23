@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: list[str] = ["Embed"]
+__all__: tuple[str, ...] = ("Embed",)
 
 import datetime
 

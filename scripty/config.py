@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-__all__: list[str] = [
+__all__: tuple[str, ...] = (
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",
     "GUILD_ID_SECONDARY",
     "INVITE_URL",
     "THE_CAT_API_KEY",
-]
+)
 
 from typing import Final
 

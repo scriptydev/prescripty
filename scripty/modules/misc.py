@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: list[str] = ["loader_misc"]
+__all__: tuple[str, ...] = ("loader_misc",)
 
 import hikari
 import tanchi
