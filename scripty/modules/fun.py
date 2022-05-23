@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ("loader_fun",)
+__all__: Sequence[str] = ("loader_fun",)
 
 import random
 
-from typing import Any
+from typing import Any, Sequence
 
 import aiohttp
 import alluka

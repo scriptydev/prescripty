@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ("Embed",)
+__all__: Sequence[str] = ("Embed",)
 
 import datetime
 

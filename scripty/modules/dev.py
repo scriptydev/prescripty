@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ("loader_dev",)
+__all__: Sequence[str] = ("loader_dev",)
 
 import pathlib
+
+from typing import Sequence
 
 import alluka
 import tanjun

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ("start_app",)
+__all__: Sequence[str] = ("start_app",)
 
 import functools
+
+from typing import Sequence
 
 import aiohttp
 import alluka

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: tuple[str, ...] = (
+__all__: Sequence[str] = (
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",
     "GUILD_ID_SECONDARY",
@@ -8,7 +8,7 @@ __all__: tuple[str, ...] = (
     "THE_CAT_API_KEY",
 )
 
-from typing import Final
+from typing import Final, Sequence
 
 import toml
 

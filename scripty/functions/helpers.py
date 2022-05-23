@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: tuple[str, ...] = (
+__all__: Sequence[str] = (
     "datetime_utcnow_aware",
     "get_modules",
     "parse_to_future_datetime",
