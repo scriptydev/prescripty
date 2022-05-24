@@ -122,7 +122,7 @@ async def activity_(
 @animal.with_command
 @tanchi.as_slash_command()
 async def cat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random cat image"""
@@ -140,7 +140,7 @@ async def cat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def httpcat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     status_code: int,
 ) -> None:
     """Cats for HTTP status codes
@@ -158,7 +158,7 @@ async def httpcat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def dog(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random dog image"""
@@ -211,7 +211,7 @@ class MemeView(miru.View):
         self.index = index
 
     @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
-    async def next(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def next(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         self.index += 1
         if self.index == len(self.submissions):
             self.index = 0
@@ -224,7 +224,7 @@ class MemeView(miru.View):
         await ctx.edit_response(embed)
 
     @miru.button(label="Stop", style=hikari.ButtonStyle.DANGER)
-    async def stop_(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def stop_(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         for item in self.children:
             item.disabled = True
 
@@ -349,17 +349,17 @@ class RPSView(miru.View):
         )
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
-    async def rock(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def rock(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         await ctx.edit_response(self.determine_outcome("Rock"), components=[])
         self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
-    async def paper(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def paper(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         await ctx.edit_response(self.determine_outcome("Paper"), components=[])
         self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
-    async def scissors(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def scissors(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
