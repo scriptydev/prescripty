@@ -13,10 +13,6 @@ import tanjun
 import scripty.config
 import scripty.functions
 
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-
 
 def create_client(
     bot: hikari.GatewayBot, datastore: scripty.functions.DataStore

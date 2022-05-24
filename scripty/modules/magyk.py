@@ -1,8 +1,9 @@
-__all__: list[str] = ["loader_magyk"]
+__all__: tuple[str, ...] = ("loader_magyk",)
 
 import aiohttp
 import alluka
-import hikari
+
+# import hikari
 import tanchi
 import tanjun
 
@@ -19,23 +20,23 @@ wizard = magykmod.with_command(
 )
 
 
-@wizard.with_command
-@tanchi.as_slash_command("activate")
-async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
-    """Activate MagykMod Wizard"""
-    # TODO: Some database system here probably to store the activation status along
-    # with the guild ID. Then a on_message event listener somewhere to listen for
-    # messages, check the content for links, and run them through Aero.
-    await ctx.respond("Not implemented error")
+# @wizard.with_command
+# @tanchi.as_slash_command("activate")
+# async def shield_activate(ctx: tanjun.abc.SlashContext) -> None:
+#     """Activate MagykMod Wizard"""
+#     # TODO: Some database system here probably to store the activation status along
+#     # with the guild ID. Then a on_message event listener somewhere to listen for
+#     # messages, check the content for links, and run them through Aero.
+#     await ctx.respond("Not implemented error")
 
 
-@wizard.with_command
-@tanchi.as_slash_command("deactivate")
-async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
-    """Deactivate MagykMod Wizard"""
-    # TODO: Let's see how lazy I am and wait until Johan actually decides to implement
-    # audit logging and then add automod.
-    await ctx.respond("Not implemented error")
+# @wizard.with_command
+# @tanchi.as_slash_command("deactivate")
+# async def shield_deactivate(ctx: tanjun.abc.SlashContext) -> None:
+#     """Deactivate MagykMod Wizard"""
+#     # TODO: Let's see how lazy I am and wait until Johan actually decides to implement
+#     # audit logging and then add automod.
+#     await ctx.respond("Not implemented error")
 
 
 @analyze.with_command
@@ -97,43 +98,43 @@ async def analyze_url(
         await ctx.respond(embed)
 
 
-@analyze.with_command
-@tanchi.as_slash_command("user")
-async def analyze_user(
-    ctx: tanjun.abc.SlashContext,
-    session: alluka.Injected[aiohttp.ClientSession],
-    user: hikari.User,
-) -> None:
-    """
-    Analyze a user for fraudulency
+# @analyze.with_command
+# @tanchi.as_slash_command("user")
+# async def analyze_user(
+#     ctx: tanjun.abc.SlashContext,
+#     session: alluka.Injected[aiohttp.ClientSession],
+#     user: hikari.User,
+# ) -> None:
+#     """
+#     Analyze a user for fraudulency
 
-    Parameters
-    ----------
-    user : hikari.User
-        User to analyze
-    """
-    async with session.get(
-        f"{scripty.AERO_API}/users/{user.id}/bans", headers=scripty.AERO_HEADERS
-    ) as response:
-        data = await response.json()
+#     Parameters
+#     ----------
+#     user : hikari.User
+#         User to analyze
+#     """
+#     async with session.get(
+#         f"{scripty.AERO_API}/users/{user.id}/bans", headers=scripty.AERO_HEADERS
+#     ) as response:
+#         data = await response.json()
 
-        if not response.ok:
-            await ctx.respond(
-                scripty.Embed(
-                    title="Analyze Error",
-                    description="An error occurred while analyzing the user",
-                )
-            )
+#         if not response.ok:
+#             await ctx.respond(
+#                 scripty.Embed(
+#                     title="Analyze Error",
+#                     description="An error occurred while analyzing the user",
+#                 )
+#             )
 
-            raise scripty.HTTPError(
-                f"The Aero Ravy API returned a mentally unok {response.status} status"
-                f" with the following data: {data}"
-            )
+#             raise scripty.HTTPError(
+#                 f"The Aero Ravy API returned a mentally unok {response.status} status"
+#                 f" with the following data: {data}"
+#             )
 
-        # TODO: The rest of this:
-        embed = scripty.Embed(description=f"```json\n{data}\n```")
+#         # TODO: The rest of this:
+#         embed = scripty.Embed(description=f"```json\n{data}\n```")
 
-        await ctx.respond(embed)
+#         await ctx.respond(embed)
 
 
 loader_magyk = tanjun.Component(name="magyk").load_from_scope().make_loader()

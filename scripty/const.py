@@ -1,4 +1,4 @@
-__all__: list[str] = ["AERO_API", "AERO_HEADERS", "INVITE_URL"]
+__all__: tuple[str, ...] = ("AERO_API", "AERO_HEADERS", "INVITE_URL")
 
 from typing import Final
 

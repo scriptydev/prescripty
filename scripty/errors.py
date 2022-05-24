@@ -1,4 +1,4 @@
-__all__: list[str] = ["HTTPError"]
+__all__: tuple[str, ...] = ("HTTPError",)
 
 
 class HTTPError(Exception):
