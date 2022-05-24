@@ -1,4 +1,6 @@
-__all__: list[str] = ["loader_fun"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_fun",)
 
 import random
 
@@ -14,7 +16,6 @@ import tanjun
 import scripty
 
 animal = tanjun.slash_command_group("animal", "Fun things related to animals")
-image = tanjun.slash_command_group("image", "Image manipulation")
 
 
 @tanjun.as_user_menu("birthday")
@@ -77,6 +78,7 @@ async def activity_autocomplete(
     await ctx.set_choices(activity_map)
 
 
+@tanjun.with_own_permission_check(hikari.Permissions.CREATE_INSTANT_INVITE)
 @tanchi.as_slash_command("activity")
 async def activity_(
     ctx: tanjun.abc.SlashContext,
@@ -174,7 +176,7 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.respond(
         scripty.Embed(
             title="Coin",
-            description=random.choice(["Heads", "Tails"]),
+            description=random.choice(("Heads", "Tails")),
         )
     )
 
@@ -197,38 +199,6 @@ async def dice(
             description=random.randint(1, sides),
         )
     )
-
-
-@image.with_command
-@tanchi.as_slash_command()
-async def magik(
-    ctx: tanjun.abc.SlashContext,
-    session: alluka.Injected[aiohttp.ClientSession],
-    user: hikari.User,
-) -> None:
-    """Magikify a user avatar
-
-    Parameters
-    ----------
-    user : hikari.User
-        User to magikify
-    """
-    async with session.get(
-        f"https://nekobot.xyz/api/imagegen?type=magik&image="
-        f"{user.avatar_url or user.default_avatar_url}"
-    ) as response:
-        data = await response.json()
-
-        if not response.ok:
-            await ctx.respond(
-                scripty.Embed(
-                    title="Magik Error",
-                    description="An error occurred while trying to magikify the avatar",
-                )
-            )
-            return
-
-        await ctx.respond(scripty.Embed(title="Magik").set_image(data["message"]))
 
 
 class MemeView(miru.View):

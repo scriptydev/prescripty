@@ -1,4 +1,6 @@
-__all__: list[str] = ["loader_util"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_util",)
 
 import datetime
 import platform

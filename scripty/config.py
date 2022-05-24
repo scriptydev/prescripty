@@ -1,11 +1,13 @@
-__all__: list[str] = [
+from __future__ import annotations
+
+__all__: tuple[str, ...] = (
     "AERO_API_KEY",
     "CLIENT_ID",
     "DISCORD_TOKEN",
     "GUILD_ID_PRIMARY",
     "GUILD_ID_SECONDARY",
     "THE_CAT_API_KEY",
-]
+)
 
 from typing import Final
 

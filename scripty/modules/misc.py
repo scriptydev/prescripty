@@ -1,4 +1,6 @@
-__all__: list[str] = ["loader_misc"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_misc",)
 
 import hikari
 import tanchi

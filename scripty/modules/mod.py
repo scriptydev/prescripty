@@ -1,8 +1,9 @@
-__all__: list[str] = ["loader_mod"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_mod",)
 
 import asyncio
 import datetime
-import functools
 
 from typing import Any
 
@@ -345,11 +346,11 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
         )
 
 
-@functools.lru_cache
+# @functools.lru_cache
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
-    bot: alluka.Injected[hikari.GatewayBot],
     user: str,
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Autocomplete for banned users"""
     guild = ctx.guild_id

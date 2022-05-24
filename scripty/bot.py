@@ -1,4 +1,6 @@
-__all__: list[str] = ["start_app"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("start_app",)
 
 import functools
 
@@ -10,6 +12,10 @@ import tanjun
 
 import scripty.config
 import scripty.functions
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def create_client(

@@ -1,4 +1,6 @@
-__all__: list[str] = [
+from __future__ import annotations
+
+__all__: tuple[str, ...] = (
     "datetime_utcnow_aware",
     "discord_timestamp",
     "generate_oauth",
@@ -6,7 +8,7 @@ __all__: list[str] = [
     "parse_to_future_datetime",
     "parse_to_timedelta_from_now",
     "validate_and_encode_url",
-]
+)
 
 import asyncio
 import datetime
