@@ -12,6 +12,8 @@ from typing import Final
 
 from .bot import *
 from .config import *
+from .const import *
+from .errors import *
 from .functions import *
 
 __author__: Final[str] = "Erich Nguyen"

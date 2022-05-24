@@ -302,15 +302,14 @@ async def timeout_set(
         await ctx.respond(error)
         return
 
-    duration_resolved = int(round(duration.timestamp()))
-    duration_resolved_full = f"<t:{duration_resolved}:F>"
+    duration_resolved = scripty.discord_timestamp(duration, "F")
 
     await member.edit(communication_disabled_until=duration)
     await ctx.respond(
         scripty.Embed(
             title="Timeout",
             description=(
-                f"Timed out **{str(member)}** until {duration_resolved_full}\n"
+                f"Timed out **{str(member)}** until {duration_resolved}\n"
                 f"Reason: `{reason or 'No reason provided'}`"
             ),
         )
