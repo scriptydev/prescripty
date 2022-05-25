@@ -18,7 +18,7 @@ import scripty
 animal = tanjun.slash_command_group("animal", "Fun things related to animals")
 
 
-@tanjun.as_user_menu("birthday")
+@tanjun.as_user_menu("Birthday")
 async def birthday(
     ctx: tanjun.abc.MenuContext,
     user: hikari.User | hikari.InteractionMember,
@@ -28,6 +28,13 @@ async def birthday(
         scripty.Embed(
             title="Birthday",
             description=f"{ctx.author} wished you a happy birthday, {user}!",
+        )
+    )
+
+    await ctx.respond(
+        scripty.Embed(
+            title="Birthday",
+            description=f"Birthday wish sent to {user}!",
         )
     )
 

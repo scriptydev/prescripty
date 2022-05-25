@@ -10,13 +10,12 @@ import hikari
 import miru
 import tanjun
 
-import scripty.config
-import scripty.functions
+from .config import DISCORD_TOKEN
+from .errors import on_error
+from .functions import DataStore, datetime_utcnow_aware
 
 
-def create_client(
-    bot: hikari.GatewayBot, datastore: scripty.functions.DataStore
-) -> tanjun.Client:
+def create_client(bot: hikari.GatewayBot, datastore: DataStore) -> tanjun.Client:
     """Create the tanjun client"""
     return (
         tanjun.Client.from_gateway_bot(
@@ -27,16 +26,17 @@ def create_client(
         .load_modules("scripty.modules")
         .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_client_starting)
         .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_client_closing)
-        .set_type_dependency(scripty.functions.DataStore, datastore)
+        .set_type_dependency(DataStore, datastore)
+        .set_hooks(tanjun.AnyHooks().set_on_error(on_error))
     )
 
 
 def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     """Build the bot"""
-    datastore = scripty.functions.DataStore()
+    datastore = DataStore()
     on_bot_started_as_partial = functools.partial(on_bot_started, datastore=datastore)
 
-    bot = hikari.GatewayBot(scripty.config.DISCORD_TOKEN)
+    bot = hikari.GatewayBot(DISCORD_TOKEN)
     bot.subscribe(hikari.StartedEvent, on_bot_started_as_partial)
 
     client = create_client(bot, datastore)
@@ -65,8 +65,6 @@ async def on_client_closing(
         await session.close()
 
 
-async def on_bot_started(
-    _: hikari.StartingEvent, datastore: scripty.functions.DataStore
-) -> None:
+async def on_bot_started(_: hikari.StartingEvent, datastore: DataStore) -> None:
     """Called after bot is fully started"""
-    datastore.start_time = scripty.functions.datetime_utcnow_aware()
+    datastore.start_time = datetime_utcnow_aware()
