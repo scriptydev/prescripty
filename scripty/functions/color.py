@@ -1,4 +1,6 @@
-__all__: list[str] = ["Color"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("Color",)
 
 import enum
 
@@ -13,4 +15,4 @@ class Color(enum.IntEnum):
     RED = 0xED4245
     WHITE = 0xFFFFFF
     BLACK = 0x000000
-    GRAY_EMBED = 0x2F3136
+    INVISIBLE = 0x2F3136

@@ -1,4 +1,6 @@
-__all__: list[str] = ["component"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_misc",)
 
 import hikari
 import tanchi
@@ -7,8 +9,6 @@ import tanjun
 from gpytranslate import Translator
 
 import scripty
-
-component = tanjun.Component()
 
 
 @tanjun.as_user_menu("Avatar")
@@ -63,7 +63,7 @@ async def translate_menu(
 
 @tanchi.as_slash_command("translate")
 async def translate_slash(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     text: str,
     source: str = "auto",
     target: str = "en",
@@ -196,4 +196,4 @@ async def poll(
                 pass
 
 
-component.load_from_scope().make_loader()
+loader_misc = tanjun.Component(name="misc").load_from_scope().make_loader()

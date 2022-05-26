@@ -1,8 +1,9 @@
-__all__: list[str] = ["component"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_mod",)
 
 import asyncio
 import datetime
-import functools
 
 from typing import Any
 
@@ -12,8 +13,6 @@ import tanchi
 import tanjun
 
 import scripty
-
-component = tanjun.Component()
 
 slowmode = tanjun.slash_command_group("slowmode", "Slowmode channel")
 timeout = tanjun.slash_command_group("timeout", "Timeout member")
@@ -303,15 +302,14 @@ async def timeout_set(
         await ctx.respond(error)
         return
 
-    duration_resolved = int(round(duration.timestamp()))
-    duration_resolved_full = f"<t:{duration_resolved}:F>"
+    duration_resolved = scripty.discord_timestamp(duration, "F")
 
     await member.edit(communication_disabled_until=duration)
     await ctx.respond(
         scripty.Embed(
             title="Timeout",
             description=(
-                f"Timed out **{str(member)}** until {duration_resolved_full}\n"
+                f"Timed out **{str(member)}** until {duration_resolved}\n"
                 f"Reason: `{reason or 'No reason provided'}`"
             ),
         )
@@ -348,11 +346,11 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
         )
 
 
-@functools.lru_cache
+# @functools.lru_cache
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
-    bot: alluka.Injected[hikari.GatewayBot],
     user: str,
+    bot: alluka.Injected[hikari.GatewayBot],
 ) -> None:
     """Autocomplete for banned users"""
     guild = ctx.guild_id
@@ -418,4 +416,4 @@ async def unban(
         )
 
 
-component.load_from_scope().make_loader()
+loader_mod = tanjun.Component(name="mod").load_from_scope().make_loader()

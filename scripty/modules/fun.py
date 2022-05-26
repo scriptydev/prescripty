@@ -1,4 +1,6 @@
-__all__: list[str] = ["component"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_fun",)
 
 import random
 
@@ -13,13 +15,10 @@ import tanjun
 
 import scripty
 
-component = tanjun.Component()
-
 animal = tanjun.slash_command_group("animal", "Fun things related to animals")
-image = tanjun.slash_command_group("image", "Fun things related to images")
 
 
-@tanjun.as_user_menu("birthday")
+@tanjun.as_user_menu("Birthday")
 async def birthday(
     ctx: tanjun.abc.MenuContext,
     user: hikari.User | hikari.InteractionMember,
@@ -29,6 +28,13 @@ async def birthday(
         scripty.Embed(
             title="Birthday",
             description=f"{ctx.author} wished you a happy birthday, {user}!",
+        )
+    )
+
+    await ctx.respond(
+        scripty.Embed(
+            title="Birthday",
+            description=f"Birthday wish sent to {user}!",
         )
     )
 
@@ -79,6 +85,7 @@ async def activity_autocomplete(
     await ctx.set_choices(activity_map)
 
 
+@tanjun.with_own_permission_check(hikari.Permissions.CREATE_INSTANT_INVITE)
 @tanchi.as_slash_command("activity")
 async def activity_(
     ctx: tanjun.abc.SlashContext,
@@ -122,7 +129,7 @@ async def activity_(
 @animal.with_command
 @tanchi.as_slash_command()
 async def cat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random cat image"""
@@ -140,11 +147,11 @@ async def cat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def httpcat(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     status_code: int,
 ) -> None:
     """Cats for HTTP status codes
-    
+
     Parameters
     ----------
     status_code : int
@@ -158,7 +165,7 @@ async def httpcat(
 @animal.with_command
 @tanchi.as_slash_command()
 async def dog(
-    ctx: tanjun.abc.Context,
+    ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
 ) -> None:
     """Get a random dog image"""
@@ -176,7 +183,7 @@ async def coin(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.respond(
         scripty.Embed(
             title="Coin",
-            description=random.choice(["Heads", "Tails"]),
+            description=random.choice(("Heads", "Tails")),
         )
     )
 
@@ -201,38 +208,6 @@ async def dice(
     )
 
 
-@image.with_command
-@tanchi.as_slash_command()
-async def magik(
-    ctx: tanjun.abc.SlashContext,
-    session: alluka.Injected[aiohttp.ClientSession],
-    user: hikari.User,
-) -> None:
-    """Magikify a user avatar
-
-    Parameters
-    ----------
-    user : hikari.User
-        User to magikify
-    """
-    async with session.get(
-        f"https://nekobot.xyz/api/imagegen?type=magik&image="
-        f"{user.avatar_url or user.default_avatar_url}"
-    ) as response:
-        data = await response.json()
-
-        if not response.ok:
-            await ctx.respond(
-                scripty.Embed(
-                    title="Magik Error",
-                    description="An error occurred while trying to magikify the avatar",
-                )
-            )
-            return
-
-        await ctx.respond(scripty.Embed(title="Magik").set_image(data["message"]))
-
-
 class MemeView(miru.View):
     def __init__(
         self, tanjun_ctx: tanjun.abc.Context, submissions: Any, index: int
@@ -243,7 +218,7 @@ class MemeView(miru.View):
         self.index = index
 
     @miru.button(label="Next", style=hikari.ButtonStyle.SECONDARY)
-    async def next(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def next(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         self.index += 1
         if self.index == len(self.submissions):
             self.index = 0
@@ -256,7 +231,7 @@ class MemeView(miru.View):
         await ctx.edit_response(embed)
 
     @miru.button(label="Stop", style=hikari.ButtonStyle.DANGER)
-    async def stop_(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def stop_(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         for item in self.children:
             item.disabled = True
 
@@ -381,17 +356,17 @@ class RPSView(miru.View):
         )
 
     @miru.button(label="Rock", style=hikari.ButtonStyle.DANGER)
-    async def rock(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def rock(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         await ctx.edit_response(self.determine_outcome("Rock"), components=[])
         self.stop()
 
     @miru.button(label="Paper", style=hikari.ButtonStyle.SUCCESS)
-    async def paper(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def paper(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         await ctx.edit_response(self.determine_outcome("Paper"), components=[])
         self.stop()
 
     @miru.button(label="Scissors", style=hikari.ButtonStyle.PRIMARY)
-    async def scissors(self, _: miru.Button, ctx: miru.Context) -> None:  # type: ignore
+    async def scissors(self, _: miru.Button[Any], ctx: miru.Context) -> None:
         await ctx.edit_response(self.determine_outcome("Scissors"), components=[])
         self.stop()
 
@@ -461,4 +436,4 @@ async def quote(
         await ctx.respond(embed)
 
 
-component.load_from_scope().make_loader()
+loader_fun = tanjun.Component(name="fun").load_from_scope().make_loader()

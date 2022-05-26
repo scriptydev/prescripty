@@ -1,4 +1,6 @@
-__all__: list[str] = ["component"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("loader_dev",)
 
 import pathlib
 
@@ -6,8 +8,6 @@ import alluka
 import tanjun
 
 import scripty
-
-component = tanjun.Component()
 
 
 @tanjun.with_owner_check(error_message=None)
@@ -107,4 +107,4 @@ async def unload(
     )
 
 
-component.load_from_scope().make_loader()
+loader_dev = tanjun.Component(name="dev").load_from_scope().make_loader()

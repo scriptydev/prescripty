@@ -1,5 +1,8 @@
-__all__: list[str] = ["component"]
+from __future__ import annotations
 
+__all__: tuple[str, ...] = ("loader_util",)
+
+import datetime
 import platform
 
 from typing import Sequence
@@ -13,8 +16,6 @@ import tanjun
 
 import scripty
 
-component = tanjun.Component()
-
 stats = tanjun.slash_command_group("stats", "Statistics related to Scripty")
 info = tanjun.slash_command_group("info", "Get information")
 
@@ -24,7 +25,7 @@ class InviteView(miru.View):
         super().__init__()
         self.add_item(
             miru.Button(
-                label="Add Scripty to Server",
+                label="Add to Server",
                 url=scripty.INVITE_URL,
             )
         )
@@ -52,10 +53,9 @@ async def stats_about(
         .add_field("Library", f"Hikari {hikari.__version__}", inline=True)
         .add_field("Repository", f"[GitHub]({scripty.__repository__})", inline=True)
         .add_field("Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True)
+        .add_field("Developer", scripty.__discord__, inline=True)
         .add_field(
-            "Developers",
-            " ".join(f"`{dev}`" for dev in scripty.__discord__),
-            inline=True,
+            "Created", scripty.discord_timestamp(bot_user.created_at, "F"), inline=True
         )
         .set_footer("#StandWithUkraine")
     )
@@ -88,11 +88,13 @@ async def stats_system(
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
 
-    boot_timestamp = round(psutil.boot_time())
-    boot_resolved_relative = f"<t:{boot_timestamp}:R>"
+    boot_timestamp = psutil.boot_time()
+    boot_resolved_relative = scripty.discord_timestamp(
+        datetime.datetime.fromtimestamp(boot_timestamp), "R"
+    )
 
-    start_time_timestamp = round(datastore.start_time.timestamp())
-    start_time_resolved_relative = f"<t:{start_time_timestamp}:R>"
+    start_time_timestamp = datastore.start_time
+    start_time_resolved_relative = scripty.discord_timestamp(start_time_timestamp, "R")
 
     embed = (
         scripty.Embed(title="System")
@@ -145,8 +147,6 @@ async def info_user(
     member: bool = isinstance(user, hikari.InteractionMember)
     roles: Sequence[hikari.Role] = user.get_roles() if member else []
 
-    error = "`Not in Guild`"
-
     embed = (
         scripty.Embed(title="Info")
         .set_author(
@@ -156,29 +156,22 @@ async def info_user(
         .add_field("Name", user.username, inline=True)
         .add_field("Discriminator", user.discriminator, inline=True)
         .add_field("ID", str(user.id), inline=True)
-        .add_field("Created", f"<t:{int(user.created_at.timestamp())}:R>", inline=True)
         .add_field(
-            "Joined",
-            f"<t:{int(user.joined_at.timestamp())}:R>" if member else error,
-            inline=True,
-        )
-        .add_field(
-            "Nickname",
-            str(user.nickname) if member else error,
-            inline=True,
-        )
-        .add_field(
-            "Roles",
-            " ".join(role.mention for role in roles) if member else error,
-        )
-        .add_field(
-            "Permissions",
-            " ".join(f"`{permission}`" for permission in user.permissions)
-            if member
-            else error,
+            "Created", scripty.discord_timestamp(user.created_at, "R"), inline=True
         )
         .set_thumbnail(user.avatar_url or user.default_avatar_url)
     )
+
+    if member:
+        embed.add_field(
+            "Joined", scripty.discord_timestamp(user.joined_at, "R"), inline=True
+        )
+        embed.add_field("Nickname", str(user.nickname), inline=True)
+        embed.add_field("Roles", " ".join(role.mention for role in roles))
+        embed.add_field(
+            "Permissions",
+            " ".join(f"`{permission}`" for permission in user.permissions),
+        )
 
     await ctx.respond(embed)
 
@@ -209,9 +202,7 @@ async def info_server(
         .add_field("ID", str(guild.id), inline=True)
         .add_field("Owner", str(await guild.fetch_owner()), inline=True)
         .add_field(
-            "Created",
-            f"<t:{int(guild.created_at.timestamp())}:R>",
-            inline=True,
+            "Created", scripty.discord_timestamp(guild.created_at, "R"), inline=True
         )
         .add_field(
             "Members",
@@ -223,11 +214,7 @@ async def info_server(
         .add_field("Roles", str(len(guild.get_roles())), inline=True)
         .add_field("Emoji", str(len(guild.emojis)), inline=True)
         .add_field("Region", guild.preferred_locale, inline=True)
-        .add_field(
-            "Premium Boosts",
-            str(guild.premium_subscription_count),
-            inline=True,
-        )
+        .add_field("Premium Boosts", str(guild.premium_subscription_count), inline=True)
         .add_field("Premium Tier", str(guild.premium_tier), inline=True)
         .add_field("Verification Level", str(guild.verification_level), inline=True)
         .set_thumbnail(guild.icon_url)
@@ -253,7 +240,9 @@ async def info_role(
         scripty.Embed(title="Info")
         .add_field("Name", role.name, inline=True)
         .add_field("ID", str(role.id), inline=True)
-        .add_field("Created", f"<t:{int(role.created_at.timestamp())}:R>", inline=True)
+        .add_field(
+            "Created", scripty.discord_timestamp(role.created_at, "R"), inline=True
+        )
         .add_field("Color", str(role.color), inline=True)
         .add_field("Position", str(role.position), inline=True)
         .add_field("Mentionable", str(role.is_mentionable), inline=True)
@@ -300,9 +289,7 @@ async def info_channel(
         .add_field("Name", str(channel.name), inline=True)
         .add_field("ID", str(channel.id), inline=True)
         .add_field(
-            "Created",
-            f"<t:{int(channel.created_at.timestamp())}:R>",
-            inline=True,
+            "Created", scripty.discord_timestamp(channel.created_at, "R"), inline=True
         )
         .add_field("Type", str(channel.type), inline=True)
     )
@@ -332,7 +319,7 @@ async def info_invite(
         .add_field("Channel", str(invite.channel), inline=True)
         .add_field(
             "Expire",
-            f"<t:{int(invite.expires_at.timestamp())}:R>"
+            scripty.discord_timestamp(invite.expires_at, "R")
             if invite.expires_at
             else str(invite.expires_at),
             inline=True,
@@ -342,4 +329,4 @@ async def info_invite(
     await ctx.respond(embed)
 
 
-component.load_from_scope().make_loader()
+loader_util = tanjun.Component(name="util").load_from_scope().make_loader()

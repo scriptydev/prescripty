@@ -1,7 +1,8 @@
-__all__: list[str] = ["start_app"]
+from __future__ import annotations
+
+__all__: tuple[str, ...] = ("start_app",)
 
 import functools
-import pathlib
 
 import aiohttp
 import alluka
@@ -10,7 +11,8 @@ import miru
 import tanjun
 
 from .config import DISCORD_TOKEN
-from .functions import DataStore, datetime_utcnow_aware, get_modules
+from .errors import on_error
+from .functions import DataStore, datetime_utcnow_aware
 
 
 def create_client(bot: hikari.GatewayBot, datastore: DataStore) -> tanjun.Client:
@@ -21,10 +23,11 @@ def create_client(bot: hikari.GatewayBot, datastore: DataStore) -> tanjun.Client
             mention_prefix=True,
             declare_global_commands=True,
         )
-        .load_modules(*get_modules(pathlib.Path("scripty/modules")))
+        .load_modules("scripty.modules")
         .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_client_starting)
         .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_client_closing)
         .set_type_dependency(DataStore, datastore)
+        .set_hooks(tanjun.AnyHooks().set_on_error(on_error))
     )
 
 
