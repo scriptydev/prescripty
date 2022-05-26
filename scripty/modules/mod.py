@@ -2,10 +2,7 @@ from __future__ import annotations
 
 __all__: tuple[str, ...] = ("loader_mod",)
 
-import asyncio
 import datetime
-
-from typing import Any
 
 import alluka
 import hikari
@@ -90,9 +87,7 @@ async def delete(
         )
 
     channel = ctx.channel_id
-
     bulk_delete_limit = scripty.datetime_utcnow_aware() - datetime.timedelta(days=14)
-
     iterator = (
         bot.rest.fetch_messages(channel)
         .take_while(lambda message: message.created_at > bulk_delete_limit)
@@ -100,38 +95,21 @@ async def delete(
     )
 
     count = 0
-    tasks: Any | None = []
     async for messages in iterator.chunk(100):
         count += len(messages)
-        task = asyncio.create_task(bot.rest.delete_messages(channel, messages))
-        tasks.append(task)
+        await bot.rest.delete_messages(channel, messages)
 
-    if not tasks:
-        await ctx.respond(
-            scripty.Embed(
-                title="Delete Error",
-                description=(
-                    "Unable to delete messages!\n"
-                    "Messages are older than `14 days` or nonexistent"
-                ),
-            )
-        )
-        return
-
-    await asyncio.wait(tasks)
+    message_base = f"`{count} message{'' if count == 1 else 's'}` deleted"
 
     if count < amount:
         await ctx.respond(
             generate_embed(
-                f"`{count} message{'' if count == 1 else 's'}` deleted\n"
-                f"Cannot delete past `14 days` or nonexistent"
+                f"{message_base}\nCannot delete past `14 days` or nonexistent"
             )
         )
         return
 
-    await ctx.respond(
-        generate_embed(f"`{count} message{'' if count == 1 else 's'}` deleted")
-    )
+    await ctx.respond(generate_embed(message_base))
 
 
 @tanjun.with_own_permission_check(hikari.Permissions.KICK_MEMBERS)
