@@ -356,6 +356,7 @@ async def unban_user_autocomplete(
 ) -> None:
     """Autocomplete for banned users"""
     guild = ctx.guild_id
+
     if guild is None:
         await ctx.set_choices()
         return
@@ -363,11 +364,9 @@ async def unban_user_autocomplete(
     if guild not in _guild_ban_cache_map.keys():
         _guild_ban_cache_map[guild] = await bot.rest.fetch_bans(guild)
 
-    bans = _guild_ban_cache_map[guild]
-
     ban_map: dict[str, str] = {}
 
-    for ban_entry in bans:
+    for ban_entry in _guild_ban_cache_map[guild]:
         if len(ban_map) == 10:
             break
         if (

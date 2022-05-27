@@ -1,6 +1,5 @@
 __all__: tuple[str, ...] = ("loader_magyk",)
 
-import aiohttp
 import alluka
 
 # import hikari
@@ -44,7 +43,6 @@ wizard = magykmod.with_command(
 @tanchi.as_slash_command("url")
 async def analyze_url(
     ctx: tanjun.abc.SlashContext,
-    session: alluka.Injected[aiohttp.ClientSession],
     plane_client: alluka.Injected[plane.Client],
     url: str,
 ) -> None:
