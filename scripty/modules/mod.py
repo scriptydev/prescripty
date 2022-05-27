@@ -5,7 +5,7 @@ __all__: tuple[str, ...] = ("loader_mod",)
 import asyncio
 import datetime
 
-from typing import Any
+from typing import Any, Sequence
 
 import alluka
 import hikari
@@ -346,7 +346,9 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
         )
 
 
-# @functools.lru_cache
+_guild_ban_cache_map: dict[int, Sequence[hikari.GuildBan]] = {}
+
+
 async def unban_user_autocomplete(
     ctx: tanjun.abc.AutocompleteContext,
     user: str,
@@ -355,9 +357,14 @@ async def unban_user_autocomplete(
     """Autocomplete for banned users"""
     guild = ctx.guild_id
     if guild is None:
+        await ctx.set_choices()
         return
 
-    bans = await bot.rest.fetch_bans(guild)
+    if guild not in _guild_ban_cache_map.keys():
+        _guild_ban_cache_map[guild] = await bot.rest.fetch_bans(guild)
+
+    bans = _guild_ban_cache_map[guild]
+
     ban_map: dict[str, str] = {}
 
     for ban_entry in bans:
@@ -414,6 +421,7 @@ async def unban(
                 description=f"Unbanned **{str(user)}**",
             )
         )
+        del _guild_ban_cache_map[guild]
 
 
 loader_mod = tanjun.Component(name="mod").load_from_scope().make_loader()
