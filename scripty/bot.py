@@ -66,7 +66,6 @@ async def on_client_closing(
     """Actions to perform while client shutdown"""
     await session.close()
     await plane_client.close()
-    client.re
 
 
 async def on_bot_started(_: hikari.StartingEvent, datastore: DataStore) -> None:
