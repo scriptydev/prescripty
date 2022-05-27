@@ -4,6 +4,7 @@ import aiohttp
 import alluka
 
 # import hikari
+import plane
 import tanchi
 import tanjun
 
@@ -44,6 +45,7 @@ wizard = magykmod.with_command(
 async def analyze_url(
     ctx: tanjun.abc.SlashContext,
     session: alluka.Injected[aiohttp.ClientSession],
+    plane_client: alluka.Injected[plane.Client],
     url: str,
 ) -> None:
     """
@@ -68,28 +70,24 @@ async def analyze_url(
         )
         return
 
-    async with session.get(
-        f"{scripty.AERO_API}/urls/{url_parsed[1]}", headers=scripty.AERO_HEADERS
-    ) as response:
-        data = await response.json()
+    try:
+        data = await plane_client.urls.get_url(url_parsed["encoded"])
 
-        if not response.ok:
-            await ctx.respond(
-                scripty.Embed(
-                    title="Analyze Error",
-                    description="An error occurred while analyzing the URL",
-                )
+    except plane.HTTPException as e:
+        await ctx.respond(
+            scripty.Embed(
+                title="Analyze Error",
+                description="An error occurred while analyzing the URL",
             )
+        )
 
-            raise scripty.HTTPError(
-                f"The Aero Ravy API returned a mentally unok {response.status} status"
-                f" with the following data: {data}"
-            )
+        raise Exception from e
 
+    else:
         embed = (
             scripty.Embed(
                 title="Analyze",
-                description=url_parsed[0],
+                description=url_parsed["input"],
             )
             .add_field("Fraudulent", data["isFraudulent"], inline=True)
             .add_field("Information", data["message"], inline=True)

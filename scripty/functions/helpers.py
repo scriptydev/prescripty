@@ -207,7 +207,7 @@ async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | Non
     return datetime.timedelta(seconds=duration_seconds)
 
 
-def validate_and_encode_url(url: str) -> tuple[str, str] | None:
+def validate_and_encode_url(url: str) -> dict[str, str] | None:
     """Validate and encode a specifed url
 
     Parameters
@@ -240,4 +240,4 @@ def validate_and_encode_url(url: str) -> tuple[str, str] | None:
     if url_http_match is None:
         url = f"https://{url}"
 
-    return url, urllib.parse.quote_plus(url)
+    return {"input": url, "encoded": urllib.parse.quote_plus(url)}

@@ -8,9 +8,10 @@ import aiohttp
 import alluka
 import hikari
 import miru
+import plane
 import tanjun
 
-from .config import DISCORD_TOKEN
+from .config import DISCORD_TOKEN, AERO_API_KEY
 from .errors import on_error
 from .functions import DataStore, datetime_utcnow_aware
 
@@ -55,14 +56,17 @@ def start_app() -> None:
 async def on_client_starting(client: alluka.Injected[tanjun.Client]) -> None:
     """Setup to execute during client startup"""
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
+    client.set_type_dependency(plane.Client, plane.Client(AERO_API_KEY))
 
 
 async def on_client_closing(
-    session: alluka.Injected[aiohttp.ClientSession | None],
+    session: alluka.Injected[aiohttp.ClientSession],
+    plane_client: alluka.Injected[plane.Client],
 ) -> None:
     """Actions to perform while client shutdown"""
-    if session:
-        await session.close()
+    await session.close()
+    await plane_client.close()
+    client.re
 
 
 async def on_bot_started(_: hikari.StartingEvent, datastore: DataStore) -> None:
