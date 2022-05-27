@@ -358,7 +358,6 @@ async def unban_user_autocomplete(
     guild = ctx.guild_id
 
     if guild is None:
-        await ctx.set_choices()
         return
 
     if guild not in _guild_ban_cache_map.keys():
