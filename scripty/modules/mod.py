@@ -52,9 +52,7 @@ async def ban(
         )
         return
 
-    await bot.rest.ban_user(
-        guild, user, delete_message_days=delete_message_days, reason=reason
-    )
+    await bot.rest.ban_user(guild, user, delete_message_days=delete_message_days, reason=reason)
 
     await ctx.respond(
         scripty.Embed(
@@ -110,10 +108,7 @@ async def delete(
         await ctx.respond(
             scripty.Embed(
                 title="Delete Error",
-                description=(
-                    "Unable to delete messages!\n"
-                    "Messages are older than `14 days` or nonexistent"
-                ),
+                description=("Unable to delete messages!\n" "Messages are older than `14 days` or nonexistent"),
             )
         )
         return
@@ -129,9 +124,7 @@ async def delete(
         )
         return
 
-    await ctx.respond(
-        generate_embed(f"`{count} message{'' if count == 1 else 's'}` deleted")
-    )
+    await ctx.respond(generate_embed(f"`{count} message{'' if count == 1 else 's'}` deleted"))
 
 
 @tanjun.with_own_permission_check(hikari.Permissions.KICK_MEMBERS)
@@ -168,10 +161,7 @@ async def kick(
     await ctx.respond(
         scripty.Embed(
             title="Kick",
-            description=(
-                f"Kicked **{str(member)}**\n"
-                f"Reason: `{reason or 'No reason provided'}`"
-            ),
+            description=(f"Kicked **{str(member)}**\n" f"Reason: `{reason or 'No reason provided'}`"),
         )
     )
 
@@ -202,9 +192,7 @@ async def slowmode_enable(
     )
 
     if channel is None:
-        error.description = (
-            "This command must be invoked in a valid textable guild channel!"
-        )
+        error.description = "This command must be invoked in a valid textable guild channel!"
         await ctx.respond(error)
         return
 
@@ -368,10 +356,7 @@ async def unban_user_autocomplete(
     for ban_entry in _guild_ban_cache_map[guild]:
         if len(ban_map) == 10:
             break
-        if (
-            user.lower() in str(ban_entry.user).lower()
-            or user.lower() in str(ban_entry.user.id).lower()
-        ):
+        if user.lower() in str(ban_entry.user).lower() or user.lower() in str(ban_entry.user.id).lower():
             ban_map[str(ban_entry.user)] = str(ban_entry.user.id)
 
     await ctx.set_choices(ban_map)
@@ -406,6 +391,7 @@ async def unban(
     try:
         await bot.rest.unban_user(guild, user)
     except hikari.NotFoundError:
+        del _guild_ban_cache_map[guild]
         await ctx.respond(
             scripty.Embed(
                 title="Unban Error",
@@ -413,13 +399,13 @@ async def unban(
             )
         )
     else:
+        del _guild_ban_cache_map[guild]
         await ctx.respond(
             scripty.Embed(
                 title="Unban",
                 description=f"Unbanned **{str(user)}**",
             )
         )
-        del _guild_ban_cache_map[guild]
 
 
 loader_mod = tanjun.Component(name="mod").load_from_scope().make_loader()
