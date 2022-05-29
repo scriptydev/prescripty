@@ -69,8 +69,7 @@ async def analyze_url(
         return
 
     try:
-        data = await plane_client.urls.get_url(url_parsed["encoded"])
-
+        data = await plane_client.urls.get_website(url_parsed["encoded"])
     except plane.HTTPException as e:
         await ctx.respond(
             scripty.Embed(
@@ -78,19 +77,16 @@ async def analyze_url(
                 description="An error occurred while analyzing the URL",
             )
         )
-
-        raise Exception from e
-
+        raise e
     else:
         embed = (
             scripty.Embed(
                 title="Analyze",
                 description=url_parsed["input"],
             )
-            .add_field("Fraudulent", data["isFraudulent"], inline=True)
-            .add_field("Information", data["message"], inline=True)
+            .add_field("Fraudulent", str(data.is_fraudulent), inline=True)
+            .add_field("Information", data.message, inline=True)
         )
-
         await ctx.respond(embed)
 
 
