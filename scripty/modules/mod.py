@@ -1,9 +1,11 @@
 from __future__ import annotations
+from collections import OrderedDict
 
 __all__: tuple[str, ...] = ("loader_mod",)
 
 import asyncio
 import datetime
+import functools
 
 from typing import Any, Sequence
 
@@ -346,7 +348,8 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
         )
 
 
-_guild_ban_cache_map: dict[hikari.Snowflake, Sequence[hikari.GuildBan]] = {}
+# _guild_ban_cache_map: dict[hikari.Snowflake, Sequence[hikari.GuildBan]] = {}
+_guild_ban_cache_map = scripty.LRUCacheDict(cache_len=100)
 
 
 async def unban_user_autocomplete(

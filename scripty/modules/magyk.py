@@ -9,6 +9,7 @@ import tanjun
 
 import scripty
 
+
 magykmod = tanjun.slash_command_group("magykmod", "Scripty MagykMod moderation")
 
 analyze = magykmod.with_command(
