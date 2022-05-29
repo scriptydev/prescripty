@@ -1,13 +1,11 @@
 from __future__ import annotations
-from collections import OrderedDict
 
 __all__: tuple[str, ...] = ("loader_mod",)
 
 import asyncio
 import datetime
-import functools
 
-from typing import Any, Sequence
+from typing import Any
 
 import alluka
 import hikari
