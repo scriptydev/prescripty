@@ -14,6 +14,8 @@ import tanjun
 
 import scripty
 
+component = tanjun.Component(name="mod")
+
 slowmode = tanjun.slash_command_group("slowmode", "Slowmode channel")
 timeout = tanjun.slash_command_group("timeout", "Timeout member")
 
@@ -60,8 +62,8 @@ async def ban(
         scripty.Embed(
             title="Ban",
             description=(
-                f"Banned **{str(user)}**\n",
-                f"Reason: `{reason or 'No reason provided'}`",
+                f"Banned **{str(user)}**\n"
+                f"Reason: `{reason or 'No reason provided'}`"
             ),
         )
     )
@@ -424,4 +426,10 @@ async def unban(
         )
 
 
-loader_mod = tanjun.Component(name="mod").load_from_scope().make_loader()
+@component.with_listener(hikari.BanDeleteEvent)
+async def on_ban_delete(event: hikari.BanDeleteEvent) -> None:
+    """Remove ban cache entry when ban is deleted"""
+    del _guild_ban_cache_map[event.guild_id]
+
+
+loader_mod = component.load_from_scope().make_loader()

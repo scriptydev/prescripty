@@ -71,7 +71,7 @@ async def analyze_url(
 
     try:
         data = await plane_client.urls.get_website(url_parsed["encoded"])
-    except plane.HTTPException as e:
+    except plane.HTTPError as e:
         await ctx.respond(
             scripty.Embed(
                 title="Analyze Error",

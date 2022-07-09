@@ -35,6 +35,6 @@ async def on_error(ctx: tanjun.abc.Context, exc: Exception) -> bool | None:
     await ctx.respond(
         Embed(
             title="Error",
-            description=(f"This interaction failed!\n```ansi\n\u001b[0;31m{exc}```"),
+            description=(f"This interaction failed!\n```{exc}```"),
         )
     )
