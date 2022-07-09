@@ -349,7 +349,7 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
 
 
 # _guild_ban_cache_map: dict[hikari.Snowflake, Sequence[hikari.GuildBan]] = {}
-_guild_ban_cache_map = scripty.LRUCacheDict(cache_len=100)
+_guild_ban_cache_map = scripty.LRUCachedDict(cache_len=100)
 
 
 async def unban_user_autocomplete(
@@ -409,7 +409,6 @@ async def unban(
     try:
         await bot.rest.unban_user(guild, user)
     except hikari.NotFoundError:
-        del _guild_ban_cache_map[guild]
         await ctx.respond(
             scripty.Embed(
                 title="Unban Error",
@@ -417,7 +416,6 @@ async def unban(
             )
         )
     else:
-        del _guild_ban_cache_map[guild]
         await ctx.respond(
             scripty.Embed(
                 title="Unban",
