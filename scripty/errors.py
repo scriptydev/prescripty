@@ -4,7 +4,7 @@ __all__: tuple[str, ...] = ("HTTPError", "on_error")
 
 import tanjun
 
-from .functions import Embed
+from scripty.functions import embeds
 
 
 class HTTPError(Exception):
@@ -33,7 +33,7 @@ async def on_error(ctx: tanjun.abc.Context, exc: Exception) -> None:
         hooks return `None` then the error will be raised.
     """
     await ctx.respond(
-        Embed(
+        embeds.Embed(
             title="Error",
             description=(f"This interaction failed!\n```{exc}```"),
         )

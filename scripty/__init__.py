@@ -11,12 +11,6 @@ from __future__ import annotations
 
 from typing import Final
 
-from .bot import *
-from .config import *
-from .const import *
-from .errors import *
-from .functions import *
-
 __author__: Final[str] = "Erich Nguyen"
 __github__: Final[str] = "GoogleGenius"
 __discord__: Final[str] = "GoogleGenius#7777"
