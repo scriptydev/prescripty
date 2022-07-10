@@ -11,7 +11,7 @@ class HTTPError(Exception):
     """A default exception to be raised when an error with a HTTP request occurs"""
 
 
-async def on_error(ctx: tanjun.abc.Context, exc: Exception) -> bool | None:
+async def on_error(ctx: tanjun.abc.Context, exc: Exception) -> None:
     """Global error handler
 
     Parameters

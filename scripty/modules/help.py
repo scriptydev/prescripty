@@ -10,7 +10,7 @@ import scripty
 
 
 class HelpView(miru.View):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.add_item(
             miru.Button(
