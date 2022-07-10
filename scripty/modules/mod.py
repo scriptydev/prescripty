@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__: tuple[str, ...] = ("loader_mod",)
 
 import asyncio
+import contextlib
 import datetime
 
 from typing import Any
@@ -427,7 +428,8 @@ async def unban(
 @component.with_listener(hikari.BanDeleteEvent)
 async def on_ban_delete(event: hikari.BanDeleteEvent) -> None:
     """Remove ban cache entry when ban is deleted"""
-    del _guild_ban_cache_map[event.guild_id]
+    with contextlib.suppress(KeyError):
+        del _guild_ban_cache_map[event.guild_id]
 
 
 loader_mod = component.load_from_scope().make_loader()
