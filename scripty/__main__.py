@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import os
 
-import scripty
-
+from scripty import bot
 
 if __name__ == "__main__":
     if os.name != "nt":
@@ -11,4 +10,4 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-    scripty.start_app()
+    bot.start_app()

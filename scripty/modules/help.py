@@ -6,7 +6,7 @@ import miru
 import tanchi
 import tanjun
 
-import scripty
+from scripty import const
 
 
 class HelpView(miru.View):
@@ -33,7 +33,7 @@ class HelpView(miru.View):
         self.add_item(
             miru.Button(
                 label="Invite",
-                url=scripty.INVITE_URL,
+                url=const.INVITE_URL,
             )
         )
 

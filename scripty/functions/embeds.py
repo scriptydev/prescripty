@@ -3,12 +3,11 @@ from __future__ import annotations
 __all__: tuple[str, ...] = ("Embed",)
 
 import datetime
-
 from typing import Any
 
 import hikari
 
-from .color import Color
+from .colors import Color
 
 INVISIBLE = Color.INVISIBLE.value
 

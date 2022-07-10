@@ -7,8 +7,7 @@ import plane
 import tanchi
 import tanjun
 
-import scripty
-
+from scripty.functions import embeds, helpers
 
 magykmod = tanjun.slash_command_group("magykmod", "Scripty MagykMod moderation")
 
@@ -55,11 +54,11 @@ async def analyze_url(
     url : str
         URL to analyze
     """
-    url_parsed = scripty.validate_and_encode_url(url)
+    url_parsed = helpers.validate_and_encode_url(url)
 
     if url_parsed is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Analyze Error",
                 description=(
                     "Provided URL is malformed!\nPlease check if complies with [DNS]"
@@ -73,7 +72,7 @@ async def analyze_url(
         data = await plane_client.urls.get_website(url_parsed["encoded"])
     except plane.HTTPError as e:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Analyze Error",
                 description="An error occurred while analyzing the URL",
             )
@@ -81,7 +80,7 @@ async def analyze_url(
         raise e
     else:
         embed = (
-            scripty.Embed(
+            embeds.Embed(
                 title="Analyze",
                 description=url_parsed["input"],
             )
@@ -113,7 +112,7 @@ async def analyze_url(
 
 #         if not response.ok:
 #             await ctx.respond(
-#                 scripty.Embed(
+#                 embeds.Embed(
 #                     title="Analyze Error",
 #                     description="An error occurred while analyzing the user",
 #                 )
@@ -125,7 +124,7 @@ async def analyze_url(
 #             )
 
 #         # TODO: The rest of this:
-#         embed = scripty.Embed(description=f"```json\n{data}\n```")
+#         embed = embeds.Embed(description=f"```json\n{data}\n```")
 
 #         await ctx.respond(embed)
 

@@ -4,7 +4,6 @@ __all__: tuple[str, ...] = ("loader_util",)
 
 import datetime
 import platform
-
 from typing import Sequence
 
 import alluka
@@ -15,6 +14,8 @@ import tanchi
 import tanjun
 
 import scripty
+from scripty import const
+from scripty.functions import datastore, embeds, helpers
 
 stats = tanjun.slash_command_group("stats", "Statistics related to Scripty")
 info = tanjun.slash_command_group("info", "Get information")
@@ -26,7 +27,7 @@ class InviteView(miru.View):
         self.add_item(
             miru.Button(
                 label="Add to Server",
-                url=scripty.INVITE_URL,
+                url=const.INVITE_URL,
             )
         )
 
@@ -43,7 +44,7 @@ async def stats_about(
     view = InviteView()
 
     embed = (
-        scripty.Embed(title="About")
+        embeds.Embed(title="About")
         .set_author(
             name=bot_user.username,
             icon=bot_user.avatar_url or bot_user.default_avatar_url,
@@ -55,7 +56,7 @@ async def stats_about(
         .add_field("Guilds", str(await bot.rest.fetch_my_guilds().count()), inline=True)
         .add_field("Developer", scripty.__discord__, inline=True)
         .add_field(
-            "Created", scripty.discord_timestamp(bot_user.created_at, "F"), inline=True
+            "Created", helpers.discord_timestamp(bot_user.created_at, "F"), inline=True
         )
         .set_footer("#StandWithUkraine")
     )
@@ -71,7 +72,7 @@ async def stats_ping(
 ) -> None:
     """Replies with bot latency"""
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Ping",
             description=f"Pong! `{round(bot.heartbeat_latency * 1000)}ms`",
         )
@@ -83,21 +84,21 @@ async def stats_ping(
 async def stats_system(
     ctx: tanjun.abc.SlashContext,
     bot: alluka.Injected[hikari.GatewayBot],
-    datastore: alluka.Injected[scripty.DataStore],
+    ds: alluka.Injected[datastore.DataStore],
 ) -> None:
     """Bot system information"""
     app_user = bot.get_me() or await bot.rest.fetch_my_user()
 
     boot_timestamp = psutil.boot_time()
-    boot_resolved_relative = scripty.discord_timestamp(
+    boot_resolved_relative = helpers.discord_timestamp(
         datetime.datetime.fromtimestamp(boot_timestamp), "R"
     )
 
-    start_time_timestamp = datastore.start_time
-    start_time_resolved_relative = scripty.discord_timestamp(start_time_timestamp, "R")
+    start_time_timestamp = ds.start_time
+    start_time_resolved_relative = helpers.discord_timestamp(start_time_timestamp, "R")
 
     embed = (
-        scripty.Embed(title="System")
+        embeds.Embed(title="System")
         .set_author(
             name=app_user.username,
             icon=app_user.avatar_url or app_user.default_avatar_url,
@@ -148,7 +149,7 @@ async def info_user(
     roles: Sequence[hikari.Role] = user.get_roles() if member else []
 
     embed = (
-        scripty.Embed(title="Info")
+        embeds.Embed(title="Info")
         .set_author(
             name=str(user),
             icon=user.avatar_url or user.default_avatar_url,
@@ -157,14 +158,14 @@ async def info_user(
         .add_field("Discriminator", user.discriminator, inline=True)
         .add_field("ID", str(user.id), inline=True)
         .add_field(
-            "Created", scripty.discord_timestamp(user.created_at, "R"), inline=True
+            "Created", helpers.discord_timestamp(user.created_at, "R"), inline=True
         )
         .set_thumbnail(user.avatar_url or user.default_avatar_url)
     )
 
     if member:
         embed.add_field(
-            "Joined", scripty.discord_timestamp(user.joined_at, "R"), inline=True
+            "Joined", helpers.discord_timestamp(user.joined_at, "R"), inline=True
         )
         embed.add_field("Nickname", str(user.nickname), inline=True)
         embed.add_field("Roles", " ".join(role.mention for role in roles))
@@ -187,7 +188,7 @@ async def info_server(
 
     if guild is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Info",
                 description="This command was not invoked in a guild!",
             )
@@ -197,12 +198,12 @@ async def info_server(
     guild = await bot.rest.fetch_guild(guild)
 
     embed = (
-        scripty.Embed(title="Info")
+        embeds.Embed(title="Info")
         .add_field("Name", guild.name, inline=True)
         .add_field("ID", str(guild.id), inline=True)
         .add_field("Owner", str(await guild.fetch_owner()), inline=True)
         .add_field(
-            "Created", scripty.discord_timestamp(guild.created_at, "R"), inline=True
+            "Created", helpers.discord_timestamp(guild.created_at, "R"), inline=True
         )
         .add_field(
             "Members",
@@ -237,11 +238,11 @@ async def info_role(
         The role to get information about
     """
     embed = (
-        scripty.Embed(title="Info")
+        embeds.Embed(title="Info")
         .add_field("Name", role.name, inline=True)
         .add_field("ID", str(role.id), inline=True)
         .add_field(
-            "Created", scripty.discord_timestamp(role.created_at, "R"), inline=True
+            "Created", helpers.discord_timestamp(role.created_at, "R"), inline=True
         )
         .add_field("Color", str(role.color), inline=True)
         .add_field("Position", str(role.position), inline=True)
@@ -275,7 +276,7 @@ async def info_channel(
 
     if channel is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Info Error",
                 description=(
                     "This command must be invoked in a valid textable guild channel!"
@@ -285,11 +286,11 @@ async def info_channel(
         return
 
     embed = (
-        scripty.Embed(title="Info")
+        embeds.Embed(title="Info")
         .add_field("Name", str(channel.name), inline=True)
         .add_field("ID", str(channel.id), inline=True)
         .add_field(
-            "Created", scripty.discord_timestamp(channel.created_at, "R"), inline=True
+            "Created", helpers.discord_timestamp(channel.created_at, "R"), inline=True
         )
         .add_field("Type", str(channel.type), inline=True)
     )
@@ -311,7 +312,7 @@ async def info_invite(
         The invite to get information about
     """
     embed = (
-        scripty.Embed(title="Info")
+        embeds.Embed(title="Info")
         .add_field("Code", invite.code, inline=True)
         .add_field("Inviter", str(invite.inviter), inline=True)
         .add_field("Target", str(invite.target_user), inline=True)
@@ -319,7 +320,7 @@ async def info_invite(
         .add_field("Channel", str(invite.channel), inline=True)
         .add_field(
             "Expire",
-            scripty.discord_timestamp(invite.expires_at, "R")
+            helpers.discord_timestamp(invite.expires_at, "R")
             if invite.expires_at
             else str(invite.expires_at),
             inline=True,

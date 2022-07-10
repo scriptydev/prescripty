@@ -51,8 +51,8 @@ dependencies = [
 [project.urls]
 changelog = "https://scriptybot.web.app" # TODO: Add changelog
 documentation = "https://scriptybot.web.app" # TODO: Add documentation
-homepage = "https://scriptybot.web.app" 
-repository = "https://github.com/scriptydev/prescripty" 
+homepage = "https://scriptybot.web.app"
+repository = "https://github.com/scriptydev/prescripty"
 
 [tool.pyright]
 exclude = ["**/node_modules", "**/__pycache__"]
@@ -70,3 +70,6 @@ reportOverlappingOverload = "none"
 reportUnknownMemberType = "warning"
 reportUnnecessaryTypeIgnoreComment = "error"
 reportUntypedFunctionDecorator = "warning"
+
+[tool.isort]
+profile = "black"

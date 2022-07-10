@@ -16,11 +16,10 @@ import functools
 import pathlib
 import re
 import urllib.parse
-
 from typing import Generator, Iterable, Literal
 
-import hikari
 import dateparser
+import hikari
 
 
 def datetime_utcnow_aware() -> datetime.datetime:

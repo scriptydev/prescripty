@@ -4,7 +4,6 @@ __all__: tuple[str, ...] = ("loader_mod",)
 
 import asyncio
 import datetime
-
 from typing import Any
 
 import alluka
@@ -12,7 +11,7 @@ import hikari
 import tanchi
 import tanjun
 
-import scripty
+from scripty.functions import cache, embeds, helpers
 
 component = tanjun.Component(name="mod")
 
@@ -47,7 +46,7 @@ async def ban(
 
     if guild is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Ban Error",
                 description="This command must be invoked in a guild!",
             )
@@ -59,7 +58,7 @@ async def ban(
     )
 
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Ban",
             description=(
                 f"Banned **{str(user)}**\n"
@@ -85,15 +84,15 @@ async def delete(
         Amount to delete
     """
 
-    def generate_embed(message: str) -> scripty.Embed:
-        return scripty.Embed(
+    def generate_embed(message: str) -> embeds.Embed:
+        return embeds.Embed(
             title="Delete",
             description=message,
         )
 
     channel = ctx.channel_id
 
-    bulk_delete_limit = scripty.datetime_utcnow_aware() - datetime.timedelta(days=14)
+    bulk_delete_limit = helpers.datetime_utcnow_aware() - datetime.timedelta(days=14)
 
     iterator = (
         bot.rest.fetch_messages(channel)
@@ -110,7 +109,7 @@ async def delete(
 
     if not tasks:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Delete Error",
                 description=(
                     "Unable to delete messages!\n"
@@ -159,7 +158,7 @@ async def kick(
 
     if guild is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Kick Error",
                 description="This command must be invoked in a guild!",
             )
@@ -168,7 +167,7 @@ async def kick(
 
     await bot.rest.kick_user(guild, member)
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Kick",
             description=(
                 f"Kicked **{str(member)}**\n"
@@ -185,21 +184,21 @@ async def kick(
 async def slowmode_enable(
     ctx: tanjun.abc.SlashContext,
     bot: alluka.Injected[hikari.GatewayBot],
-    duration: tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now],
+    duration: tanchi.Converted[datetime.timedelta, helpers.parse_to_timedelta_from_now],
     channel: hikari.TextableGuildChannel | None = None,
 ) -> None:
     """Enable slowmode for channel
 
     Parameters
     ----------
-    duration : tanchi.Converted[datetime.timedelta, scripty.parse_to_timedelta_from_now]
+    duration : tanchi.Converted[datetime.timedelta, helpers.parse_to_timedelta_from_now]
         Duration of slowmode
     channel : hikari.TextableGuildChannel
         Channel to enable slowmode
     """
     channel = channel or ctx.get_channel()
     duration_limit = datetime.timedelta(hours=6)
-    error = scripty.Embed(
+    error = embeds.Embed(
         title="Slowmode Error",
     )
 
@@ -222,7 +221,7 @@ async def slowmode_enable(
 
     await bot.rest.edit_channel(channel, rate_limit_per_user=duration)
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Slowmode",
             description=f"Enabled slowmode for **{str(channel)}** to `{duration}s`",
         )
@@ -249,7 +248,7 @@ async def slowmode_disable(
 
     if channel is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Slowmode Error",
                 description="This command must be invoked in a guild!",
             )
@@ -258,7 +257,7 @@ async def slowmode_disable(
 
     await bot.rest.edit_channel(channel, rate_limit_per_user=0)
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Slowmode",
             description=f"Removed slowmode from **{str(channel)}**",
         )
@@ -272,7 +271,7 @@ async def slowmode_disable(
 async def timeout_set(
     ctx: tanjun.abc.SlashContext,
     member: hikari.Member,
-    duration: tanchi.Converted[datetime.datetime, scripty.parse_to_future_datetime],
+    duration: tanchi.Converted[datetime.datetime, helpers.parse_to_future_datetime],
     reason: hikari.UndefinedNoneOr[str] = None,
 ) -> None:
     """Set timeout for member
@@ -286,15 +285,15 @@ async def timeout_set(
     reason : hikari.UndefinedNoneOr[str]
         Reason for timeout
     """
-    timeout_limit = scripty.datetime_utcnow_aware() + datetime.timedelta(days=28)
-    error = scripty.Embed(title="Timeout Error")
+    timeout_limit = helpers.datetime_utcnow_aware() + datetime.timedelta(days=28)
+    error = embeds.Embed(title="Timeout Error")
 
     if duration is None:
         error.description = "Unable to parse specified duration; invalid time!"
         await ctx.respond(error)
         return
 
-    if duration < scripty.datetime_utcnow_aware():
+    if duration < helpers.datetime_utcnow_aware():
         error.description = "Duration provided must be in the future!"
         await ctx.respond(error)
         return
@@ -304,11 +303,11 @@ async def timeout_set(
         await ctx.respond(error)
         return
 
-    duration_resolved = scripty.discord_timestamp(duration, "F")
+    duration_resolved = helpers.discord_timestamp(duration, "F")
 
     await member.edit(communication_disabled_until=duration)
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Timeout",
             description=(
                 f"Timed out **{str(member)}** until {duration_resolved}\n"
@@ -332,7 +331,7 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
     """
     if member.communication_disabled_until() is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Timeout Error",
                 description="Member specified is not already timed out!",
             )
@@ -341,7 +340,7 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
     else:
         await member.edit(communication_disabled_until=None)
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Timeout",
                 description=f"Removed timeout from **{str(member)}**",
             )
@@ -349,7 +348,7 @@ async def timeout_remove(ctx: tanjun.abc.SlashContext, member: hikari.Member) ->
 
 
 # _guild_ban_cache_map: dict[hikari.Snowflake, Sequence[hikari.GuildBan]] = {}
-_guild_ban_cache_map = scripty.LRUCachedDict(cache_len=100)
+_guild_ban_cache_map = cache.LRUCachedDict(cache_len=100)
 
 
 async def unban_user_autocomplete(
@@ -399,7 +398,7 @@ async def unban(
 
     if guild is None:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Unban Error",
                 description="This command must be invoked in a guild!",
             )
@@ -410,14 +409,14 @@ async def unban(
         await bot.rest.unban_user(guild, user)
     except hikari.NotFoundError:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Unban Error",
                 description="Unable to unban user that is not banned!",
             )
         )
     else:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Unban",
                 description=f"Unbanned **{str(user)}**",
             )

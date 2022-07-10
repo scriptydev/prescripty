@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from .cache import *
-from .color import *
+from .colors import *
 from .datastore import *
-from .embed import *
+from .embeds import *
 from .helpers import *

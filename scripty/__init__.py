@@ -8,6 +8,7 @@ moderation and utilities. A bot that does everything you want, intuitively.
 """
 
 from __future__ import annotations
+
 from typing import Final
 
 from .bot import *

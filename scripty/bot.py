@@ -11,12 +11,11 @@ import miru
 import plane
 import tanjun
 
-from .config import DISCORD_TOKEN, AERO_API_KEY
-from .errors import on_error
-from .functions import DataStore, datetime_utcnow_aware
+from scripty import config, errors
+from scripty.functions import datastore, helpers
 
 
-def create_client(bot: hikari.GatewayBot, datastore: DataStore) -> tanjun.Client:
+def create_client(bot: hikari.GatewayBot, ds: datastore.DataStore) -> tanjun.Client:
     """Create the tanjun client"""
     return (
         tanjun.Client.from_gateway_bot(
@@ -27,20 +26,20 @@ def create_client(bot: hikari.GatewayBot, datastore: DataStore) -> tanjun.Client
         .load_modules("scripty.modules")
         .add_client_callback(tanjun.ClientCallbackNames.STARTING, on_client_starting)
         .add_client_callback(tanjun.ClientCallbackNames.CLOSING, on_client_closing)
-        .set_type_dependency(DataStore, datastore)
-        .set_hooks(tanjun.AnyHooks().set_on_error(on_error))
+        .set_type_dependency(datastore.DataStore, ds)
+        .set_hooks(tanjun.AnyHooks().set_on_error(errors.on_error))
     )
 
 
 def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     """Build the bot"""
-    datastore = DataStore()
-    on_bot_started_as_partial = functools.partial(on_bot_started, datastore=datastore)
+    ds = datastore.DataStore()
+    on_bot_started_as_partial = functools.partial(on_bot_started, ds=ds)
 
-    bot = hikari.GatewayBot(DISCORD_TOKEN)
+    bot = hikari.GatewayBot(config.DISCORD_TOKEN)
     bot.subscribe(hikari.StartedEvent, on_bot_started_as_partial)
 
-    client = create_client(bot, datastore)
+    client = create_client(bot, ds)
 
     miru.load(bot)
 
@@ -56,7 +55,7 @@ def start_app() -> None:
 async def on_client_starting(client: alluka.Injected[tanjun.Client]) -> None:
     """Setup to execute during client startup"""
     client.set_type_dependency(aiohttp.ClientSession, aiohttp.ClientSession())
-    client.set_type_dependency(plane.Client, plane.Client(AERO_API_KEY))
+    client.set_type_dependency(plane.Client, plane.Client(config.AERO_API_KEY))
 
 
 async def on_client_closing(
@@ -68,6 +67,6 @@ async def on_client_closing(
     await plane_client.close()
 
 
-async def on_bot_started(_: hikari.StartingEvent, datastore: DataStore) -> None:
+async def on_bot_started(_: hikari.StartingEvent, ds: datastore.DataStore) -> None:
     """Called after bot is fully started"""
-    datastore.start_time = datetime_utcnow_aware()
+    ds.start_time = helpers.datetime_utcnow_aware()

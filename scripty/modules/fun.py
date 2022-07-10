@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from scripty import config
+
 __all__: tuple[str, ...] = ("loader_fun",)
 
 import random
-
 from typing import Any
 
 import aiohttp
@@ -13,7 +14,7 @@ import miru
 import tanchi
 import tanjun
 
-import scripty
+from scripty.functions import embeds
 
 animal = tanjun.slash_command_group("animal", "Fun things related to animals")
 
@@ -25,14 +26,14 @@ async def birthday(
 ) -> None:
     """Wish user a happy birthday"""
     await user.send(
-        scripty.Embed(
+        embeds.Embed(
             title="Birthday",
             description=f"{ctx.author} wished you a happy birthday, {user}!",
         )
     )
 
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Birthday",
             description=f"Birthday wish sent to {user}!",
         )
@@ -104,7 +105,7 @@ async def activity_(
     """
     if activity not in ACTIVITIES.values():
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Activity Error",
                 description="Unable to find activity from autocomplete options",
             )
@@ -135,11 +136,11 @@ async def cat(
     """Get a random cat image"""
     async with session.get(
         "https://api.thecatapi.com/v1/images/search",
-        headers={"x-api-key": scripty.THE_CAT_API_KEY},
+        headers={"x-api-key": config.THE_CAT_API_KEY},
     ) as response:
         data = await response.json()
 
-    embed = scripty.Embed(title="Cat").set_image(data[0]["url"])
+    embed = embeds.Embed(title="Cat").set_image(data[0]["url"])
 
     await ctx.respond(embed)
 
@@ -158,7 +159,7 @@ async def httpcat(
         HTTP status code
     """
     await ctx.respond(
-        scripty.Embed(title="HTTPCat").set_image(f"https://http.cat/{status_code}")
+        embeds.Embed(title="HTTPCat").set_image(f"https://http.cat/{status_code}")
     )
 
 
@@ -172,7 +173,7 @@ async def dog(
     async with session.get("https://dog.ceo/api/breeds/image/random") as response:
         data = await response.json()
 
-    embed = scripty.Embed(title="Dog").set_image(data["message"])
+    embed = embeds.Embed(title="Dog").set_image(data["message"])
 
     await ctx.respond(embed)
 
@@ -181,7 +182,7 @@ async def dog(
 async def coin(ctx: tanjun.abc.SlashContext) -> None:
     """Flip a coin"""
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Coin",
             description=random.choice(("Heads", "Tails")),
         )
@@ -201,7 +202,7 @@ async def dice(
         Number of sides on the die
     """
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Dice",
             description=random.randint(1, sides),
         )
@@ -223,7 +224,7 @@ class MemeView(miru.View):
         if self.index == len(self.submissions):
             self.index = 0
 
-        embed = scripty.Embed(
+        embed = embeds.Embed(
             title=self.submissions[self.index]["title"],
             url=f"https://reddit.com{self.submissions[self.index]['permalink']}",
         ).set_image(self.submissions[self.index]["url"])
@@ -246,7 +247,7 @@ class MemeView(miru.View):
         if ctx.user == self.tanjun_ctx.author:
             return True
 
-        embed = scripty.Embed(
+        embed = embeds.Embed(
             title="Error",
             description="This command was not invoked by you!",
         )
@@ -296,7 +297,7 @@ async def meme(
 
     view = MemeView(ctx, submissions, index)
 
-    embed = scripty.Embed(
+    embed = embeds.Embed(
         title=submissions[index]["title"][:255] + "\U00002026"
         if len(submissions[index]["title"]) > 256
         else submissions[index]["title"],
@@ -333,13 +334,13 @@ class RPSView(miru.View):
         return tuple(k for k, v in self.rps.items() if v == value)[0]
 
     @staticmethod
-    def generate_embed(message: str) -> scripty.Embed:
-        return scripty.Embed(
+    def generate_embed(message: str) -> embeds.Embed:
+        return embeds.Embed(
             title="RPS",
             description=message,
         )
 
-    def determine_outcome(self, player_choice: str) -> scripty.Embed:
+    def determine_outcome(self, player_choice: str) -> embeds.Embed:
         player_value = self.get_value(player_choice)
         computer_choice = self.get_key(self._rps)
 
@@ -377,7 +378,7 @@ class RPSView(miru.View):
         if ctx.user == self.tanjun_ctx.author:
             return True
 
-        embed = scripty.Embed(
+        embed = embeds.Embed(
             title="Error",
             description="This command was not invoked by you!",
         )
@@ -407,7 +408,7 @@ async def rps(ctx: tanjun.abc.SlashContext) -> None:
     """Play rock paper scissors"""
     view = RPSView(ctx)
 
-    embed = scripty.Embed(
+    embed = embeds.Embed(
         title="RPS",
         description="Click on the button options to continue the game!",
     )
@@ -428,7 +429,7 @@ async def quote(
     ) as response:
         data = await response.json()
 
-        embed = scripty.Embed(
+        embed = embeds.Embed(
             title="Quote",
             description=data["quoteText"],
         ).set_author(name=data["quoteAuthor"])

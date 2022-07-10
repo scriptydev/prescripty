@@ -7,7 +7,7 @@ import pathlib
 import alluka
 import tanjun
 
-import scripty
+from scripty.functions import embeds
 
 
 @tanjun.with_owner_check(error_message=None)
@@ -27,7 +27,7 @@ async def load(
     """
     await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Load",
             description=f"`{module}` module loaded",
         )
@@ -51,7 +51,7 @@ async def reload(
     """
     await client.reload_modules_async(pathlib.Path(f"scripty/modules/{module}.py"))
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Load",
             description=f"`{module}` module reloaded",
         )
@@ -67,7 +67,7 @@ async def sync(
     """Sync global application commands"""
     await client.declare_global_commands()
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Sync",
             description="Successfully synced global application commands",
         )
@@ -91,7 +91,7 @@ async def unload(
     """
     if "dev" in module:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Unload Error",
                 description=f"`{module}` cannot be unloaded!",
             )
@@ -100,7 +100,7 @@ async def unload(
 
     client.unload_modules(pathlib.Path(f"scripty/modules/{module}.py"))
     await ctx.respond(
-        scripty.Embed(
+        embeds.Embed(
             title="Unload",
             description=f"`{module}` module unloaded",
         )

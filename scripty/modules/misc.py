@@ -5,10 +5,9 @@ __all__: tuple[str, ...] = ("loader_misc",)
 import hikari
 import tanchi
 import tanjun
-
 from gpytranslate import Translator
 
-import scripty
+from scripty.functions import embeds
 
 
 @tanjun.as_user_menu("Avatar")
@@ -17,7 +16,7 @@ async def avatar(
 ) -> None:
     """Get user avatar"""
     await ctx.respond(
-        scripty.Embed(title="Avatar")
+        embeds.Embed(title="Avatar")
         .set_author(name=str(user), icon=user.avatar_url or user.default_avatar_url)
         .set_image(user.avatar_url or user.default_avatar_url)
     )
@@ -33,7 +32,7 @@ async def translate_menu(
 
     if not message.content:
         await ctx.respond(
-            scripty.Embed(
+            embeds.Embed(
                 title="Translate Error",
                 description="Message is empty",
             )
@@ -46,7 +45,7 @@ async def translate_menu(
     translate_lang = await translator.detect(message.content)  # type: ignore
 
     embed = (
-        scripty.Embed(title="Translate")
+        embeds.Embed(title="Translate")
         .set_author(
             name=str(message.author),
             icon=message.author.avatar_url or message.author.default_avatar_url,
@@ -86,7 +85,7 @@ async def translate_slash(
     translate_lang = await translator.detect(text)  # type: ignore
 
     embed = (
-        scripty.Embed(title="Translate")
+        embeds.Embed(title="Translate")
         .set_author(
             name=str(ctx.author),
             icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
@@ -113,7 +112,7 @@ async def echo(ctx: tanjun.abc.SlashContext, text: str) -> None:
     text : str
         Text to repeat
     """
-    embed = scripty.Embed(title="Echo", description=f"```{text}```").set_author(
+    embed = embeds.Embed(title="Echo", description=f"```{text}```").set_author(
         name=str(ctx.author),
         icon=ctx.author.avatar_url or ctx.author.default_avatar_url,
     )
@@ -176,7 +175,7 @@ async def poll(
         "\U0001f1ef": option_j,
     }
 
-    embed = scripty.Embed(
+    embed = embeds.Embed(
         title=topic,
         description="\n\n".join(
             f"{key} {value}" for key, value in options.items() if value is not None
