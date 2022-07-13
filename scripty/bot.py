@@ -35,8 +35,9 @@ def build_bot() -> tuple[hikari.GatewayBot, tanjun.Client]:
     """Build the bot"""
     ds = datastore.DataStore()
     on_bot_started_as_partial = functools.partial(on_bot_started, ds=ds)
+    intents = hikari.Intents.ALL_UNPRIVILEGED | hikari.Intents.GUILD_MEMBERS
 
-    bot = hikari.GatewayBot(config.DISCORD_TOKEN)
+    bot = hikari.GatewayBot(config.DISCORD_TOKEN, intents=intents)
     bot.subscribe(hikari.StartedEvent, on_bot_started_as_partial)
 
     client = create_client(bot, ds)
@@ -60,11 +61,11 @@ async def on_client_starting(client: alluka.Injected[tanjun.Client]) -> None:
 
 async def on_client_closing(
     session: alluka.Injected[aiohttp.ClientSession],
-    plane_client: alluka.Injected[plane.Client],
+    pc: alluka.Injected[plane.Client],
 ) -> None:
     """Actions to perform while client shutdown"""
     await session.close()
-    await plane_client.close()
+    await pc.close()
 
 
 async def on_bot_started(_: hikari.StartingEvent, ds: datastore.DataStore) -> None:
