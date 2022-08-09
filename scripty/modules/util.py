@@ -110,8 +110,8 @@ async def stats_system(
         .add_field("CPU", f"{psutil.cpu_percent(interval=None)}%", inline=True)
         .add_field(
             "Memory",
-            f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/"  # type: ignore
-            f"{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",  # type: ignore
+            f"{round(psutil.virtual_memory().used / 1.074e+9, 1)}/"
+            f"{round(psutil.virtual_memory().total / 1.074e+9, 1)}GiB",
             inline=True,
         )
         .add_field(
