@@ -3,7 +3,7 @@ alluka==0.1.2
 dateparser==1.1.1
 gpytranslate==1.4.0
 hikari==2.0.0.dev110
-hikari-miru==1.1.1
+hikari-miru==1.1.2
 git+https://github.com/GoogleGenius/plane
 hikari-tanchi==1.3.3
 hikari-tanjun==2.5.3a1
