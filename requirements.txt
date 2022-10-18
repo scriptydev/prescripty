@@ -7,7 +7,7 @@ hikari-miru==1.1.2
 git+https://github.com/GoogleGenius/plane
 hikari-tanchi==1.3.6
 hikari-tanjun==2.7.0a1
-psutil==5.9.2
+psutil==5.9.3
 pyright==1.1.275
 toml==0.10.2
 uvloop==0.17.0; sys_platform != "win32"
