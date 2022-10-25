@@ -1,6 +1,6 @@
 aiohttp~=3.8
 alluka==0.1.2
-dateparser==1.1.1
+dateparser==1.1.2
 gpytranslate==1.4.0
 hikari==2.0.0.dev111
 hikari-miru==1.1.2
