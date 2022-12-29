@@ -6,7 +6,7 @@ hikari==2.0.0.dev112
 hikari-miru==1.1.2
 git+https://github.com/GoogleGenius/plane
 hikari-tanchi==1.3.6
-hikari-tanjun==2.7.0a1
+hikari-tanjun==2.10.1a1
 psutil==5.9.4
 pyright==1.1.286
 toml==0.10.2
