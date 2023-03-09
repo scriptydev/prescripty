@@ -175,7 +175,7 @@ async def parse_to_future_datetime(duration: str) -> datetime.datetime | None:
         functools.partial(
             dateparser.parse,
             date_string=duration,
-            settings={  # type: ignore
+            settings={
                 "RETURN_AS_TIMEZONE_AWARE": True,
                 "PREFER_DATES_FROM": "future",
                 "STRICT_PARSING": True,
@@ -212,7 +212,7 @@ async def parse_to_timedelta_from_now(duration: str) -> datetime.timedelta | Non
         functools.partial(
             dateparser.parse,
             date_string=duration,
-            settings={  # type: ignore
+            settings={
                 "RETURN_AS_TIMEZONE_AWARE": True,
                 "PREFER_DATES_FROM": "future",
                 "STRICT_PARSING": True,
